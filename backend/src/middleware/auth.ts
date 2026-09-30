@@ -14,6 +14,14 @@ declare global {
   }
 }
 
+// Users created before sessionVersion was introduced may not have the field
+// persisted in MongoDB. Treat a missing value as the original session version
+// (0) so those accounts can still authenticate and then receive the field on
+// the next session-changing update.
+function normalizedSessionVersion(value: unknown): number {
+  return typeof value === 'number' ? value : 0;
+}
+
 export async function requireAuth(req: Request, _res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (!header || !header.startsWith('Bearer ')) {
@@ -23,10 +31,10 @@ export async function requireAuth(req: Request, _res: Response, next: NextFuncti
   try {
     const payload = jwt.verify(token, env.jwtSecret) as JwtPayload;
     const user = await User.findById(payload.sub).select('_id role active sessionVersion').lean();
-    if (!user || user.active === false || user.sessionVersion !== payload.sessionVersion) {
+    if (!user || user.active === false || normalizedSessionVersion(user.sessionVersion) !== normalizedSessionVersion(payload.sessionVersion)) {
       return next(AppError.unauthorized('Invalid or expired session.'));
     }
-    req.user = { id: user._id, role: user.role, sessionVersion: user.sessionVersion };
+    req.user = { id: user._id, role: user.role, sessionVersion: normalizedSessionVersion(user.sessionVersion) };
     next();
   } catch {
     next(AppError.unauthorized('Invalid or expired session.'));
@@ -47,8 +55,8 @@ export function optionalAuth(req: Request, _res: Response, next: NextFunction) {
   try {
     const payload = jwt.verify(token, env.jwtSecret) as JwtPayload;
     void User.findById(payload.sub).select('_id role active sessionVersion').lean().then((user) => {
-      if (user && user.active !== false && user.sessionVersion === payload.sessionVersion) {
-        req.user = { id: user._id, role: user.role, sessionVersion: user.sessionVersion };
+      if (user && user.active !== false && normalizedSessionVersion(user.sessionVersion) === normalizedSessionVersion(payload.sessionVersion)) {
+        req.user = { id: user._id, role: user.role, sessionVersion: normalizedSessionVersion(user.sessionVersion) };
       }
       next();
     }).catch(() => next());
