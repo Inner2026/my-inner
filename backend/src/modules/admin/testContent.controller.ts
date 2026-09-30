@@ -9,8 +9,19 @@ import path from 'path';
 import { env } from '../../config/env';
 
 const uploadDirectory = path.resolve(process.cwd(), env.uploadDir);
-fs.mkdirSync(uploadDirectory, { recursive: true });
-const imageUpload = multer({ storage: multer.diskStorage({ destination: uploadDirectory, filename: (_req, file, cb) => cb(null, `${crypto.randomUUID()}${path.extname(file.originalname).toLowerCase()}`) }), limits: { fileSize: 5 * 1024 * 1024 }, fileFilter: (_req, file, cb) => cb(null, ['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.mimetype)) });
+const isVercel = process.env.VERCEL === '1';
+if (!isVercel) fs.mkdirSync(uploadDirectory, { recursive: true });
+
+// Vercel's function filesystem is not persistent and its deployed bundle is
+// not writable. Keep uploads in memory there until a cloud storage provider is
+// configured; local development continues to use the uploads directory.
+const imageUpload = multer({
+  storage: isVercel
+    ? multer.memoryStorage()
+    : multer.diskStorage({ destination: uploadDirectory, filename: (_req, file, cb) => cb(null, `${crypto.randomUUID()}${path.extname(file.originalname).toLowerCase()}`) }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => cb(null, ['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.mimetype))
+});
 
 export const createTest = asyncHandler(async (req: Request, res: Response) => {
   const test = await svc.createTest(req.body);
@@ -33,8 +44,8 @@ export const listTests = asyncHandler(async (req: Request, res: Response) => {
   res.json(await svc.listTestsAdmin({ search: String(req.query.search ?? ''), active, page, pageSize }));
 });
 
-export function hasValidImageSignature(filePath: string, mimeType: string) {
-  const bytes = fs.readFileSync(filePath);
+export function hasValidImageSignature(filePathOrBuffer: string | Buffer, mimeType: string) {
+  const bytes = Buffer.isBuffer(filePathOrBuffer) ? filePathOrBuffer : fs.readFileSync(filePathOrBuffer);
   if (mimeType === 'image/png') return bytes.length >= 8 && bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
   if (mimeType === 'image/jpeg') return bytes.length >= 3 && bytes.subarray(0, 3).equals(Buffer.from([255, 216, 255]));
   if (mimeType === 'image/gif') return bytes.subarray(0, 6).toString('ascii') === 'GIF87a' || bytes.subarray(0, 6).toString('ascii') === 'GIF89a';
@@ -44,7 +55,16 @@ export function hasValidImageSignature(filePath: string, mimeType: string) {
 
 export const uploadImage = [imageUpload.single('image'), asyncHandler(async (req: Request, res: Response) => {
   if (!req.file) { res.status(400).json({ error: { message: 'Please upload a PNG, JPEG, WEBP, or GIF image up to 5MB.' } }); return; }
-  if (!hasValidImageSignature(req.file.path, req.file.mimetype)) { fs.unlinkSync(req.file.path); res.status(400).json({ error: { message: 'The uploaded file content does not match its image type.' } }); return; }
+  const imageData = isVercel ? req.file.buffer : req.file.path;
+  if (!hasValidImageSignature(imageData, req.file.mimetype)) {
+    if (!isVercel) fs.unlinkSync(req.file.path);
+    res.status(400).json({ error: { message: 'The uploaded file content does not match its image type.' } });
+    return;
+  }
+  if (isVercel) {
+    res.status(503).json({ error: { message: 'Image uploads require persistent cloud storage on this deployment.' } });
+    return;
+  }
   res.status(201).json({ imageUrl: `${env.publicApiUrl}/uploads/${req.file.filename}` });
 })];
 
