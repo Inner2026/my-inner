@@ -1,0 +1,23 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { AdminApi } from '../api/adminEndpoints';
+
+export function AdminUsers() {
+  const [users, setUsers] = useState<any[]>([]);
+  const [search, setSearch] = useState('');
+  const [active, setActive] = useState('');
+  const [marketingEmails, setMarketingEmails] = useState('');
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ page: 1, pageSize: 25, total: 0, pages: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const load = () => { setLoading(true); setError(null); AdminApi.listUsers({ search, active, marketingEmails, page, pageSize: 25 }).then((res) => { setUsers(res.users); setPagination(res.pagination); }).catch((e) => setError(e.message)).finally(() => setLoading(false)); };
+  useEffect(load, [search, active, marketingEmails, page]);
+  async function toggle(user: any) { setError(null); setMessage(null); try { await AdminApi.updateUser(user._id, { active: !user.active }); setMessage(`${user.email || user.username} is now ${user.active ? 'disabled' : 'active'}.`); load(); } catch (e: any) { setError(e.message); } }
+  async function toggleMarketing(user: any) { setError(null); setMessage(null); try { await AdminApi.updateUser(user._id, { marketingEmails: !user.marketingEmails }); setMessage('Marketing preference updated.'); load(); } catch (e: any) { setError(e.message); } }
+  function resetPage() { setPage(1); }
+
+  return <div><div className="flex flex-wrap items-center justify-between gap-3"><h1 className="text-xl font-semibold text-slate-900">Users</h1><div className="flex flex-wrap gap-2"><input value={search} onChange={(e) => { setSearch(e.target.value); resetPage(); }} placeholder="Search email, username or phone" className="admin-input max-w-xs" /><select value={active} onChange={(e) => { setActive(e.target.value); resetPage(); }} className="admin-input w-auto"><option value="">All account status</option><option value="true">Active</option><option value="false">Disabled</option></select><select value={marketingEmails} onChange={(e) => { setMarketingEmails(e.target.value); resetPage(); }} className="admin-input w-auto"><option value="">All marketing status</option><option value="true">Subscribed</option><option value="false">Unsubscribed</option></select></div></div>{message && <p className="mt-3 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">{message}</p>}{error && <p className="mt-3 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}{loading ? <p className="mt-5 text-sm text-slate-500">Loading users...</p> : users.length === 0 ? <p className="mt-5 rounded-xl border border-dashed border-slate-200 p-8 text-center text-sm text-slate-500">No users found.</p> : <div className="admin-table-wrap mt-4"><table className="w-full text-sm"><thead><tr className="border-b border-slate-200 text-left text-slate-500"><th className="py-2">Email</th><th>Phone</th><th>Status</th><th>Marketing</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead><tbody>{users.map((u) => <tr key={u._id} className="border-b border-slate-100"><td className="py-2"><Link to={`/admin/users/${u._id}`} className="font-semibold text-[#765c8d] underline underline-offset-4">{u.email ?? u.username ?? '-'}</Link></td><td>{u.phone ?? '-'}</td><td>{u.active === false ? 'Disabled' : 'Active'}</td><td>{u.marketingEmails ? 'Subscribed' : 'Unsubscribed'}</td><td>{u.role}</td><td>{new Date(u.createdAt).toLocaleDateString()}</td><td className="space-x-2"><button onClick={() => toggle(u)} className="rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">{u.active === false ? 'Reactivate' : 'Disable'}</button><button onClick={() => toggleMarketing(u)} className="rounded-lg bg-[#f1ebf5] px-2 py-1 text-xs font-semibold text-[#765c8d]">{u.marketingEmails ? 'Opt out' : 'Opt in'}</button></td></tr>)}</tbody></table></div>}<div className="mt-4 flex items-center justify-between text-sm text-slate-500"><span>{pagination.total} users</span><div className="flex gap-2"><button disabled={page <= 1} onClick={() => setPage((current) => current - 1)} className="rounded-lg border border-slate-200 px-3 py-1.5 disabled:opacity-40">Previous</button><span className="px-2 py-1.5">Page {pagination.page} of {Math.max(1, pagination.pages)}</span><button disabled={page >= pagination.pages} onClick={() => setPage((current) => current + 1)} className="rounded-lg border border-slate-200 px-3 py-1.5 disabled:opacity-40">Next</button></div></div></div>;
+}

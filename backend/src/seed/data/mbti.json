@@ -1,0 +1,1382 @@
+[
+  {
+    "n": 1,
+    "text": "When you have had a demanding day, what restores you most reliably?",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Talking through the day with someone I trust."
+      },
+      {
+        "letter": "B",
+        "text": "Being alone long enough to hear my own thoughts."
+      },
+      {
+        "letter": "C",
+        "text": "Doing something active with other people."
+      },
+      {
+        "letter": "D",
+        "text": "Going somewhere quiet and mentally switching off."
+      }
+    ]
+  },
+  {
+    "n": 2,
+    "text": "When a new idea occurs to you, what happens first?",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "I want to say it out loud and see where it goes."
+      },
+      {
+        "letter": "B",
+        "text": "I turn it over privately before sharing it."
+      },
+      {
+        "letter": "C",
+        "text": "I immediately look for people or situations where I can try it."
+      },
+      {
+        "letter": "D",
+        "text": "I keep it inside until it feels fully formed."
+      }
+    ]
+  },
+  {
+    "n": 3,
+    "text": "At a gathering where you know few people, you are more likely to:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Start a conversation simply to see what develops."
+      },
+      {
+        "letter": "B",
+        "text": "Wait until there is a natural reason to speak."
+      },
+      {
+        "letter": "C",
+        "text": "Move between different people and groups."
+      },
+      {
+        "letter": "D",
+        "text": "Find one person or a quiet corner that feels comfortable."
+      }
+    ]
+  },
+  {
+    "n": 4,
+    "text": "After making an important decision, you prefer to:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Talk about it and hear reactions."
+      },
+      {
+        "letter": "B",
+        "text": "Sit with it privately and make sure it feels settled inside."
+      },
+      {
+        "letter": "C",
+        "text": "Explain your reasoning to someone else."
+      },
+      {
+        "letter": "D",
+        "text": "Keep the decision mostly to yourself until you have processed it."
+      }
+    ]
+  },
+  {
+    "n": 5,
+    "text": "When you are learning something difficult, you tend to:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Ask questions as they arise."
+      },
+      {
+        "letter": "B",
+        "text": "Think through the questions before asking them."
+      },
+      {
+        "letter": "C",
+        "text": "Learn by discussing the topic with others."
+      },
+      {
+        "letter": "D",
+        "text": "Learn best through concentrated independent study."
+      }
+    ]
+  },
+  {
+    "n": 6,
+    "text": "If you suddenly have an entirely free evening, your instinct is to:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "See whether someone wants to do something."
+      },
+      {
+        "letter": "B",
+        "text": "Protect the evening for myself."
+      },
+      {
+        "letter": "C",
+        "text": "Look for something happening outside the house."
+      },
+      {
+        "letter": "D",
+        "text": "Enjoy having no social obligation at all."
+      }
+    ]
+  },
+  {
+    "n": 7,
+    "text": "When a problem is emotionally complicated, you often:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Need to talk it through to understand it."
+      },
+      {
+        "letter": "B",
+        "text": "Need time alone before you can explain it."
+      },
+      {
+        "letter": "C",
+        "text": "Discover what you think while speaking."
+      },
+      {
+        "letter": "D",
+        "text": "Discover what you think while reflecting."
+      }
+    ]
+  },
+  {
+    "n": 8,
+    "text": "When you enter a new environment, your attention naturally goes toward:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "What people are doing and how the atmosphere is moving."
+      },
+      {
+        "letter": "B",
+        "text": "How the place affects you personally."
+      },
+      {
+        "letter": "C",
+        "text": "Who might be interesting to meet."
+      },
+      {
+        "letter": "D",
+        "text": "What you notice internally before engaging."
+      }
+    ]
+  },
+  {
+    "n": 9,
+    "text": "When you disagree with someone, your first impulse is often to:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Engage them and work it out aloud."
+      },
+      {
+        "letter": "B",
+        "text": "Step back and formulate your position."
+      },
+      {
+        "letter": "C",
+        "text": "Keep the conversation going until something useful emerges."
+      },
+      {
+        "letter": "D",
+        "text": "Pause because you need space to know what you really think."
+      }
+    ]
+  },
+  {
+    "n": 10,
+    "text": "Which feels more natural when you have a thought you are excited about?",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Sharing it while it is still developing."
+      },
+      {
+        "letter": "B",
+        "text": "Protecting it until I know what I mean."
+      },
+      {
+        "letter": "C",
+        "text": "Building on it through conversation."
+      },
+      {
+        "letter": "D",
+        "text": "Exploring it privately before anyone else influences it."
+      }
+    ]
+  },
+  {
+    "n": 11,
+    "text": "When you remember an experience, what tends to stand out?",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "The specific things that happened."
+      },
+      {
+        "letter": "B",
+        "text": "The meaning the experience has acquired over time."
+      },
+      {
+        "letter": "C",
+        "text": "Concrete details, sensations, and what was actually said."
+      },
+      {
+        "letter": "D",
+        "text": "The pattern or lesson I think was underneath it."
+      }
+    ]
+  },
+  {
+    "n": 12,
+    "text": "When someone gives you instructions, you prefer:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Clear steps and concrete expectations."
+      },
+      {
+        "letter": "B",
+        "text": "The overall purpose so I can decide how to approach it."
+      },
+      {
+        "letter": "C",
+        "text": "Examples of exactly what the finished result should look like."
+      },
+      {
+        "letter": "D",
+        "text": "Freedom to interpret the underlying idea."
+      }
+    ]
+  },
+  {
+    "n": 13,
+    "text": "When solving a practical problem, you trust most:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "What has worked before."
+      },
+      {
+        "letter": "B",
+        "text": "What the situation might become if I change the approach."
+      },
+      {
+        "letter": "C",
+        "text": "Observable evidence."
+      },
+      {
+        "letter": "D",
+        "text": "A pattern I notice that suggests a new solution."
+      }
+    ]
+  },
+  {
+    "n": 14,
+    "text": "Which statement sounds more like you?",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Details often tell me what I need to know."
+      },
+      {
+        "letter": "B",
+        "text": "Details are useful, but the larger pattern matters more."
+      },
+      {
+        "letter": "C",
+        "text": "I notice what is tangible before speculating."
+      },
+      {
+        "letter": "D",
+        "text": "I often notice implications before I can explain the details."
+      }
+    ]
+  },
+  {
+    "n": 15,
+    "text": "When reading a story, you are more drawn to:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "What actually happened and how the characters behaved."
+      },
+      {
+        "letter": "B",
+        "text": "What the story could be saying beneath the surface."
+      },
+      {
+        "letter": "C",
+        "text": "The realism and texture of the world."
+      },
+      {
+        "letter": "D",
+        "text": "The symbolism, themes, and possibilities."
+      }
+    ]
+  },
+  {
+    "n": 16,
+    "text": "When planning a trip, you prefer to know:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Where you will be, how you will get there, and what is available."
+      },
+      {
+        "letter": "B",
+        "text": "What kind of experience you want and then improvise the details."
+      },
+      {
+        "letter": "C",
+        "text": "Practical facts that make the trip run smoothly."
+      },
+      {
+        "letter": "D",
+        "text": "The possibilities and unusual places you might discover."
+      }
+    ]
+  },
+  {
+    "n": 17,
+    "text": "When someone describes a future they want, you naturally ask:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "What exactly would that look like day to day?"
+      },
+      {
+        "letter": "B",
+        "text": "What could that future become?"
+      },
+      {
+        "letter": "C",
+        "text": "What practical steps would make it possible?"
+      },
+      {
+        "letter": "D",
+        "text": "What larger idea or possibility is behind it?"
+      }
+    ]
+  },
+  {
+    "n": 18,
+    "text": "You are more likely to trust a new idea when:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "It has evidence behind it."
+      },
+      {
+        "letter": "B",
+        "text": "It connects with a pattern I have noticed."
+      },
+      {
+        "letter": "C",
+        "text": "It has already worked in a similar situation."
+      },
+      {
+        "letter": "D",
+        "text": "It opens a possibility that conventional evidence has not captured yet."
+      }
+    ]
+  },
+  {
+    "n": 19,
+    "text": "When faced with a familiar task, you usually:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Use the method that reliably works."
+      },
+      {
+        "letter": "B",
+        "text": "Wonder whether there is a fundamentally different way."
+      },
+      {
+        "letter": "C",
+        "text": "Pay attention to the known sequence and details."
+      },
+      {
+        "letter": "D",
+        "text": "Look for a way to reinterpret or improve the task."
+      }
+    ]
+  },
+  {
+    "n": 20,
+    "text": "Which kind of conversation holds your attention longer?",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "What happened, what is happening, and what needs to happen next."
+      },
+      {
+        "letter": "B",
+        "text": "What it all might mean."
+      },
+      {
+        "letter": "C",
+        "text": "Specific experiences and useful information."
+      },
+      {
+        "letter": "D",
+        "text": "Ideas, theories, and what might happen."
+      }
+    ]
+  },
+  {
+    "n": 21,
+    "text": "When making a difficult decision, what carries more weight?",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Whether the reasoning is internally consistent."
+      },
+      {
+        "letter": "B",
+        "text": "How the decision will affect the people involved."
+      },
+      {
+        "letter": "C",
+        "text": "Whether the principles hold up even when emotions change."
+      },
+      {
+        "letter": "D",
+        "text": "Whether the outcome respects what matters to the people closest to me."
+      }
+    ]
+  },
+  {
+    "n": 22,
+    "text": "A friend asks for your honest opinion about something they created. You are more likely to:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Tell them exactly what is not working."
+      },
+      {
+        "letter": "B",
+        "text": "Start with what I appreciate so the criticism can be heard."
+      },
+      {
+        "letter": "C",
+        "text": "Focus on the quality of the result."
+      },
+      {
+        "letter": "D",
+        "text": "Think carefully about how the feedback will affect them."
+      }
+    ]
+  },
+  {
+    "n": 23,
+    "text": "When two people argue, you instinctively look for:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "The strongest evidence."
+      },
+      {
+        "letter": "B",
+        "text": "The underlying feelings and needs."
+      },
+      {
+        "letter": "C",
+        "text": "The point at which the reasoning breaks down."
+      },
+      {
+        "letter": "D",
+        "text": "The point at which the relationship is being damaged."
+      }
+    ]
+  },
+  {
+    "n": 24,
+    "text": "If a rule seems inefficient, your first question is:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Why should we keep a rule that does not work?"
+      },
+      {
+        "letter": "B",
+        "text": "Who is affected if we change it?"
+      },
+      {
+        "letter": "C",
+        "text": "Can the rule be redesigned logically?"
+      },
+      {
+        "letter": "D",
+        "text": "What would preserve fairness and trust if it changes?"
+      }
+    ]
+  },
+  {
+    "n": 25,
+    "text": "When someone makes a decision you disagree with, you are more likely to ask:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Does their reasoning actually support the conclusion?"
+      },
+      {
+        "letter": "B",
+        "text": "What circumstances led them to that choice?"
+      },
+      {
+        "letter": "C",
+        "text": "What evidence are they relying on?"
+      },
+      {
+        "letter": "D",
+        "text": "What values or people are they trying to protect?"
+      }
+    ]
+  },
+  {
+    "n": 26,
+    "text": "What makes an apology convincing to you?",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Acknowledging exactly what was wrong."
+      },
+      {
+        "letter": "B",
+        "text": "Showing genuine understanding of the hurt caused."
+      },
+      {
+        "letter": "C",
+        "text": "Taking responsibility for the specific action."
+      },
+      {
+        "letter": "D",
+        "text": "Showing that the relationship matters enough to change behavior."
+      }
+    ]
+  },
+  {
+    "n": 27,
+    "text": "When giving advice, you naturally emphasize:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "What is most rational and effective."
+      },
+      {
+        "letter": "B",
+        "text": "What will preserve the person's sense of self."
+      },
+      {
+        "letter": "C",
+        "text": "The consequences of each option."
+      },
+      {
+        "letter": "D",
+        "text": "What aligns with the person's values and relationships."
+      }
+    ]
+  },
+  {
+    "n": 28,
+    "text": "You discover that a decision produced a good outcome for the wrong reasons. You tend to:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Still question the reasoning."
+      },
+      {
+        "letter": "B",
+        "text": "Care that the outcome helped people."
+      },
+      {
+        "letter": "C",
+        "text": "Separate the quality of the reasoning from the outcome."
+      },
+      {
+        "letter": "D",
+        "text": "Consider whether the good result changes how the decision should be judged."
+      }
+    ]
+  },
+  {
+    "n": 29,
+    "text": "Which criticism would bother you more?",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "'Your reasoning does not hold together.'"
+      },
+      {
+        "letter": "B",
+        "text": "'You did not consider how this affected people.'"
+      },
+      {
+        "letter": "C",
+        "text": "'Your conclusion is based on weak evidence.'"
+      },
+      {
+        "letter": "D",
+        "text": "'You made people feel disregarded.'"
+      }
+    ]
+  },
+  {
+    "n": 30,
+    "text": "When you must choose between being precise and being kind in a difficult conversation, you tend to:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Say what is true as clearly as possible."
+      },
+      {
+        "letter": "B",
+        "text": "Find a way to preserve the person's dignity."
+      },
+      {
+        "letter": "C",
+        "text": "Prioritize accuracy first, then repair the relationship."
+      },
+      {
+        "letter": "D",
+        "text": "Prioritize the relationship while still being honest."
+      }
+    ]
+  },
+  {
+    "n": 31,
+    "text": "A project begins without clear direction. You feel most comfortable when you can:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Define the objective, roles, and timeline."
+      },
+      {
+        "letter": "B",
+        "text": "Keep the direction flexible while learning more."
+      },
+      {
+        "letter": "C",
+        "text": "Set milestones and make decisions early."
+      },
+      {
+        "letter": "D",
+        "text": "Leave room for unexpected opportunities and changes."
+      }
+    ]
+  },
+  {
+    "n": 32,
+    "text": "Your ideal weekend is more likely to be:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Planned enough that I know what I am doing."
+      },
+      {
+        "letter": "B",
+        "text": "Open enough that I can decide as I go."
+      },
+      {
+        "letter": "C",
+        "text": "A sequence of things I have chosen in advance."
+      },
+      {
+        "letter": "D",
+        "text": "A blank space where something unexpected can happen."
+      }
+    ]
+  },
+  {
+    "n": 33,
+    "text": "When a deadline is weeks away, you tend to:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Finish early so it stops occupying mental space."
+      },
+      {
+        "letter": "B",
+        "text": "Work best when the deadline becomes real."
+      },
+      {
+        "letter": "C",
+        "text": "Create a plan and follow it."
+      },
+      {
+        "letter": "D",
+        "text": "Keep options open until I know the best approach."
+      }
+    ]
+  },
+  {
+    "n": 34,
+    "text": "If plans change at the last minute, you usually:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Feel disrupted, then reorganize quickly."
+      },
+      {
+        "letter": "B",
+        "text": "Adapt easily if the new option is interesting."
+      },
+      {
+        "letter": "C",
+        "text": "Want to know the new plan as soon as possible."
+      },
+      {
+        "letter": "D",
+        "text": "See the change as potentially better than the original."
+      }
+    ]
+  },
+  {
+    "n": 35,
+    "text": "Which feels more uncomfortable?",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Leaving an important decision unresolved."
+      },
+      {
+        "letter": "B",
+        "text": "Having a decision made before all options are explored."
+      },
+      {
+        "letter": "C",
+        "text": "Not knowing what the plan is."
+      },
+      {
+        "letter": "D",
+        "text": "Being locked into a plan that no longer fits."
+      }
+    ]
+  },
+  {
+    "n": 36,
+    "text": "When organizing your surroundings, you prefer:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Everything having a defined place."
+      },
+      {
+        "letter": "B",
+        "text": "Things being accessible even if not perfectly arranged."
+      },
+      {
+        "letter": "C",
+        "text": "A visible system that keeps life predictable."
+      },
+      {
+        "letter": "D",
+        "text": "Freedom to change the arrangement as needs change."
+      }
+    ]
+  },
+  {
+    "n": 37,
+    "text": "When someone says, 'Let's just see what happens,' your reaction is more likely:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "I want at least a basic plan."
+      },
+      {
+        "letter": "B",
+        "text": "That sounds freeing."
+      },
+      {
+        "letter": "C",
+        "text": "I want to know what we are committing to."
+      },
+      {
+        "letter": "D",
+        "text": "That gives us room to respond intelligently."
+      }
+    ]
+  },
+  {
+    "n": 38,
+    "text": "When you have several important tasks, you naturally:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Prioritize them and work through the list."
+      },
+      {
+        "letter": "B",
+        "text": "Move between them depending on energy and interest."
+      },
+      {
+        "letter": "C",
+        "text": "Create a sequence and close things one by one."
+      },
+      {
+        "letter": "D",
+        "text": "Keep several active until the best direction becomes clear."
+      }
+    ]
+  },
+  {
+    "n": 39,
+    "text": "How do you relate to unfinished decisions?",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "They stay in my mind until I resolve them."
+      },
+      {
+        "letter": "B",
+        "text": "I can leave them open while I gather information."
+      },
+      {
+        "letter": "C",
+        "text": "I prefer closure even if the decision is difficult."
+      },
+      {
+        "letter": "D",
+        "text": "I dislike closing options prematurely."
+      }
+    ]
+  },
+  {
+    "n": 40,
+    "text": "When preparing for an important event, you are more likely to:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Plan the details so nothing is left to chance."
+      },
+      {
+        "letter": "B",
+        "text": "Prepare the essentials and improvise the rest."
+      },
+      {
+        "letter": "C",
+        "text": "Feel calmer once everything is organized."
+      },
+      {
+        "letter": "D",
+        "text": "Enjoy discovering what happens beyond the plan."
+      }
+    ]
+  },
+  {
+    "n": 41,
+    "text": "You inherit a responsibility with no instructions. Your first move is:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Establish a structure and decide what must be done."
+      },
+      {
+        "letter": "B",
+        "text": "Explore the situation before committing to a structure."
+      },
+      {
+        "letter": "C",
+        "text": "Set an outcome and organize the work around it."
+      },
+      {
+        "letter": "D",
+        "text": "Gather possibilities and see which direction develops."
+      }
+    ]
+  },
+  {
+    "n": 42,
+    "text": "When a conversation unexpectedly becomes deep, you usually:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Become more engaged because there is something real to explore."
+      },
+      {
+        "letter": "B",
+        "text": "Need time afterward to process what was said."
+      },
+      {
+        "letter": "C",
+        "text": "Enjoy the exchange and think through it with the other person."
+      },
+      {
+        "letter": "D",
+        "text": "Listen deeply but keep much of the experience inside."
+      }
+    ]
+  },
+  {
+    "n": 43,
+    "text": "When you meet someone who thinks very differently from you, what interests you first?",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "How they see the world and what we could discuss."
+      },
+      {
+        "letter": "B",
+        "text": "What their perspective reveals about my own thinking."
+      },
+      {
+        "letter": "C",
+        "text": "The energy of the interaction and what we might do together."
+      },
+      {
+        "letter": "D",
+        "text": "The internal logic of their worldview."
+      }
+    ]
+  },
+  {
+    "n": 44,
+    "text": "When you are overwhelmed, you are most likely to seek:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "A trusted person who helps me reconnect with the outside world."
+      },
+      {
+        "letter": "B",
+        "text": "Solitude so I can regain internal clarity."
+      },
+      {
+        "letter": "C",
+        "text": "Activity or movement that changes my state."
+      },
+      {
+        "letter": "D",
+        "text": "Quiet reflection without needing to explain myself."
+      }
+    ]
+  },
+  {
+    "n": 45,
+    "text": "Which sounds more like your natural thought process?",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "I understand what I think by hearing myself talk."
+      },
+      {
+        "letter": "B",
+        "text": "I understand what I think after I have reflected."
+      },
+      {
+        "letter": "C",
+        "text": "Ideas become clearer as I exchange them."
+      },
+      {
+        "letter": "D",
+        "text": "Ideas become clearer when I am alone with them."
+      }
+    ]
+  },
+  {
+    "n": 46,
+    "text": "When entering an unfamiliar social setting, you tend to:",
+    "tag": "E",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Make contact first and figure out the atmosphere through interaction."
+      },
+      {
+        "letter": "B",
+        "text": "Observe first and decide where I fit."
+      },
+      {
+        "letter": "C",
+        "text": "Use conversation to discover what the setting is like."
+      },
+      {
+        "letter": "D",
+        "text": "Wait until I understand the environment before participating."
+      }
+    ]
+  },
+  {
+    "n": 47,
+    "text": "When looking at a photograph from years ago, your mind is more likely to:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Notice what was physically there and what happened."
+      },
+      {
+        "letter": "B",
+        "text": "Wonder what the moment represents now."
+      },
+      {
+        "letter": "C",
+        "text": "Recall concrete details about the occasion."
+      },
+      {
+        "letter": "D",
+        "text": "Connect the image to a larger story about my life."
+      }
+    ]
+  },
+  {
+    "n": 48,
+    "text": "Someone tells you they have a strange feeling about a situation but no evidence. You tend to:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Ask what observable facts led them there."
+      },
+      {
+        "letter": "B",
+        "text": "Take the feeling seriously as a possible signal."
+      },
+      {
+        "letter": "C",
+        "text": "Wait for something concrete before deciding."
+      },
+      {
+        "letter": "D",
+        "text": "Wonder what pattern they may have sensed."
+      }
+    ]
+  },
+  {
+    "n": 49,
+    "text": "When designing something, you are more drawn to:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Making it functional, clear, and dependable."
+      },
+      {
+        "letter": "B",
+        "text": "Making it expressive of an idea or concept."
+      },
+      {
+        "letter": "C",
+        "text": "Using proven materials and methods well."
+      },
+      {
+        "letter": "D",
+        "text": "Experimenting with what it could become."
+      }
+    ]
+  },
+  {
+    "n": 50,
+    "text": "When you encounter a surprising coincidence, you are more likely to:",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Treat it as an interesting event unless there is evidence for more."
+      },
+      {
+        "letter": "B",
+        "text": "Wonder whether it reveals a meaningful pattern."
+      },
+      {
+        "letter": "C",
+        "text": "Look for the factual explanation first."
+      },
+      {
+        "letter": "D",
+        "text": "Explore the possible significance even without proof."
+      }
+    ]
+  },
+  {
+    "n": 51,
+    "text": "Which question naturally pulls you in?",
+    "tag": "S",
+    "options": [
+      {
+        "letter": "A",
+        "text": "'What exactly happened?'"
+      },
+      {
+        "letter": "B",
+        "text": "'Why might this be happening beneath the surface?'"
+      },
+      {
+        "letter": "C",
+        "text": "'What can we verify?'"
+      },
+      {
+        "letter": "D",
+        "text": "'What could this become?'"
+      }
+    ]
+  },
+  {
+    "n": 52,
+    "text": "A close friend is making a life change you think is risky. You are more likely to:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Point out the concrete risks and practical consequences."
+      },
+      {
+        "letter": "B",
+        "text": "Ask what the change means to them."
+      },
+      {
+        "letter": "C",
+        "text": "Help them examine the evidence and prepare."
+      },
+      {
+        "letter": "D",
+        "text": "Ask what future they are trying to create."
+      }
+    ]
+  },
+  {
+    "n": 53,
+    "text": "You have to deliver bad news. You focus first on:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Being accurate and unambiguous."
+      },
+      {
+        "letter": "B",
+        "text": "Choosing words that allow the person to absorb it."
+      },
+      {
+        "letter": "C",
+        "text": "Making sure the facts cannot be misunderstood."
+      },
+      {
+        "letter": "D",
+        "text": "Making sure the person does not feel abandoned by the message."
+      }
+    ]
+  },
+  {
+    "n": 54,
+    "text": "A team is divided between what is efficient and what feels fair. Your first instinct is to:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Define the objective and compare the costs and benefits."
+      },
+      {
+        "letter": "B",
+        "text": "Ask what fairness means to the people involved."
+      },
+      {
+        "letter": "C",
+        "text": "Determine which option best satisfies the stated goal."
+      },
+      {
+        "letter": "D",
+        "text": "Find a solution people can live with even if it is not maximally efficient."
+      }
+    ]
+  },
+  {
+    "n": 55,
+    "text": "When you discover that someone you care about is wrong, you are more likely to:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Tell them because accuracy matters."
+      },
+      {
+        "letter": "B",
+        "text": "Choose the moment carefully because the relationship matters."
+      },
+      {
+        "letter": "C",
+        "text": "Explain the evidence and let them decide."
+      },
+      {
+        "letter": "D",
+        "text": "Consider whether correcting them now would actually help."
+      }
+    ]
+  },
+  {
+    "n": 56,
+    "text": "Which compliment feels more meaningful?",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "'You think clearly.'"
+      },
+      {
+        "letter": "B",
+        "text": "'You make people feel understood.'"
+      },
+      {
+        "letter": "C",
+        "text": "'You solve difficult problems.'"
+      },
+      {
+        "letter": "D",
+        "text": "'People feel safe being themselves with you.'"
+      }
+    ]
+  },
+  {
+    "n": 57,
+    "text": "If a tradition no longer makes sense, you tend to:",
+    "tag": "T",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Question it and replace it if necessary."
+      },
+      {
+        "letter": "B",
+        "text": "Consider what the tradition means to people before changing it."
+      },
+      {
+        "letter": "C",
+        "text": "Test whether the original purpose still has value."
+      },
+      {
+        "letter": "D",
+        "text": "Preserve the meaning while changing the form."
+      }
+    ]
+  },
+  {
+    "n": 58,
+    "text": "When a plan is nearly complete, you are more likely to:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Lock it down and make sure everything is ready."
+      },
+      {
+        "letter": "B",
+        "text": "Keep it open in case something important appears."
+      },
+      {
+        "letter": "C",
+        "text": "Close remaining decisions so I can move forward."
+      },
+      {
+        "letter": "D",
+        "text": "Stay receptive until the last reasonable moment."
+      }
+    ]
+  },
+  {
+    "n": 59,
+    "text": "You are given two free weeks with no obligations. You would rather:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Know roughly how the time will be used."
+      },
+      {
+        "letter": "B",
+        "text": "Decide day by day."
+      },
+      {
+        "letter": "C",
+        "text": "Set a few goals and build the time around them."
+      },
+      {
+        "letter": "D",
+        "text": "See what opportunities appear."
+      }
+    ]
+  },
+  {
+    "n": 60,
+    "text": "When buying something expensive, you prefer to:",
+    "tag": "J",
+    "options": [
+      {
+        "letter": "A",
+        "text": "Research, compare, decide, and finish the purchase."
+      },
+      {
+        "letter": "B",
+        "text": "Keep looking until I feel the right option has emerged."
+      },
+      {
+        "letter": "C",
+        "text": "Create clear criteria and choose the best match."
+      },
+      {
+        "letter": "D",
+        "text": "Avoid committing until I have explored enough alternatives."
+      }
+    ]
+  }
+]

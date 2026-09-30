@@ -1,0 +1,232 @@
+[
+  {
+    "n": 1,
+    "stem": "2, 4, 8, 16, ?",
+    "options": [
+      {
+        "label": "A",
+        "text": "20"
+      },
+      {
+        "label": "B",
+        "text": "24"
+      },
+      {
+        "label": "C",
+        "text": "32"
+      },
+      {
+        "label": "D",
+        "text": "36"
+      }
+    ],
+    "correct": "C"
+  },
+  {
+    "n": 2,
+    "stem": "3, 6, 12, 24, ?",
+    "options": [
+      {
+        "label": "A",
+        "text": "36"
+      },
+      {
+        "label": "B",
+        "text": "42"
+      },
+      {
+        "label": "C",
+        "text": "48"
+      },
+      {
+        "label": "D",
+        "text": "54"
+      }
+    ],
+    "correct": "C"
+  },
+  {
+    "n": 3,
+    "stem": "Which does not belong?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Apple"
+      },
+      {
+        "label": "B",
+        "text": "Banana"
+      },
+      {
+        "label": "C",
+        "text": "Orange"
+      },
+      {
+        "label": "D",
+        "text": "Carrot"
+      }
+    ],
+    "correct": "D"
+  },
+  {
+    "n": 4,
+    "stem": "All roses are flowers. Some flowers are red. Which is definitely true?",
+    "options": [
+      {
+        "label": "A",
+        "text": "All roses are red"
+      },
+      {
+        "label": "B",
+        "text": "Some roses are red"
+      },
+      {
+        "label": "C",
+        "text": "Roses are flowers"
+      },
+      {
+        "label": "D",
+        "text": "No roses are red"
+      }
+    ],
+    "correct": "C"
+  },
+  {
+    "n": 5,
+    "stem": "A clock shows 3:00. What is the angle?",
+    "options": [
+      {
+        "label": "A",
+        "text": "45°"
+      },
+      {
+        "label": "B",
+        "text": "60°"
+      },
+      {
+        "label": "C",
+        "text": "90°"
+      },
+      {
+        "label": "D",
+        "text": "180°"
+      }
+    ],
+    "correct": "C"
+  },
+  {
+    "n": 6,
+    "stem": "How many letters are in COMPUTER?",
+    "options": [
+      {
+        "label": "A",
+        "text": "6"
+      },
+      {
+        "label": "B",
+        "text": "7"
+      },
+      {
+        "label": "C",
+        "text": "8"
+      },
+      {
+        "label": "D",
+        "text": "9"
+      }
+    ],
+    "correct": "C"
+  },
+  {
+    "n": 7,
+    "stem": "Which number is different?",
+    "options": [
+      {
+        "label": "A",
+        "text": "9"
+      },
+      {
+        "label": "B",
+        "text": "16"
+      },
+      {
+        "label": "C",
+        "text": "25"
+      },
+      {
+        "label": "D",
+        "text": "30"
+      }
+    ],
+    "correct": "D"
+  },
+  {
+    "n": 8,
+    "stem": "1,1,2,3,5,8,?",
+    "options": [
+      {
+        "label": "A",
+        "text": "10"
+      },
+      {
+        "label": "B",
+        "text": "11"
+      },
+      {
+        "label": "C",
+        "text": "12"
+      },
+      {
+        "label": "D",
+        "text": "13"
+      }
+    ],
+    "correct": "D"
+  },
+  {
+    "n": 9,
+    "stem": "Book is to Reading as Fork is to:",
+    "options": [
+      {
+        "label": "A",
+        "text": "Cooking"
+      },
+      {
+        "label": "B",
+        "text": "Eating"
+      },
+      {
+        "label": "C",
+        "text": "Writing"
+      },
+      {
+        "label": "D",
+        "text": "Cutting"
+      }
+    ],
+    "correct": "B"
+  },
+  {
+    "n": 10,
+    "stem": "If 5 machines make 5 products in 5 minutes, how long does 1 machine take to make 1 product?",
+    "options": [
+      {
+        "label": "A",
+        "text": "1"
+      },
+      {
+        "label": "B",
+        "text": "5"
+      },
+      {
+        "label": "C",
+        "text": "10"
+      },
+      {
+        "label": "D",
+        "text": "25 minutes"
+      }
+    ],
+    "correct": "B"
+  }
+]

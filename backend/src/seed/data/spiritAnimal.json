@@ -1,0 +1,756 @@
+[
+  {
+    "n": 1,
+    "stem": "Imagine you discover that someone you trusted has been telling a different version of your relationship to other people.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Stag+Wolf",
+        "animal": "Stag+Wolf"
+      },
+      {
+        "label": "B",
+        "text": "Owl+Fox",
+        "animal": "Owl+Fox"
+      },
+      {
+        "label": "C",
+        "text": "Wolf+Serpent",
+        "animal": "Wolf+Serpent"
+      },
+      {
+        "label": "D",
+        "text": "Phoenix+Unicorn",
+        "animal": "Phoenix+Unicorn"
+      }
+    ]
+  },
+  {
+    "n": 2,
+    "stem": "You are given the opportunity to start an entirely new life, but nobody from your current life can come with you.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Panther+Eagle",
+        "animal": "Panther+Eagle"
+      },
+      {
+        "label": "B",
+        "text": "Fox+Dragon",
+        "animal": "Fox+Dragon"
+      },
+      {
+        "label": "C",
+        "text": "Wolf+Bear",
+        "animal": "Wolf+Bear"
+      },
+      {
+        "label": "D",
+        "text": "Phoenix+Stag",
+        "animal": "Phoenix+Stag"
+      }
+    ]
+  },
+  {
+    "n": 3,
+    "stem": "Someone criticizes a part of your personality that you secretly know is true.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Lion+Dragon",
+        "animal": "Lion+Dragon"
+      },
+      {
+        "label": "B",
+        "text": "Owl+Panther",
+        "animal": "Owl+Panther"
+      },
+      {
+        "label": "C",
+        "text": "Serpent+Fox",
+        "animal": "Serpent+Fox"
+      },
+      {
+        "label": "D",
+        "text": "Stag+Unicorn",
+        "animal": "Stag+Unicorn"
+      }
+    ]
+  },
+  {
+    "n": 4,
+    "stem": "You could know one absolute truth about your life, but knowing it would remove all uncertainty. Would you choose to know?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Owl+Bear",
+        "animal": "Owl+Bear"
+      },
+      {
+        "label": "B",
+        "text": "Unicorn+Eagle",
+        "animal": "Unicorn+Eagle"
+      },
+      {
+        "label": "C",
+        "text": "Dragon+Fox",
+        "animal": "Dragon+Fox"
+      },
+      {
+        "label": "D",
+        "text": "Serpent+Phoenix",
+        "animal": "Serpent+Phoenix"
+      }
+    ]
+  },
+  {
+    "n": 5,
+    "stem": "Think of the last time you felt completely misunderstood. What did you want most from the other person?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Stag+Owl",
+        "animal": "Stag+Owl"
+      },
+      {
+        "label": "B",
+        "text": "Wolf+Serpent",
+        "animal": "Wolf+Serpent"
+      },
+      {
+        "label": "C",
+        "text": "Panther+Phoenix",
+        "animal": "Panther+Phoenix"
+      },
+      {
+        "label": "D",
+        "text": "Eagle+Lion",
+        "animal": "Eagle+Lion"
+      }
+    ]
+  },
+  {
+    "n": 6,
+    "stem": "You walk into a room where everyone seems to know something you don't.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Owl+Panther",
+        "animal": "Owl+Panther"
+      },
+      {
+        "label": "B",
+        "text": "Lion+Eagle",
+        "animal": "Lion+Eagle"
+      },
+      {
+        "label": "C",
+        "text": "Fox+Unicorn",
+        "animal": "Fox+Unicorn"
+      },
+      {
+        "label": "D",
+        "text": "Serpent+Dragon",
+        "animal": "Serpent+Dragon"
+      }
+    ]
+  },
+  {
+    "n": 7,
+    "stem": "If someone you love repeatedly makes the same mistake, eventually you:",
+    "options": [
+      {
+        "label": "A",
+        "text": "Bear+Wolf",
+        "animal": "Bear+Wolf"
+      },
+      {
+        "label": "B",
+        "text": "Lion+Stag",
+        "animal": "Lion+Stag"
+      },
+      {
+        "label": "C",
+        "text": "Eagle+Panther",
+        "animal": "Eagle+Panther"
+      },
+      {
+        "label": "D",
+        "text": "Serpent+Owl",
+        "animal": "Serpent+Owl"
+      }
+    ]
+  },
+  {
+    "n": 8,
+    "stem": "Which would be harder for you to accept?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Phoenix+Stag",
+        "animal": "Phoenix+Stag"
+      },
+      {
+        "label": "B",
+        "text": "Wolf+Lion",
+        "animal": "Wolf+Lion"
+      },
+      {
+        "label": "C",
+        "text": "Eagle+Panther",
+        "animal": "Eagle+Panther"
+      },
+      {
+        "label": "D",
+        "text": "Owl+Serpent",
+        "animal": "Owl+Serpent"
+      }
+    ]
+  },
+  {
+    "n": 9,
+    "stem": "You suddenly realize that the life you've built no longer feels like yours.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Bear+Owl",
+        "animal": "Bear+Owl"
+      },
+      {
+        "label": "B",
+        "text": "Eagle+Phoenix",
+        "animal": "Eagle+Phoenix"
+      },
+      {
+        "label": "C",
+        "text": "Fox+Panther",
+        "animal": "Fox+Panther"
+      },
+      {
+        "label": "D",
+        "text": "Dragon+Serpent",
+        "animal": "Dragon+Serpent"
+      }
+    ]
+  },
+  {
+    "n": 10,
+    "stem": "Someone offers you a position of enormous influence, but nobody would ever know that you were the person behind the decisions.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Serpent+Fox",
+        "animal": "Serpent+Fox"
+      },
+      {
+        "label": "B",
+        "text": "Lion+Bear",
+        "animal": "Lion+Bear"
+      },
+      {
+        "label": "C",
+        "text": "Dragon+Eagle",
+        "animal": "Dragon+Eagle"
+      },
+      {
+        "label": "D",
+        "text": "Unicorn+Stag",
+        "animal": "Unicorn+Stag"
+      }
+    ]
+  },
+  {
+    "n": 11,
+    "stem": "When someone becomes emotionally distant from you, your first instinct is usually:",
+    "options": [
+      {
+        "label": "A",
+        "text": "Eagle+Panther",
+        "animal": "Eagle+Panther"
+      },
+      {
+        "label": "B",
+        "text": "Owl+Wolf",
+        "animal": "Owl+Wolf"
+      },
+      {
+        "label": "C",
+        "text": "Serpent+Fox",
+        "animal": "Serpent+Fox"
+      },
+      {
+        "label": "D",
+        "text": "Stag+Bear",
+        "animal": "Stag+Bear"
+      }
+    ]
+  },
+  {
+    "n": 12,
+    "stem": "You have to choose between a peaceful life that never surprises you and a difficult life that could completely transform you.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Bear+Stag",
+        "animal": "Bear+Stag"
+      },
+      {
+        "label": "B",
+        "text": "Phoenix+Dragon",
+        "animal": "Phoenix+Dragon"
+      },
+      {
+        "label": "C",
+        "text": "Fox+Owl",
+        "animal": "Fox+Owl"
+      },
+      {
+        "label": "D",
+        "text": "Unicorn+Serpent",
+        "animal": "Unicorn+Serpent"
+      }
+    ]
+  },
+  {
+    "n": 13,
+    "stem": "Someone gives you an apology, but you can tell they haven't really changed.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Stag+Unicorn",
+        "animal": "Stag+Unicorn"
+      },
+      {
+        "label": "B",
+        "text": "Lion+Owl",
+        "animal": "Lion+Owl"
+      },
+      {
+        "label": "C",
+        "text": "Panther+Eagle",
+        "animal": "Panther+Eagle"
+      },
+      {
+        "label": "D",
+        "text": "Serpent+Wolf",
+        "animal": "Serpent+Wolf"
+      }
+    ]
+  },
+  {
+    "n": 14,
+    "stem": "Which thought would stay with you longer?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Wolf+Bear",
+        "animal": "Wolf+Bear"
+      },
+      {
+        "label": "B",
+        "text": "Phoenix+Eagle",
+        "animal": "Phoenix+Eagle"
+      },
+      {
+        "label": "C",
+        "text": "Panther+Dragon",
+        "animal": "Panther+Dragon"
+      },
+      {
+        "label": "D",
+        "text": "Owl+Serpent",
+        "animal": "Owl+Serpent"
+      }
+    ]
+  },
+  {
+    "n": 15,
+    "stem": "You are told that someone has formed a completely false opinion of you.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Lion+Eagle",
+        "animal": "Lion+Eagle"
+      },
+      {
+        "label": "B",
+        "text": "Panther+Unicorn",
+        "animal": "Panther+Unicorn"
+      },
+      {
+        "label": "C",
+        "text": "Owl+Fox",
+        "animal": "Owl+Fox"
+      },
+      {
+        "label": "D",
+        "text": "Stag+Wolf",
+        "animal": "Stag+Wolf"
+      }
+    ]
+  },
+  {
+    "n": 16,
+    "stem": "You are alone in a place where nobody knows who you are.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Eagle+Panther",
+        "animal": "Eagle+Panther"
+      },
+      {
+        "label": "B",
+        "text": "Bear+Stag",
+        "animal": "Bear+Stag"
+      },
+      {
+        "label": "C",
+        "text": "Dragon+Phoenix",
+        "animal": "Dragon+Phoenix"
+      },
+      {
+        "label": "D",
+        "text": "Wolf+Unicorn",
+        "animal": "Wolf+Unicorn"
+      }
+    ]
+  },
+  {
+    "n": 17,
+    "stem": "If you could remove one recurring pattern from your life, which would you choose?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Owl+Fox",
+        "animal": "Owl+Fox"
+      },
+      {
+        "label": "B",
+        "text": "Wolf+Stag",
+        "animal": "Wolf+Stag"
+      },
+      {
+        "label": "C",
+        "text": "Bear+Phoenix",
+        "animal": "Bear+Phoenix"
+      },
+      {
+        "label": "D",
+        "text": "Panther+Eagle",
+        "animal": "Panther+Eagle"
+      }
+    ]
+  },
+  {
+    "n": 18,
+    "stem": "You are given a choice between being deeply understood by one person or admired by thousands.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Wolf+Stag",
+        "animal": "Wolf+Stag"
+      },
+      {
+        "label": "B",
+        "text": "Lion+Dragon",
+        "animal": "Lion+Dragon"
+      },
+      {
+        "label": "C",
+        "text": "Eagle+Panther",
+        "animal": "Eagle+Panther"
+      },
+      {
+        "label": "D",
+        "text": "Phoenix+Owl",
+        "animal": "Phoenix+Owl"
+      }
+    ]
+  },
+  {
+    "n": 19,
+    "stem": "Someone tells you a truth about yourself that you weren't ready to hear.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Lion+Bear",
+        "animal": "Lion+Bear"
+      },
+      {
+        "label": "B",
+        "text": "Owl+Fox",
+        "animal": "Owl+Fox"
+      },
+      {
+        "label": "C",
+        "text": "Panther+Serpent",
+        "animal": "Panther+Serpent"
+      },
+      {
+        "label": "D",
+        "text": "Stag+Phoenix",
+        "animal": "Stag+Phoenix"
+      }
+    ]
+  },
+  {
+    "n": 20,
+    "stem": "When you imagine your future self, what matters most?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Eagle+Panther",
+        "animal": "Eagle+Panther"
+      },
+      {
+        "label": "B",
+        "text": "Lion+Dragon",
+        "animal": "Lion+Dragon"
+      },
+      {
+        "label": "C",
+        "text": "Wolf+Bear",
+        "animal": "Wolf+Bear"
+      },
+      {
+        "label": "D",
+        "text": "Phoenix+Unicorn",
+        "animal": "Phoenix+Unicorn"
+      }
+    ]
+  },
+  {
+    "n": 21,
+    "stem": "Achieving your biggest goal would require becoming a person you don't recognize.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Unicorn+Stag",
+        "animal": "Unicorn+Stag"
+      },
+      {
+        "label": "B",
+        "text": "Phoenix+Dragon",
+        "animal": "Phoenix+Dragon"
+      },
+      {
+        "label": "C",
+        "text": "Fox+Serpent",
+        "animal": "Fox+Serpent"
+      },
+      {
+        "label": "D",
+        "text": "Owl+Panther",
+        "animal": "Owl+Panther"
+      }
+    ]
+  },
+  {
+    "n": 22,
+    "stem": "Someone walks away from your life without giving you an explanation.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Owl+Serpent",
+        "animal": "Owl+Serpent"
+      },
+      {
+        "label": "B",
+        "text": "Eagle+Bear",
+        "animal": "Eagle+Bear"
+      },
+      {
+        "label": "C",
+        "text": "Wolf+Stag",
+        "animal": "Wolf+Stag"
+      },
+      {
+        "label": "D",
+        "text": "Phoenix+Unicorn",
+        "animal": "Phoenix+Unicorn"
+      }
+    ]
+  },
+  {
+    "n": 23,
+    "stem": "When you're under extreme pressure, what part of you becomes strongest?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Owl+Fox",
+        "animal": "Owl+Fox"
+      },
+      {
+        "label": "B",
+        "text": "Bear+Phoenix",
+        "animal": "Bear+Phoenix"
+      },
+      {
+        "label": "C",
+        "text": "Lion+Dragon",
+        "animal": "Lion+Dragon"
+      },
+      {
+        "label": "D",
+        "text": "Panther+Serpent",
+        "animal": "Panther+Serpent"
+      }
+    ]
+  },
+  {
+    "n": 24,
+    "stem": "You have one chance to ask your future self a question.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Owl+Fox",
+        "animal": "Owl+Fox"
+      },
+      {
+        "label": "B",
+        "text": "Stag+Bear",
+        "animal": "Stag+Bear"
+      },
+      {
+        "label": "C",
+        "text": "Phoenix+Unicorn",
+        "animal": "Phoenix+Unicorn"
+      },
+      {
+        "label": "D",
+        "text": "Wolf+Serpent",
+        "animal": "Wolf+Serpent"
+      }
+    ]
+  },
+  {
+    "n": 25,
+    "stem": "Imagine that nobody could ever judge you again. What would change first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Unicorn+Stag",
+        "animal": "Unicorn+Stag"
+      },
+      {
+        "label": "B",
+        "text": "Phoenix+Eagle",
+        "animal": "Phoenix+Eagle"
+      },
+      {
+        "label": "C",
+        "text": "Panther+Wolf",
+        "animal": "Panther+Wolf"
+      },
+      {
+        "label": "D",
+        "text": "Dragon+Lion",
+        "animal": "Dragon+Lion"
+      }
+    ]
+  },
+  {
+    "n": 26,
+    "stem": "You have to choose one: being right but alone, or being wrong but surrounded by people you love.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Eagle+Owl",
+        "animal": "Eagle+Owl"
+      },
+      {
+        "label": "B",
+        "text": "Wolf+Bear",
+        "animal": "Wolf+Bear"
+      },
+      {
+        "label": "C",
+        "text": "Fox+Dragon",
+        "animal": "Fox+Dragon"
+      },
+      {
+        "label": "D",
+        "text": "Serpent+Stag",
+        "animal": "Serpent+Stag"
+      }
+    ]
+  },
+  {
+    "n": 27,
+    "stem": "You realize someone close to you needs something from you that they have never asked for directly. What do you do?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Eagle+Owl",
+        "animal": "Eagle+Owl"
+      },
+      {
+        "label": "B",
+        "text": "Bear+Wolf",
+        "animal": "Bear+Wolf"
+      },
+      {
+        "label": "C",
+        "text": "Stag+Serpent",
+        "animal": "Stag+Serpent"
+      },
+      {
+        "label": "D",
+        "text": "Panther+Fox",
+        "animal": "Panther+Fox"
+      }
+    ]
+  },
+  {
+    "n": 28,
+    "stem": "You are given a choice between knowing exactly how people see you and never knowing what they think of you.",
+    "options": [
+      {
+        "label": "A",
+        "text": "Owl+Fox",
+        "animal": "Owl+Fox"
+      },
+      {
+        "label": "B",
+        "text": "Unicorn+Panther",
+        "animal": "Unicorn+Panther"
+      },
+      {
+        "label": "C",
+        "text": "Wolf+Stag",
+        "animal": "Wolf+Stag"
+      },
+      {
+        "label": "D",
+        "text": "Eagle+Lion",
+        "animal": "Eagle+Lion"
+      }
+    ]
+  },
+  {
+    "n": 29,
+    "stem": "You are standing at the end of your life and looking back at yourself today. What would you hope that person had understood?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Eagle+Panther+Phoenix",
+        "animal": "Eagle+Panther+Phoenix"
+      },
+      {
+        "label": "B",
+        "text": "Wolf+Bear+Stag",
+        "animal": "Wolf+Bear+Stag"
+      },
+      {
+        "label": "C",
+        "text": "Owl+Serpent+Fox",
+        "animal": "Owl+Serpent+Fox"
+      },
+      {
+        "label": "D",
+        "text": "Dragon+Unicorn+Phoenix",
+        "animal": "Dragon+Unicorn+Phoenix"
+      }
+    ]
+  }
+]

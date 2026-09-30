@@ -1,0 +1,1382 @@
+[
+  {
+    "n": 1,
+    "text": "After a difficult day, which response from your partner would stay with you the longest?",
+    "options": [
+      {
+        "label": "A",
+        "text": "They tell me they are proud of how I handled it.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "They put everything aside and spend the evening with me.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "They quietly take something off my plate.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "They bring me something small they remembered I like.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "They hold me close without needing to talk.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 2,
+    "text": "Your partner has had an exhausting week. What do you instinctively want to do first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Tell them exactly what you appreciate about them.",
+        "selfCategory": "WA",
+        "selfScore": 2,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "Make uninterrupted time for them.",
+        "selfCategory": "QT",
+        "selfScore": 2,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Handle one of their responsibilities for them.",
+        "selfCategory": "AS",
+        "selfScore": 2,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Surprise them with something meaningful.",
+        "selfCategory": "TG",
+        "selfScore": 2,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Sit close, hug them, or touch their hand.",
+        "selfCategory": "PT",
+        "selfScore": 2,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 3,
+    "text": "Imagine your partner says, 'I know you love me, but sometimes I don't feel it.' Which response would most likely repair the moment?",
+    "options": [
+      {
+        "label": "A",
+        "text": "'Let me tell you what you mean to me.'",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "'Let's spend some time together�just us.'",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 2
+      },
+      {
+        "label": "C",
+        "text": "'Tell me what I can take care of for you.'",
+        "selfCategory": "AS",
+        "selfScore": 2,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "'I saw this and immediately thought of you.'",
+        "selfCategory": "TG",
+        "selfScore": 2,
+        "partnerCategory": "TG",
+        "partnerScore": 2
+      },
+      {
+        "label": "E",
+        "text": "You move closer and embrace them.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 4,
+    "text": "Which absence would be hardest for you to explain away in a relationship?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Rarely hearing affection or appreciation.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Rarely having real time together.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 2
+      },
+      {
+        "label": "C",
+        "text": "Feeling that everything is left for me to handle.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "Never receiving thoughtful gestures.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 2
+      },
+      {
+        "label": "E",
+        "text": "A lack of affectionate touch.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 5,
+    "text": "Your partner remembers something tiny you mentioned months ago. What makes the moment meaningful?",
+    "options": [
+      {
+        "label": "A",
+        "text": "They remembered because they listened to me.",
+        "selfCategory": "QT",
+        "selfScore": 2,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "They turned it into a thoughtful surprise.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "They use it to do something helpful for me.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "They mention it affectionately and tell me why they remembered.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "E",
+        "text": "They pull me close while mentioning it.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 6,
+    "text": "When you picture a perfect ordinary evening together, what matters most?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Talking openly about the day.",
+        "selfCategory": "WA",
+        "selfScore": 2,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Doing something together without distractions.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Cooking, organizing, or preparing something together.",
+        "selfCategory": "AS",
+        "selfScore": 2,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Having a small surprise waiting for one another.",
+        "selfCategory": "TG",
+        "selfScore": 2,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Sitting close, cuddling, or touching naturally.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 7,
+    "text": "Your partner is upset but says, 'I'm fine.' What are you most likely to do?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Ask gently and tell them they can say anything to me.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Stay with them and let them decide whether to talk.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Start helping with whatever seems to be overwhelming them.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "Bring them something comforting.",
+        "selfCategory": "TG",
+        "selfScore": 2,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Reach for their hand or hug them.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 8,
+    "text": "If your partner had to choose one sentence, which would feel most revealing about how they want to be loved?",
+    "options": [
+      {
+        "label": "A",
+        "text": "'Tell me what you appreciate about me.'",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "'Make time for me when life gets busy.'",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "'Notice what needs doing and help without me asking.'",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "'Remember the little things that matter to me.'",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "'Come closer when I need you.'",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 9,
+    "text": "During an argument, what would help you feel that the relationship is still safe?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Hearing reassurance that we still care about each other.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Knowing we will have uninterrupted time to resolve it.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 2
+      },
+      {
+        "label": "C",
+        "text": "Seeing the other person take responsibility through action.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "A meaningful gesture after the conflict.",
+        "selfCategory": "TG",
+        "selfScore": 2,
+        "partnerCategory": "TG",
+        "partnerScore": 2
+      },
+      {
+        "label": "E",
+        "text": "A hug or affectionate contact once we are calm.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 10,
+    "text": "Which kind of disappointment would make you feel most invisible?",
+    "options": [
+      {
+        "label": "A",
+        "text": "They rarely acknowledge what I do.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "They are physically present but mentally somewhere else.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "They see that I am overwhelmed but do nothing.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "They forget meaningful occasions or details.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "They become physically distant when I need closeness.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 11,
+    "text": "Your partner achieves something they worked hard for. What feels most natural?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Tell them specifically how proud I am.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "Make the occasion about spending time together.",
+        "selfCategory": "QT",
+        "selfScore": 2,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Help make their next step easier.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "Give them something connected to the achievement.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Hug them and celebrate physically.",
+        "selfCategory": "PT",
+        "selfScore": 2,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 12,
+    "text": "If you were away from your partner for several weeks, what would you miss most?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Their messages and words.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "The experience of simply being together.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Having someone who naturally helps with everyday things.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "The little things they would normally bring or leave for me.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 2
+      },
+      {
+        "label": "E",
+        "text": "Their physical presence and touch.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 13,
+    "text": "Your partner asks, 'How do you know I love you?' What answer comes most naturally?",
+    "options": [
+      {
+        "label": "A",
+        "text": "'Because of the way you speak to me.'",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "'Because you make time for me.'",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "'Because you show up when I need you.'",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "'Because you notice things about me.'",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "'Because I feel it when you hold me.'",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 14,
+    "text": "What kind of romantic surprise would stay in your memory longest?",
+    "options": [
+      {
+        "label": "A",
+        "text": "A letter explaining what I mean to them.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "A whole day planned around us.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "They arrange something that removes a burden I have been carrying.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Something personal they chose because it reminded them of me.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "A private, affectionate moment together.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 15,
+    "text": "When you feel disconnected from your partner, what do you reach for first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "A real conversation.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Time alone together.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Doing something helpful for them.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "A thoughtful gesture.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 2
+      },
+      {
+        "label": "E",
+        "text": "Physical closeness.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 16,
+    "text": "Which sentence would hurt most if your partner said it sincerely?",
+    "options": [
+      {
+        "label": "A",
+        "text": "'I don't really notice what you do.'",
+        "selfCategory": "WA",
+        "selfScore": 2,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "'I don't need to spend time with you to feel close.'",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "'You don't need to help me; I'll handle everything alone.'",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "'Those little things don't mean anything to me.'",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "'I don't really like being touched.'",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 17,
+    "text": "Imagine your partner has had a terrible day but does not want advice. What would you give instead?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Reassuring words.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "Your full attention without trying to fix it.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Practical relief from whatever still needs to be done.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Something comforting you know they like.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "A hug or quiet physical closeness.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 18,
+    "text": "Which pattern would make you wonder whether your partner still feels emotionally connected to you?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Their affectionate language disappears.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "They stop making intentional time for us.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "They stop helping or showing practical consideration.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "They stop remembering the little things.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "They stop reaching for me physically.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 19,
+    "text": "When you apologize, which part feels most important to you?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Saying clearly what I am sorry for.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Giving them time and attention to talk it through.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Changing something practical afterward.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Doing something thoughtful afterward.",
+        "selfCategory": "TG",
+        "selfScore": 2,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Reconnecting physically once things are calm.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 20,
+    "text": "If your partner could change one small habit tomorrow, which would make the biggest emotional difference?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Express appreciation more often.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "Put the phone away and be fully present.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Notice what needs to be done without being asked.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Remember small occasions and preferences.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Initiate affection more naturally.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 21,
+    "text": "What do you secretly wish your partner understood without you having to ask?",
+    "options": [
+      {
+        "label": "A",
+        "text": "How much their words affect me.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "How much their attention matters.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "How meaningful it is when they make life easier.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "How much small details stay with me.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "How much closeness calms me.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 22,
+    "text": "Your partner says they feel loved by you, but you are not sure they actually do. What do you examine first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Whether I tell them enough.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Whether I give them enough real time.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Whether my actions match what I say.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Whether I remember what matters to them.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Whether I show affection physically.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 23,
+    "text": "Which moment feels most intimate without necessarily being romantic?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Someone saying something vulnerable and honest.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "Sitting together in comfortable silence.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Doing an ordinary task for each other.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Finding an unexpected little reminder of each other.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Resting against each other without speaking.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 24,
+    "text": "Your partner is busy for a long period. Which change would you notice first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Fewer affectionate messages.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "Fewer moments of undistracted time.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "Less practical consideration.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Fewer thoughtful gestures.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Less physical affection.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 25,
+    "text": "If you could preserve one thing from your relationship during a difficult period, what would you protect?",
+    "options": [
+      {
+        "label": "A",
+        "text": "The way we speak kindly to each other.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "Our private time together.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "The way we help each other.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "Our little traditions and gestures.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "Our physical closeness.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 26,
+    "text": "What would make you feel most chosen by your partner?",
+    "options": [
+      {
+        "label": "A",
+        "text": "They tell me why they choose me.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "They consistently make space for me.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "They show up when life is difficult.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "They notice and remember what matters to me.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "They naturally seek closeness with me.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 27,
+    "text": "Your partner gives you a gift that is inexpensive but deeply personal. What matters most?",
+    "options": [
+      {
+        "label": "A",
+        "text": "The message they included.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "That they took time to find something personal.",
+        "selfCategory": "QT",
+        "selfScore": 2,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "That they solved a small problem for me through the gift.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 2
+      },
+      {
+        "label": "D",
+        "text": "That they remembered something specific about me.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "That they gave it to me with affection and closeness.",
+        "selfCategory": "PT",
+        "selfScore": 2,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 28,
+    "text": "When your relationship feels strong, which sentence best describes the feeling?",
+    "options": [
+      {
+        "label": "A",
+        "text": "'I feel understood.'",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "'I feel like we really share a life.'",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "'I know we can rely on each other.'",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "'I feel remembered even when we are apart.'",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "'I feel at home when we are close.'",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  },
+  {
+    "n": 29,
+    "text": "What is the clearest sign that your partner has truly listened to you?",
+    "options": [
+      {
+        "label": "A",
+        "text": "They respond to what I actually said.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 2
+      },
+      {
+        "label": "B",
+        "text": "They remember it later and make time to return to it.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "They change something they do because of it.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "They remember a detail I thought they would forget.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "They respond with affectionate closeness.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 2
+      }
+    ]
+  },
+  {
+    "n": 30,
+    "text": "If you had to describe the deepest thing you want from a long-term relationship, which feels closest?",
+    "options": [
+      {
+        "label": "A",
+        "text": "To feel emotionally valued and spoken to with love.",
+        "selfCategory": "WA",
+        "selfScore": 3,
+        "partnerCategory": "WA",
+        "partnerScore": 3
+      },
+      {
+        "label": "B",
+        "text": "To feel that we continually choose time for each other.",
+        "selfCategory": "QT",
+        "selfScore": 3,
+        "partnerCategory": "QT",
+        "partnerScore": 3
+      },
+      {
+        "label": "C",
+        "text": "To know we will carry life's burdens together.",
+        "selfCategory": "AS",
+        "selfScore": 3,
+        "partnerCategory": "AS",
+        "partnerScore": 3
+      },
+      {
+        "label": "D",
+        "text": "To feel that even after years, we still notice the little things about each other.",
+        "selfCategory": "TG",
+        "selfScore": 3,
+        "partnerCategory": "TG",
+        "partnerScore": 3
+      },
+      {
+        "label": "E",
+        "text": "To feel physically and emotionally at home with each other.",
+        "selfCategory": "PT",
+        "selfScore": 3,
+        "partnerCategory": "PT",
+        "partnerScore": 3
+      }
+    ]
+  }
+]

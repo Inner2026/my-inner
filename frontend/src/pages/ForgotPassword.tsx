@@ -1,0 +1,10 @@
+import { FormEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthApi } from '../api/endpoints';
+import { ApiError } from '../api/client';
+
+export function ForgotPassword() {
+  const [email, setEmail] = useState(''); const [status, setStatus] = useState<string | null>(null); const [error, setError] = useState<string | null>(null); const [loading, setLoading] = useState(false);
+  async function submit(event: FormEvent) { event.preventDefault(); setLoading(true); setError(null); setStatus(null); try { const response = await AuthApi.forgotPassword(email); setStatus(response.message); } catch (err) { setError(err instanceof ApiError ? err.message : 'Could not send the reset email.'); } finally { setLoading(false); } }
+  return <div className="min-h-[calc(100vh-74px)] bg-[#f7f3f2] px-4 py-10 sm:px-8"><div className="mx-auto max-w-md rounded-[2rem] border border-white bg-[#fffdfb] p-7 shadow-xl sm:p-10"><img src="/my-inner-logo.png" alt="My Inner" className="h-14 w-auto" /><p className="mt-7 text-xs font-semibold uppercase tracking-[.18em] text-[#765c8d]">Account recovery</p><h1 className="mt-3 text-3xl font-semibold text-[#302447]">Forgot Password?</h1><p className="mt-3 text-sm leading-6 text-slate-500">Enter your email and, if an account exists, we will send a secure reset link.</p><form onSubmit={submit} className="mt-7 space-y-4"><label className="block text-sm font-medium text-[#302447]">Email address<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-[#d9cfdb] bg-white px-4 py-3.5 outline-none focus:border-[#765c8d]" /></label>{error && <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}{status && <p className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">{status}</p>}<button disabled={loading} className="w-full rounded-full bg-[#765c8d] py-3.5 text-sm font-semibold text-white disabled:opacity-50">{loading ? 'Sending...' : 'Send reset link'}</button></form><Link to="/login" className="mt-6 block text-center text-sm font-semibold text-[#765c8d]">Back to login</Link></div></div>;
+}

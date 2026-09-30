@@ -1,0 +1,152 @@
+[
+  {
+    "category": "Communication",
+    "n": 1,
+    "text": "I communicate my feelings openly."
+  },
+  {
+    "category": "Communication",
+    "n": 2,
+    "text": "I feel comfortable discussing difficult subjects."
+  },
+  {
+    "category": "Communication",
+    "n": 3,
+    "text": "I listen carefully when my partner speaks."
+  },
+  {
+    "category": "Communication",
+    "n": 4,
+    "text": "I prefer resolving misunderstandings quickly."
+  },
+  {
+    "category": "Trust",
+    "n": 1,
+    "text": "I find it easy to trust someone I love."
+  },
+  {
+    "category": "Trust",
+    "n": 2,
+    "text": "I respect my partner's privacy."
+  },
+  {
+    "category": "Trust",
+    "n": 3,
+    "text": "I do not constantly need reassurance."
+  },
+  {
+    "category": "Trust",
+    "n": 4,
+    "text": "I believe trust should be built through consistent behavior."
+  },
+  {
+    "category": "Emotional Connection",
+    "n": 1,
+    "text": "Emotional intimacy is essential to me."
+  },
+  {
+    "category": "Emotional Connection",
+    "n": 2,
+    "text": "I want my partner to understand my deeper feelings."
+  },
+  {
+    "category": "Emotional Connection",
+    "n": 3,
+    "text": "I enjoy sharing personal experiences."
+  },
+  {
+    "category": "Emotional Connection",
+    "n": 4,
+    "text": "I feel emotionally connected when we spend meaningful time together."
+  },
+  {
+    "category": "Conflict",
+    "n": 1,
+    "text": "I can disagree without becoming disrespectful."
+  },
+  {
+    "category": "Conflict",
+    "n": 2,
+    "text": "I am willing to apologize when I am wrong."
+  },
+  {
+    "category": "Conflict",
+    "n": 3,
+    "text": "I try to understand my partner's perspective during arguments."
+  },
+  {
+    "category": "Conflict",
+    "n": 4,
+    "text": "I avoid using silence as punishment."
+  },
+  {
+    "category": "Independence",
+    "n": 1,
+    "text": "Both partners should maintain individual interests."
+  },
+  {
+    "category": "Independence",
+    "n": 2,
+    "text": "I am comfortable spending time apart."
+  },
+  {
+    "category": "Independence",
+    "n": 3,
+    "text": "I respect my partner's independence."
+  },
+  {
+    "category": "Independence",
+    "n": 4,
+    "text": "I do not believe couples need to do everything together."
+  },
+  {
+    "category": "Affection",
+    "n": 1,
+    "text": "I enjoy expressing affection."
+  },
+  {
+    "category": "Affection",
+    "n": 2,
+    "text": "I appreciate receiving affection."
+  },
+  {
+    "category": "Affection",
+    "n": 3,
+    "text": "Physical affection is important to me."
+  },
+  {
+    "category": "Affection",
+    "n": 4,
+    "text": "Small romantic gestures matter to me."
+  },
+  {
+    "category": "Commitment",
+    "n": 1,
+    "text": "Loyalty is essential in a relationship."
+  },
+  {
+    "category": "Commitment",
+    "n": 2,
+    "text": "I prefer long-term commitment."
+  },
+  {
+    "category": "Commitment",
+    "n": 3,
+    "text": "I believe relationships require effort."
+  },
+  {
+    "category": "Commitment",
+    "n": 4,
+    "text": "I remain committed even during difficult periods."
+  },
+  {
+    "category": "Compatibility",
+    "n": 1,
+    "text": "Similar values are important to me."
+  },
+  {
+    "category": "Compatibility",
+    "n": 2,
+    "text": "I believe partners should have compatible life goals."
+  }
+]

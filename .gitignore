@@ -1,0 +1,25 @@
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.vercel/
+.npm-cache/
+
+# Local runtime data and test artifacts
+backend/uploads/
+frontend/test-results/
+playwright-report/
+coverage/
+*.log
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/

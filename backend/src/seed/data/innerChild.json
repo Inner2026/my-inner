@@ -1,0 +1,1232 @@
+[
+  {
+    "n": 1,
+    "text": "Imagine you walk into a house you have never seen before. One room immediately feels like it belongs to you. What makes you stay there?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Nobody can enter without me knowing.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "You instinctively create safety through control and clear boundaries."
+      },
+      {
+        "label": "B",
+        "text": "It is warm, quiet, and comfortable.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "Comfort matters deeply to you; your inner world seems to seek places where nothing needs to be defended."
+      },
+      {
+        "label": "C",
+        "text": "There are things inside that remind me of places I've known.",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "Familiar emotional signals appear to carry more weight for you than the appearance of a place itself."
+      },
+      {
+        "label": "D",
+        "text": "There is a window, and I can see the outside world.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "Part of you needs perspective and an emotional escape route even when you feel comfortable."
+      },
+      {
+        "label": "E",
+        "text": "I don't stay; I keep exploring.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You tend to respond to unfamiliarity through movement and curiosity rather than immediately seeking security."
+      }
+    ]
+  },
+  {
+    "n": 2,
+    "text": "Someone you care about suddenly becomes distant. You don't know why. What happens inside you first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "I assume I did something wrong.",
+        "category": "Self-Worth",
+        "score": -3,
+        "meaning": "Ambiguous distance can easily turn inward, making you question your own value or behavior."
+      },
+      {
+        "label": "B",
+        "text": "I wonder what they are going through.",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "Your first instinct is to understand rather than immediately protect yourself."
+      },
+      {
+        "label": "C",
+        "text": "I become uncomfortable and want an explanation.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "Uncertainty becomes easier to tolerate once you understand what is happening."
+      },
+      {
+        "label": "D",
+        "text": "I tell myself not to care.",
+        "category": "Emotional Expression",
+        "score": -2,
+        "meaning": "You may protect yourself by reducing the importance of feelings before they have a chance to hurt you."
+      },
+      {
+        "label": "E",
+        "text": "I wait and see whether they come back.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You can tolerate emotional uncertainty without immediately forcing an answer."
+      }
+    ]
+  },
+  {
+    "n": 3,
+    "text": "You accomplish something important, but nobody notices. Which thought feels closest?",
+    "options": [
+      {
+        "label": "A",
+        "text": "I wish someone had seen it.",
+        "category": "Self-Worth",
+        "score": -1,
+        "meaning": "Recognition from others can become emotionally connected to feeling that your effort mattered."
+      },
+      {
+        "label": "B",
+        "text": "I know what it took, so that's enough.",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "You have a relatively strong internal source of validation and can recognize your own effort without external confirmation."
+      },
+      {
+        "label": "C",
+        "text": "Maybe it wasn't actually that important.",
+        "category": "Self-Worth",
+        "score": -3,
+        "meaning": "When appreciation is absent, you may sometimes question the value of the achievement itself."
+      },
+      {
+        "label": "D",
+        "text": "I feel disappointed, but I keep going.",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "Disappointment may affect you, but it does not necessarily stop you from moving forward."
+      },
+      {
+        "label": "E",
+        "text": "I wonder why I needed them to notice.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "You have an ability to look beneath the immediate emotion and question what it is really asking for."
+      }
+    ]
+  },
+  {
+    "n": 4,
+    "text": "Think of a moment when you needed comfort but didn't receive it. What do you remember most?",
+    "options": [
+      {
+        "label": "A",
+        "text": "The silence.",
+        "category": "Emotional Safety",
+        "score": -3,
+        "meaning": "Absence during vulnerable moments may remain particularly meaningful in your emotional landscape."
+      },
+      {
+        "label": "B",
+        "text": "Having to act as if I was fine.",
+        "category": "Emotional Expression",
+        "score": -3,
+        "meaning": "You may have learned to contain difficult emotions when expressing them did not feel useful or safe."
+      },
+      {
+        "label": "C",
+        "text": "The person who wasn't there.",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "For you, emotional absence can become closely associated with the meaning of a relationship."
+      },
+      {
+        "label": "D",
+        "text": "The feeling eventually disappearing.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You recognize that intense emotions can pass, even when they feel permanent in the moment."
+      },
+      {
+        "label": "E",
+        "text": "Becoming stronger because of it.",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "You tend to transform difficult experiences into evidence that you can survive what hurts."
+      }
+    ]
+  },
+  {
+    "n": 5,
+    "text": "Someone praises you sincerely. What is hardest to do?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Believe them.",
+        "category": "Self-Worth",
+        "score": -3,
+        "meaning": "Positive feedback may not automatically override the internal doubts you carry about yourself."
+      },
+      {
+        "label": "B",
+        "text": "Accept it without minimizing myself.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Part of you may be more comfortable giving value than receiving it."
+      },
+      {
+        "label": "C",
+        "text": "Enjoy it without wondering what they want.",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "Praise may sometimes trigger questions about intention rather than simply feeling good."
+      },
+      {
+        "label": "D",
+        "text": "Remember it later.",
+        "category": "Emotional Expression",
+        "score": -1,
+        "meaning": "Positive emotional experiences may not always remain as accessible internally as negative ones."
+      },
+      {
+        "label": "E",
+        "text": "Nothing; I can receive appreciation.",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "You appear relatively comfortable allowing positive recognition to exist without immediately challenging it."
+      }
+    ]
+  },
+  {
+    "n": 6,
+    "text": "Imagine your younger self is sitting across from you but refuses to speak. What do you do?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Wait quietly.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "You understand that safety can sometimes begin with patience rather than answers."
+      },
+      {
+        "label": "B",
+        "text": "Ask what happened.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "You naturally move toward understanding feelings by giving them words and meaning."
+      },
+      {
+        "label": "C",
+        "text": "Try to make them laugh.",
+        "category": "Emotional Expression",
+        "score": 1,
+        "meaning": "You may use warmth and lightness as a bridge when emotions become difficult."
+      },
+      {
+        "label": "D",
+        "text": "Tell them they don't have to explain anything.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "You place acceptance before explanation, suggesting that vulnerability does not always need to be justified."
+      },
+      {
+        "label": "E",
+        "text": "Leave the room and give them space.",
+        "category": "Trust & Connection",
+        "score": 1,
+        "meaning": "You respect emotional distance and do not necessarily interpret silence as rejection."
+      }
+    ]
+  },
+  {
+    "n": 7,
+    "text": "When you make a mistake in front of people, what hurts most?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Looking incapable.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Competence can become connected to your sense of personal value."
+      },
+      {
+        "label": "B",
+        "text": "Disappointing someone.",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "Disappointing others may carry more emotional weight than the mistake itself."
+      },
+      {
+        "label": "C",
+        "text": "Feeling exposed.",
+        "category": "Emotional Safety",
+        "score": -3,
+        "meaning": "Being seen imperfectly may feel more threatening than simply being wrong."
+      },
+      {
+        "label": "D",
+        "text": "Knowing I should have done better.",
+        "category": "Inner Resilience",
+        "score": 1,
+        "meaning": "You naturally turn mistakes into standards for improvement."
+      },
+      {
+        "label": "E",
+        "text": "Other people's judgment.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "External judgment may have a strong influence on how you evaluate yourself."
+      }
+    ]
+  },
+  {
+    "n": 8,
+    "text": "You receive a message saying, �We need to talk.� Before the conversation, where does your mind go?",
+    "options": [
+      {
+        "label": "A",
+        "text": "To everything I might have done wrong.",
+        "category": "Emotional Safety",
+        "score": -2,
+        "meaning": "Uncertainty can quickly become self-questioning for you."
+      },
+      {
+        "label": "B",
+        "text": "To the worst possible outcome.",
+        "category": "Emotional Safety",
+        "score": -3,
+        "meaning": "Your mind may protect you by preparing for emotional danger before it arrives."
+      },
+      {
+        "label": "C",
+        "text": "I feel tense but wait for facts.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You can experience anxiety without allowing it to completely determine your interpretation."
+      },
+      {
+        "label": "D",
+        "text": "I prepare what I want to say.",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "You regain emotional control by preparing yourself to communicate clearly."
+      },
+      {
+        "label": "E",
+        "text": "I don't assume anything until I know more.",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "You have a strong ability to separate uncertainty from assumption."
+      }
+    ]
+  },
+  {
+    "n": 9,
+    "text": "Which kind of apology feels most meaningful?",
+    "options": [
+      {
+        "label": "A",
+        "text": "�I understand what I did to you.�",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "Being emotionally understood matters to you more than simply hearing the word sorry."
+      },
+      {
+        "label": "B",
+        "text": "�I'll make sure it never happens again.�",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Reliability and future behavior are important components of emotional repair for you."
+      },
+      {
+        "label": "C",
+        "text": "�I'm sorry you felt hurt.�",
+        "category": "Emotional Safety",
+        "score": 1,
+        "meaning": "Acknowledgment of your feelings can help restore a sense of emotional safety."
+      },
+      {
+        "label": "D",
+        "text": "�I didn't mean to hurt you.�",
+        "category": "Trust & Connection",
+        "score": 1,
+        "meaning": "Intent matters to you when deciding whether someone truly understands what happened."
+      },
+      {
+        "label": "E",
+        "text": "Actions changing afterward.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "For you, trust is rebuilt through consistent behavior rather than words alone."
+      }
+    ]
+  },
+  {
+    "n": 10,
+    "text": "You are alone after a difficult day. What do you naturally want?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Someone beside me.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "When you are depleted, genuine presence can feel more restorative than advice."
+      },
+      {
+        "label": "B",
+        "text": "Complete silence.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "You may recover by reducing stimulation and creating a private emotional space."
+      },
+      {
+        "label": "C",
+        "text": "Something familiar.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "Familiarity appears to function as a source of comfort when you feel emotionally overloaded."
+      },
+      {
+        "label": "D",
+        "text": "To understand what happened.",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "Making sense of an experience can be part of how you regain emotional balance."
+      },
+      {
+        "label": "E",
+        "text": "To distract myself.",
+        "category": "Emotional Expression",
+        "score": -2,
+        "meaning": "You may sometimes regulate difficult feelings by moving your attention away from them."
+      }
+    ]
+  },
+  {
+    "n": 11,
+    "text": "When someone misunderstands you, what is your strongest impulse?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Explain myself until they understand.",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "Being accurately understood can feel important enough that you keep working at the conversation."
+      },
+      {
+        "label": "B",
+        "text": "Become quiet.",
+        "category": "Emotional Expression",
+        "score": -2,
+        "meaning": "When communication feels futile, you may protect yourself by withdrawing your words."
+      },
+      {
+        "label": "C",
+        "text": "Feel hurt that they didn't know me better.",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "Misunderstanding can feel particularly painful when you expected emotional familiarity."
+      },
+      {
+        "label": "D",
+        "text": "Let them believe what they want.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You can sometimes detach from other people's interpretations rather than trying to control them."
+      },
+      {
+        "label": "E",
+        "text": "Ask what made them see me that way.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "You are inclined to investigate the gap between your intention and another person's perception."
+      }
+    ]
+  },
+  {
+    "n": 12,
+    "text": "Imagine you are holding a photograph of yourself as a child. What do you notice first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "The expression on my face.",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "You naturally look for the feeling behind the image rather than only its visible details."
+      },
+      {
+        "label": "B",
+        "text": "What I was wearing.",
+        "category": "Self-Worth",
+        "score": 1,
+        "meaning": "Concrete details can give you a safer entry point into emotionally meaningful memories."
+      },
+      {
+        "label": "C",
+        "text": "Who was standing beside me.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "The people surrounding you may carry strong emotional significance in how you understand your younger self."
+      },
+      {
+        "label": "D",
+        "text": "Where the photograph was taken.",
+        "category": "Emotional Safety",
+        "score": 1,
+        "meaning": "Context and surroundings may help you understand whether a memory feels safe, meaningful, or distant."
+      },
+      {
+        "label": "E",
+        "text": "What I wish I could tell that child.",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "You naturally connect the past self with the need for reassurance, acceptance, or recognition."
+      }
+    ]
+  },
+  {
+    "n": 13,
+    "text": "Someone tells you, �You're too sensitive.� What happens internally?",
+    "options": [
+      {
+        "label": "A",
+        "text": "I question whether they're right.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Other people's judgments can sometimes become material for questioning your own emotional legitimacy."
+      },
+      {
+        "label": "B",
+        "text": "I become defensive.",
+        "category": "Emotional Safety",
+        "score": -1,
+        "meaning": "You may experience criticism of your emotional reactions as a threat to your sense of safety."
+      },
+      {
+        "label": "C",
+        "text": "I feel misunderstood.",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "Being reduced to a label can feel painful when you want your emotional experience understood in context."
+      },
+      {
+        "label": "D",
+        "text": "I ignore it.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You can sometimes protect your inner world by refusing to give every outside judgment authority."
+      },
+      {
+        "label": "E",
+        "text": "I wonder why they reacted that way.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "You tend to look beneath criticism and examine the emotional exchange itself."
+      }
+    ]
+  },
+  {
+    "n": 14,
+    "text": "You finally receive something you wanted for a long time. What happens afterward?",
+    "options": [
+      {
+        "label": "A",
+        "text": "I immediately want to protect it.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "Getting something valuable may also awaken a desire to make sure it cannot suddenly disappear."
+      },
+      {
+        "label": "B",
+        "text": "I enjoy it completely.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You can allow positive experiences to exist without immediately preparing for their ending."
+      },
+      {
+        "label": "C",
+        "text": "I wonder how long it will last.",
+        "category": "Emotional Safety",
+        "score": -2,
+        "meaning": "Even happiness may sometimes carry an awareness that circumstances can change."
+      },
+      {
+        "label": "D",
+        "text": "I look for the next thing to achieve.",
+        "category": "Self-Worth",
+        "score": -1,
+        "meaning": "Achievement may provide momentum, but stillness can make you aware of whether accomplishment has become a source of value."
+      },
+      {
+        "label": "E",
+        "text": "I feel strangely emotional.",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "Receiving something meaningful can open feelings that were easier to contain while you were still waiting."
+      }
+    ]
+  },
+  {
+    "n": 15,
+    "text": "When conflict becomes intense, which version of you appears most naturally?",
+    "options": [
+      {
+        "label": "A",
+        "text": "The one who tries to fix everything.",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "Repairing the relationship can become your instinctive way of restoring emotional safety."
+      },
+      {
+        "label": "B",
+        "text": "The one who becomes silent.",
+        "category": "Emotional Expression",
+        "score": -3,
+        "meaning": "Silence may become a protective response when emotional intensity feels difficult to contain."
+      },
+      {
+        "label": "C",
+        "text": "The one who fights to be understood.",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "You may become especially determined to have your inner experience recognized when conflict threatens connection."
+      },
+      {
+        "label": "D",
+        "text": "The one who leaves.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "Creating distance can be your way of protecting yourself when an interaction becomes overwhelming."
+      },
+      {
+        "label": "E",
+        "text": "The one who watches and waits.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You can create internal distance during conflict, observing before deciding how to respond."
+      }
+    ]
+  },
+  {
+    "n": 16,
+    "text": "Someone you love is crying but doesn't want to talk. What do you do?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Stay close without asking questions.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "You understand that presence can communicate safety without demanding emotional disclosure."
+      },
+      {
+        "label": "B",
+        "text": "Ask repeatedly what's wrong.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "You may seek words because understanding the feeling helps you know how to respond."
+      },
+      {
+        "label": "C",
+        "text": "Give them space.",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "You can respect another person's boundaries without treating their withdrawal as rejection."
+      },
+      {
+        "label": "D",
+        "text": "Try to make them feel better.",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "You naturally respond to another person's distress by trying to reduce it."
+      },
+      {
+        "label": "E",
+        "text": "Tell them I'm available whenever they're ready.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "You offer connection without pressure, creating room for vulnerability to happen voluntarily."
+      }
+    ]
+  },
+  {
+    "n": 17,
+    "text": "Which thought is hardest for you to believe?",
+    "options": [
+      {
+        "label": "A",
+        "text": "�You don't have to earn love.�",
+        "category": "Self-Worth",
+        "score": -3,
+        "meaning": "The idea that love can exist without achievement may challenge a deeply held internal rule."
+      },
+      {
+        "label": "B",
+        "text": "�It's okay to need people.�",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "Dependence or asking for support may feel more vulnerable than handling things alone."
+      },
+      {
+        "label": "C",
+        "text": "�You are allowed to say no.�",
+        "category": "Emotional Safety",
+        "score": -2,
+        "meaning": "Boundaries may feel complicated when protecting yourself can also feel like disappointing others."
+      },
+      {
+        "label": "D",
+        "text": "�You don't have to be strong all the time.�",
+        "category": "Emotional Expression",
+        "score": -3,
+        "meaning": "Letting yourself be visibly vulnerable may be harder than carrying difficulty privately."
+      },
+      {
+        "label": "E",
+        "text": "�You are already enough.�",
+        "category": "Self-Worth",
+        "score": -3,
+        "meaning": "The absence of conditions around worth may be difficult to fully accept if you are used to measuring yourself through what you do."
+      }
+    ]
+  },
+  {
+    "n": 18,
+    "text": "When something you were excited about suddenly disappears, what do you feel first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Anger.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "Your first response may be an outward, energized expression of disappointment and blocked expectation."
+      },
+      {
+        "label": "B",
+        "text": "Emptiness.",
+        "category": "Emotional Safety",
+        "score": -2,
+        "meaning": "Loss can create a sudden absence of emotional structure, leaving you feeling unanchored."
+      },
+      {
+        "label": "C",
+        "text": "Disappointment.",
+        "category": "Emotional Expression",
+        "score": 1,
+        "meaning": "You allow yourself to register the loss directly rather than immediately replacing it with another emotion."
+      },
+      {
+        "label": "D",
+        "text": "I immediately search for another possibility.",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "Your instinct is to restore movement and possibility rather than remain centered on what disappeared."
+      },
+      {
+        "label": "E",
+        "text": "I wonder what I could have done differently.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "When circumstances change unexpectedly, you may search yourself for a reason or responsibility."
+      }
+    ]
+  },
+  {
+    "n": 19,
+    "text": "If you could hear one sentence from someone important from your past, which would affect you most?",
+    "options": [
+      {
+        "label": "A",
+        "text": "�I saw how hard you were trying.�",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "Being recognized for effort appears deeply meaningful, especially when the effort may have gone unseen."
+      },
+      {
+        "label": "B",
+        "text": "�None of it was your fault.�",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Relief from self-blame appears emotionally significant in your inner landscape."
+      },
+      {
+        "label": "C",
+        "text": "�You could have told me how you felt.�",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "Being invited to express what was inside you may carry a strong emotional charge."
+      },
+      {
+        "label": "D",
+        "text": "�I was proud of you.�",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "Recognition and pride from an important person can represent a powerful form of emotional validation."
+      },
+      {
+        "label": "E",
+        "text": "�You were never difficult to love.�",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "Unconditional acceptance appears to touch a particularly fundamental layer of your inner self."
+      }
+    ]
+  },
+  {
+    "n": 20,
+    "text": "Someone remembers a tiny detail you mentioned months ago. Why might it affect you?",
+    "options": [
+      {
+        "label": "A",
+        "text": "It proves they were listening.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Being genuinely heard can be one of the clearest signals of care for you."
+      },
+      {
+        "label": "B",
+        "text": "It makes me feel important.",
+        "category": "Self-Worth",
+        "score": 2,
+        "meaning": "Attention from another person can reinforce a feeling that you matter to them."
+      },
+      {
+        "label": "C",
+        "text": "It makes me feel understood.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Recognition of small details can create a strong feeling of emotional closeness."
+      },
+      {
+        "label": "D",
+        "text": "It makes me suspicious they remember too much.",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "Closeness can sometimes activate caution when another person seems to know more than expected."
+      },
+      {
+        "label": "E",
+        "text": "It simply feels nice.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "You can receive small signs of care without needing them to prove anything larger."
+      }
+    ]
+  },
+  {
+    "n": 21,
+    "text": "You are given a completely free day with no obligations. What do you naturally do?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Make a plan.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "Structure can make freedom feel more comfortable by giving the day a predictable shape."
+      },
+      {
+        "label": "B",
+        "text": "Sleep and recover.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "Your instinct recognizes restoration as a legitimate response to accumulated demands."
+      },
+      {
+        "label": "C",
+        "text": "Contact someone.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Connection may be one of the ways you naturally refill your emotional energy."
+      },
+      {
+        "label": "D",
+        "text": "Follow whatever I feel like doing.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "You value access to your immediate preferences when external demands temporarily disappear."
+      },
+      {
+        "label": "E",
+        "text": "Work on something I've postponed.",
+        "category": "Self-Worth",
+        "score": 1,
+        "meaning": "Productivity may provide a sense of satisfaction or value even when nothing requires you to perform."
+      }
+    ]
+  },
+  {
+    "n": 22,
+    "text": "When you are genuinely angry with someone you love, what is hardest?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Saying exactly why.",
+        "category": "Emotional Expression",
+        "score": -2,
+        "meaning": "The intensity of anger can make the vulnerable reason underneath it difficult to articulate."
+      },
+      {
+        "label": "B",
+        "text": "Not saying something hurtful.",
+        "category": "Emotional Expression",
+        "score": 1,
+        "meaning": "You are aware of the power of your words even when emotion is intense."
+      },
+      {
+        "label": "C",
+        "text": "Staying connected while angry.",
+        "category": "Trust & Connection",
+        "score": -2,
+        "meaning": "Conflict may make continued closeness feel temporarily unsafe or uncertain."
+      },
+      {
+        "label": "D",
+        "text": "Letting the anger disappear.",
+        "category": "Inner Resilience",
+        "score": -1,
+        "meaning": "Strong emotions may remain active internally even after the original event has passed."
+      },
+      {
+        "label": "E",
+        "text": "Admitting that I was hurt underneath it.",
+        "category": "Emotional Expression",
+        "score": 3,
+        "meaning": "You recognize that anger can sometimes protect a more vulnerable feeling."
+      }
+    ]
+  },
+  {
+    "n": 23,
+    "text": "You enter a room where everyone seems to know each other except you. What do you notice first?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Who seems welcoming.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Your attention naturally searches for signals of interpersonal safety and acceptance."
+      },
+      {
+        "label": "B",
+        "text": "Who seems powerful.",
+        "category": "Emotional Safety",
+        "score": 1,
+        "meaning": "You may first map the social environment to understand where influence and risk sit."
+      },
+      {
+        "label": "C",
+        "text": "Whether anyone notices me.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Being seen or overlooked can quickly affect how you position yourself in a social environment."
+      },
+      {
+        "label": "D",
+        "text": "Where I could comfortably sit.",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "You instinctively establish a secure physical and emotional position before engaging."
+      },
+      {
+        "label": "E",
+        "text": "Whether I actually want to belong there.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You retain an internal sense of choice rather than automatically equating belonging with safety."
+      }
+    ]
+  },
+  {
+    "n": 24,
+    "text": "Someone offers to help you with something you normally handle alone. Your first internal reaction?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Relief.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Support can feel genuinely restorative when you allow yourself to receive it."
+      },
+      {
+        "label": "B",
+        "text": "Suspicion.",
+        "category": "Trust & Connection",
+        "score": -3,
+        "meaning": "Help may sometimes trigger questions about hidden expectations or whether it is safe to depend on someone."
+      },
+      {
+        "label": "C",
+        "text": "�I can do it myself.�",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "Self-reliance appears to be a well-developed way of maintaining stability."
+      },
+      {
+        "label": "D",
+        "text": "Gratitude.",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "You can experience receiving support as a positive exchange rather than a loss of independence."
+      },
+      {
+        "label": "E",
+        "text": "Discomfort at needing them.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Needing assistance may sometimes feel connected to a fear of appearing less capable or sufficient."
+      }
+    ]
+  },
+  {
+    "n": 25,
+    "text": "When you remember something embarrassing from years ago, what do you usually do?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Laugh at myself.",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "You can create emotional distance from past embarrassment by allowing it to become part of your story rather than a permanent judgment."
+      },
+      {
+        "label": "B",
+        "text": "Re-experience the embarrassment.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Old moments can retain emotional intensity when they become tied to how you evaluate yourself."
+      },
+      {
+        "label": "C",
+        "text": "Wonder why nobody stopped me.",
+        "category": "Trust & Connection",
+        "score": -1,
+        "meaning": "Your memory may return not only to what happened, but to who was or was not there to guide you."
+      },
+      {
+        "label": "D",
+        "text": "Analyze what I learned from it.",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "You naturally convert uncomfortable memories into information that can be used going forward."
+      },
+      {
+        "label": "E",
+        "text": "Push the memory away.",
+        "category": "Emotional Expression",
+        "score": -2,
+        "meaning": "You may protect yourself by limiting contact with emotions that feel unnecessary or uncomfortable."
+      }
+    ]
+  },
+  {
+    "n": 26,
+    "text": "Imagine your younger self asks, �Am I going to be okay?� What is your answer?",
+    "options": [
+      {
+        "label": "A",
+        "text": "�Yes. I'll protect you.�",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "Your instinct is to create safety through protection, presence, and reassurance."
+      },
+      {
+        "label": "B",
+        "text": "�Yes. You will become strong.�",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "You frame survival through strength and the ability to withstand what comes."
+      },
+      {
+        "label": "C",
+        "text": "�Yes. You will find people who understand you.�",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "The reassurance you offer centers on belonging and being emotionally understood."
+      },
+      {
+        "label": "D",
+        "text": "�Yes. You don't need to know everything yet.�",
+        "category": "Emotional Safety",
+        "score": 2,
+        "meaning": "You allow uncertainty to exist without demanding immediate answers from yourself."
+      },
+      {
+        "label": "E",
+        "text": "�Yes. And you don't have to become someone else to deserve it.�",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "You connect safety with unconditional acceptance rather than performance or transformation."
+      }
+    ]
+  },
+  {
+    "n": 27,
+    "text": "When someone you love succeeds, what emotion appears alongside your happiness, if any?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Pure happiness.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Another person's success can feel emotionally safe enough for you to celebrate without needing to compare."
+      },
+      {
+        "label": "B",
+        "text": "A small comparison with myself.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Another person's achievement may naturally activate questions about where you stand in relation to them."
+      },
+      {
+        "label": "C",
+        "text": "Fear that things may change between us.",
+        "category": "Trust & Connection",
+        "score": -3,
+        "meaning": "Change in another person's life may activate concern about whether closeness will remain stable."
+      },
+      {
+        "label": "D",
+        "text": "Pride in them.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "You can experience another person's growth as something that strengthens rather than threatens connection."
+      },
+      {
+        "label": "E",
+        "text": "A desire to help them go even further.",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "Supporting another person's growth is one way you naturally express care."
+      }
+    ]
+  },
+  {
+    "n": 28,
+    "text": "What happens when you finally have nothing left to prove?",
+    "options": [
+      {
+        "label": "A",
+        "text": "I feel peaceful.",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "Without the pressure to demonstrate your value, you can access a quieter sense of enoughness."
+      },
+      {
+        "label": "B",
+        "text": "I don't know what to do with myself.",
+        "category": "Self-Worth",
+        "score": -2,
+        "meaning": "Achievement may have become so familiar that its absence creates uncertainty about identity."
+      },
+      {
+        "label": "C",
+        "text": "I become aware of how tired I am.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "Once pressure disappears, you can recognize the cost of carrying it and allow yourself to notice fatigue."
+      },
+      {
+        "label": "D",
+        "text": "I start looking for another challenge.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "Forward movement is a natural way for you to maintain momentum and purpose."
+      },
+      {
+        "label": "E",
+        "text": "I wonder who I am without achievement.",
+        "category": "Self-Worth",
+        "score": -3,
+        "meaning": "The question suggests that accomplishment may sometimes be closely connected to your sense of personal identity."
+      }
+    ]
+  },
+  {
+    "n": 29,
+    "text": "Imagine your childhood bedroom is exactly as it was, except one thing has changed. What would you change?",
+    "options": [
+      {
+        "label": "A",
+        "text": "Make the door impossible to lock from outside.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "Control over access and the ability to protect your private space appear deeply meaningful."
+      },
+      {
+        "label": "B",
+        "text": "Put someone I trusted inside.",
+        "category": "Trust & Connection",
+        "score": 3,
+        "meaning": "Your ideal change centers on having dependable emotional presence rather than changing the environment itself."
+      },
+      {
+        "label": "C",
+        "text": "Remove something that made me feel afraid.",
+        "category": "Emotional Safety",
+        "score": 3,
+        "meaning": "Your instinct is to remove the source of threat and create a space where you can relax."
+      },
+      {
+        "label": "D",
+        "text": "Make the room brighter.",
+        "category": "Emotional Expression",
+        "score": 2,
+        "meaning": "You associate openness and visibility with making the inner environment easier to inhabit."
+      },
+      {
+        "label": "E",
+        "text": "Change nothing.",
+        "category": "Inner Resilience",
+        "score": 2,
+        "meaning": "You may hold a relatively accepting relationship with the past, allowing it to remain part of your landscape without needing to rewrite it."
+      }
+    ]
+  },
+  {
+    "n": 30,
+    "text": "Your younger self stands in front of you and asks only one question: �Did you become the person I hoped I would become?� What is your honest answer?",
+    "options": [
+      {
+        "label": "A",
+        "text": "�Not exactly, but I survived.�",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "You define your journey partly through endurance, recognizing survival itself as meaningful progress."
+      },
+      {
+        "label": "B",
+        "text": "�Yes, and I became stronger than we imagined.�",
+        "category": "Inner Resilience",
+        "score": 3,
+        "meaning": "You see your development through the strength you have built in response to life."
+      },
+      {
+        "label": "C",
+        "text": "�I'm still becoming that person.�",
+        "category": "Self-Worth",
+        "score": 2,
+        "meaning": "You view identity as unfinished and leave room for growth rather than demanding a final version of yourself."
+      },
+      {
+        "label": "D",
+        "text": "�I became someone different, and that's okay.�",
+        "category": "Self-Worth",
+        "score": 3,
+        "meaning": "You show acceptance that personal growth does not have to follow the expectations of your younger self."
+      },
+      {
+        "label": "E",
+        "text": "�I hope you would still recognize me.�",
+        "category": "Trust & Connection",
+        "score": 2,
+        "meaning": "Your answer reflects a desire for continuity between who you were, who you are, and the person you were hoping to become."
+      }
+    ]
+  }
+]
