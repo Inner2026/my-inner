@@ -68,3 +68,8 @@ export function createApp() {
 
   return app;
 }
+
+// Vercel's Express zero-config detector prefers src/app.ts. Export the
+// application as the default entrypoint while keeping createApp available for
+// the local server and tests.
+export default createApp();
