@@ -188,7 +188,7 @@ input[type='password']::-ms-clear {
 .admin-content { border-radius: 1rem; }
 .admin-stat { display: flex; align-items: center; gap: .9rem; border: 1px solid #eee5e9; border-radius: 1rem; background: white; padding: 1rem; box-shadow: 0 5px 18px rgba(73,57,88,.04); }
 .admin-stat-icon { display: flex; height: 2.75rem; width: 2.75rem; align-items: center; justify-content: center; border-radius: .8rem; font-size: 1.2rem; }
-.admin-table-wrap { overflow-x: auto; border: 1px solid #eee5e9; border-radius: 1rem; background: white; box-shadow: 0 5px 18px rgba(73,57,88,.04); }
+.admin-table-wrap { overflow-x: auto; border: 1px solid #eee5e9; border-radius: 1rem; background: white; box-shadow: 0 5px 18px rgba(73,57,88,.04); -webkit-overflow-scrolling: touch; }
 .admin-table-wrap th, .admin-table-wrap td { padding: .9rem 1rem; white-space: nowrap; }
 .admin-content > div { color: #475569; }
 .admin-content h1 { color: #302447; font-size: 1.5rem; font-weight: 650; letter-spacing: -.02em; }
@@ -208,7 +208,17 @@ input[type='password']::-ms-clear {
 .admin-help { color: #9a919e; font-size: .7rem; font-weight: 400; }
 .admin-input { display: block; width: 100%; border: 1px solid #e5dce8; border-radius: .65rem; background: white; color: #302447; padding: .7rem .8rem; outline: none; font-size: .85rem; }
 .admin-input:focus { border-color: #765c8d; box-shadow: 0 0 0 3px rgba(118,92,141,.1); }
-@media (max-width: 639px) { .admin-content table { min-width: 620px; } .admin-content > div { overflow-x: hidden; } .admin-sidebar { min-height: auto; } }
+@media (max-width: 639px) {
+  .admin-content table { min-width: 620px; }
+  .admin-content > div { max-width: 100%; overflow-x: hidden; }
+  .admin-sidebar { min-height: auto; }
+  .admin-stat { min-width: 0; padding: .85rem; }
+  .admin-stat-icon { height: 2.4rem; width: 2.4rem; }
+  .admin-mobile-nav { scrollbar-width: none; }
+  .admin-mobile-nav::-webkit-scrollbar { display: none; }
+  .admin-content .admin-table-wrap { max-width: 100%; }
+  .admin-content .admin-field, .admin-content form { min-width: 0; }
+}
 .instructions-page { background-image: radial-gradient(circle at 90% 15%, rgba(238,229,243,.35), transparent 20rem), radial-gradient(circle at 8% 90%, rgba(241,230,235,.3), transparent 18rem); }
 .tests-page { background: radial-gradient(circle at 90% 5%, rgba(238,229,243,.4), transparent 22rem), #fcfaf9; }
 .test-card::after { content: ''; position: absolute; top: 0; left: 1.5rem; right: 1.5rem; height: 2px; background: linear-gradient(90deg, transparent, rgba(118,92,141,.18), transparent); }
