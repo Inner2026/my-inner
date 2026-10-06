@@ -85,7 +85,7 @@ export async function listOwnedAttempts(userId: Types.ObjectId) {
   return TestAttempt.find({ userId })
     .sort({ startedAt: -1 })
     .populate('testId', 'slug name')
-    .select('_id testId status startedAt completedAt')
+    .select('_id purchaseId testId status startedAt completedAt')
     .lean();
 }
 

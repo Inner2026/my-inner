@@ -51,6 +51,7 @@ export interface ResultSummary {
 
 export interface AttemptSummary {
   _id: string;
+  purchaseId: string;
   status: 'in_progress' | 'scoring' | 'submitted';
   startedAt: string;
   completedAt?: string | null;
