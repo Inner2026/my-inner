@@ -72,6 +72,14 @@ export const listVersions = asyncHandler(async (req: Request, res: Response) => 
   res.json({ versions: await svc.listVersions(req.params.testId) });
 });
 
+export const getVersion = asyncHandler(async (req: Request, res: Response) => {
+  res.json({ version: await svc.getVersion(req.params.versionId) });
+});
+
+export const syncMbtiVersion = asyncHandler(async (req: Request, res: Response) => {
+  res.json({ version: await svc.syncMbtiVersion(req.params.versionId) });
+});
+
 export const createVersion = asyncHandler(async (req: Request, res: Response) => {
   const version = await svc.createVersion(req.body);
   res.status(201).json({ version });

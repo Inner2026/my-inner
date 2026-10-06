@@ -18,6 +18,8 @@ adminRouter.patch('/tests/:testId', content.updateTest);
 adminRouter.delete('/tests/:testId', content.archiveTest);
 
 // Versions
+adminRouter.get('/versions/:versionId', content.getVersion);
+adminRouter.post('/versions/:versionId/sync-mbti', content.syncMbtiVersion);
 adminRouter.post('/versions', content.createVersion);
 adminRouter.patch('/versions/:versionId', content.updateVersion);
 adminRouter.post('/versions/:versionId/clone', content.cloneVersion);

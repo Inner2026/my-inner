@@ -113,6 +113,17 @@ export const MBTI_SCORING_CONFIG = {
   ]
 };
 
+export const MBTI_CATEGORIES = [
+  { key: 'E', name: 'Extraversion' },
+  { key: 'I', name: 'Introversion' },
+  { key: 'S', name: 'Sensing' },
+  { key: 'N', name: 'Intuition' },
+  { key: 'T', name: 'Thinking' },
+  { key: 'F', name: 'Feeling' },
+  { key: 'J', name: 'Judging' },
+  { key: 'P', name: 'Perceiving' }
+];
+
 // ---------------------------------------------------------------------------
 // 2. Inner Child (CATEGORY_SUM_RANGE) -- 30 questions, verbatim from spec.
 //

@@ -29,7 +29,7 @@ export function TestManage() {
   const [tests, setTests] = useState<any[]>([]);
   const [versions, setVersions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [newVersion, setNewVersion] = useState({ versionLabel: '1.0', expectedQuestionCount: 10, scoringMethod: SCORING_METHODS[0] });
+  const [newVersion, setNewVersion] = useState({ versionLabel: '1.0', expectedQuestionCount: 10, scoringMethod: SCORING_METHODS[0], categoriesJson: '[]', scoringConfigJson: '{}' });
 
   // NOTE: the backend does not (yet) expose a "list versions for a test" endpoint,
   // so this simplified admin view lets you create a version and jump straight to
@@ -41,7 +41,7 @@ export function TestManage() {
   const [savingVersion, setSavingVersion] = useState(false);
   const [previewResult, setPreviewResult] = useState<any>(null);
   const [marketingMessage, setMarketingMessage] = useState<string | null>(null);
-  const [versionForm, setVersionForm] = useState({ versionLabel: '', expectedQuestionCount: 0, scoringMethod: SCORING_METHODS[0] });
+  const [versionForm, setVersionForm] = useState({ versionLabel: '', expectedQuestionCount: 0, scoringMethod: SCORING_METHODS[0], categoriesJson: '[]', scoringConfigJson: '{}' });
 
   useEffect(() => {
     if (!testId) return;
@@ -50,7 +50,16 @@ export function TestManage() {
 
   const test = tests.find((t) => t._id === testId);
   useEffect(() => { if (test) setTestForm({ name: test.name, description: test.description, imageUrl: test.imageUrl ?? '', priceCents: test.price?.amount ?? 0, active: test.active }); }, [test]);
-  useEffect(() => { const selected = versions.find((version) => version._id === versionId); if (selected) setVersionForm({ versionLabel: selected.versionLabel, expectedQuestionCount: selected.expectedQuestionCount, scoringMethod: selected.scoringMethod }); }, [versionId, versions]);
+  useEffect(() => {
+    const selected = versions.find((version) => version._id === versionId);
+    if (selected) setVersionForm({
+      versionLabel: selected.versionLabel,
+      expectedQuestionCount: selected.expectedQuestionCount,
+      scoringMethod: selected.scoringMethod,
+      categoriesJson: JSON.stringify(selected.categories ?? [], null, 2),
+      scoringConfigJson: JSON.stringify(selected.scoringConfig ?? {}, null, 2)
+    });
+  }, [versionId, versions]);
 
   async function handleSaveTest() {
     if (!testId) return;
@@ -63,7 +72,10 @@ export function TestManage() {
     if (!testId) return;
     setError(null);
     try {
-      const { version } = await AdminApi.createVersion({ testId, ...newVersion, categories: [] });
+      const categories = JSON.parse(newVersion.categoriesJson);
+      const scoringConfig = JSON.parse(newVersion.scoringConfigJson);
+      if (!Array.isArray(categories) || typeof scoringConfig !== 'object' || scoringConfig === null || Array.isArray(scoringConfig)) throw new Error('Categories must be an array and scoring config must be a JSON object.');
+      const { version } = await AdminApi.createVersion({ testId, versionLabel: newVersion.versionLabel, expectedQuestionCount: newVersion.expectedQuestionCount, scoringMethod: newVersion.scoringMethod, categories, scoringConfig });
       setVersionId(version._id);
       setVersions((prev) => [version, ...prev]);
     } catch (e: any) {
@@ -81,7 +93,13 @@ export function TestManage() {
   async function handleSaveVersion() {
     if (!versionId) return;
     setSavingVersion(true); setError(null);
-    try { const { version } = await AdminApi.updateVersion(versionId, versionForm); setVersions((prev) => prev.map((item) => item._id === version._id ? version : item)); }
+    try {
+      const categories = JSON.parse(versionForm.categoriesJson);
+      const scoringConfig = JSON.parse(versionForm.scoringConfigJson);
+      if (!Array.isArray(categories) || typeof scoringConfig !== 'object' || scoringConfig === null || Array.isArray(scoringConfig)) throw new Error('Categories must be an array and scoring config must be a JSON object.');
+      const { version } = await AdminApi.updateVersion(versionId, { versionLabel: versionForm.versionLabel, expectedQuestionCount: versionForm.expectedQuestionCount, scoringMethod: versionForm.scoringMethod, categories, scoringConfig });
+      setVersions((prev) => prev.map((item) => item._id === version._id ? version : item));
+    }
     catch (e: any) { setError(e.message); } finally { setSavingVersion(false); }
   }
 
@@ -122,6 +140,16 @@ export function TestManage() {
     }
   }
 
+  async function handleSyncMbti() {
+    if (!versionId || !window.confirm('Replace this draft with the approved 60-question MBTI assessment?')) return;
+    setError(null);
+    try {
+      const { version } = await AdminApi.syncMbtiVersion(versionId);
+      setVersions((prev) => prev.map((item) => item._id === version._id ? version : item));
+      alert('MBTI questions and scoring were synced from the approved assessment.');
+    } catch (e: any) { setError(e.message); }
+  }
+
   return (
     <div>
       <div className="flex flex-wrap items-start justify-between gap-4"><div><Link to="/admin" className="text-xs font-semibold text-[#765c8d]">← Back to tests</Link><h1 className="mt-3 text-xl font-semibold text-slate-900">{test?.name ?? 'Test'}</h1><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">Create and publish the content version that customers will take. A version keeps questions, scoring, and result definitions together.</p></div>{test && <span className={`rounded-full px-3 py-1 text-xs font-semibold ${test.active ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{test.active ? 'Published' : 'Draft'}</span>}</div>
@@ -158,6 +186,8 @@ export function TestManage() {
               <option key={m} value={m}>{SCORING_METHOD_INFO[m].label}</option>
             ))}
           </select><span className="admin-help">{SCORING_METHOD_INFO[newVersion.scoringMethod]?.help}</span></label>
+          <label className="admin-field md:col-span-3">Categories JSON<span className="admin-help">Example: [{`{ "key": "trust", "name": "Trust" }`}]</span><textarea value={newVersion.categoriesJson} onChange={(e) => setNewVersion({ ...newVersion, categoriesJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label>
+          <label className="admin-field md:col-span-3">Scoring configuration JSON<span className="admin-help">Example: {`{ "dichotomies": [["E", "I"], ["S", "N"]] }`}</span><textarea value={newVersion.scoringConfigJson} onChange={(e) => setNewVersion({ ...newVersion, scoringConfigJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label>
         </div>
         <button onClick={handleCreateVersion} className="mt-5 rounded-xl bg-[#765c8d] px-5 py-2.5 text-sm font-semibold text-white shadow-sm">
           Create version
@@ -188,8 +218,11 @@ export function TestManage() {
             <button onClick={handlePublish} className="rounded-md bg-emerald-600 px-3 py-1.5 text-white">
               Publish version
             </button>
+            {test?.slug === 'mbti-style' && versions.find((version) => version._id === versionId)?.status === 'draft' && <button onClick={handleSyncMbti} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d]">
+              Sync approved MBTI questions
+            </button>}
           </div>
-          {versions.find((version) => version._id === versionId)?.status === 'draft' && <div className="mt-5 grid gap-4 border-t border-slate-100 pt-5 md:grid-cols-3"><label className="admin-field">Version label<input value={versionForm.versionLabel} onChange={(e) => setVersionForm({ ...versionForm, versionLabel: e.target.value })} className="admin-input" /></label><label className="admin-field">Expected questions<input type="number" min="1" value={versionForm.expectedQuestionCount} onChange={(e) => setVersionForm({ ...versionForm, expectedQuestionCount: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field">Scoring method<select value={versionForm.scoringMethod} onChange={(e) => setVersionForm({ ...versionForm, scoringMethod: e.target.value })} className="admin-input">{SCORING_METHODS.map((method) => <option key={method} value={method}>{SCORING_METHOD_INFO[method].label}</option>)}</select></label><button onClick={handleSaveVersion} disabled={savingVersion || !versionForm.versionLabel || versionForm.expectedQuestionCount < 1} className="w-fit rounded-xl bg-[#765c8d] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{savingVersion ? 'Saving...' : 'Save version settings'}</button></div>}
+          {versions.find((version) => version._id === versionId)?.status === 'draft' && <div className="mt-5 grid gap-4 border-t border-slate-100 pt-5 md:grid-cols-3"><label className="admin-field">Version label<input value={versionForm.versionLabel} onChange={(e) => setVersionForm({ ...versionForm, versionLabel: e.target.value })} className="admin-input" /></label><label className="admin-field">Expected questions<input type="number" min="1" value={versionForm.expectedQuestionCount} onChange={(e) => setVersionForm({ ...versionForm, expectedQuestionCount: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field">Scoring method<select value={versionForm.scoringMethod} onChange={(e) => setVersionForm({ ...versionForm, scoringMethod: e.target.value })} className="admin-input">{SCORING_METHODS.map((method) => <option key={method} value={method}>{SCORING_METHOD_INFO[method].label}</option>)}</select></label><label className="admin-field md:col-span-3">Categories JSON<textarea value={versionForm.categoriesJson} onChange={(e) => setVersionForm({ ...versionForm, categoriesJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><label className="admin-field md:col-span-3">Scoring configuration JSON<span className="admin-help">Use this for dichotomies or bands.</span><textarea value={versionForm.scoringConfigJson} onChange={(e) => setVersionForm({ ...versionForm, scoringConfigJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><button onClick={handleSaveVersion} disabled={savingVersion || !versionForm.versionLabel || versionForm.expectedQuestionCount < 1} className="w-fit rounded-xl bg-[#765c8d] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{savingVersion ? 'Saving...' : 'Save version settings'}</button></div>}
           {validation && (
             <div className="mt-3 text-sm">
               <p className={validation.valid ? 'text-emerald-600' : 'text-amber-600'}>

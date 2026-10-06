@@ -21,6 +21,12 @@ describe('seed content fidelity to specification', () => {
     for (const q of qs) {
       expect(q.answerOptions).toHaveLength(4);
       expect(['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P']).toContain(q.categoryKey);
+      const opposite: Record<string, string> = { E: 'I', I: 'E', S: 'N', N: 'S', T: 'F', F: 'T', J: 'P', P: 'J' };
+      q.answerOptions.forEach((option, index) => {
+        expect(option.numericalValue).toBe(1);
+        expect(option.scoringDirection).toBe('positive');
+        expect(option.scoringCategory).toBe(index % 2 === 0 ? q.categoryKey : opposite[q.categoryKey as string]);
+      });
     }
     expect(buildMbtiResultDefinitions()).toHaveLength(16); // 16 MBTI-style types
   });

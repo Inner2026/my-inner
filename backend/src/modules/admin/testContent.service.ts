@@ -7,6 +7,7 @@ import { AppError } from '../../utils/AppError';
 import { validateTestVersionForActivation } from './validation.service';
 import { scoreAttempt } from '../scoring/scoringEngine';
 import { SubmittedAnswer } from '../scoring/types';
+import { buildMbtiQuestions, MBTI_CATEGORIES, MBTI_SCORING_CONFIG } from '../../seed/builders';
 
 async function getEditableVersion(testVersionId: string): Promise<ITestVersion> {
   const version = await TestVersion.findById(testVersionId);
@@ -85,6 +86,29 @@ export async function listVersions(testId: string) {
   const test = await Test.findById(testId);
   if (!test) throw AppError.notFound('Test not found.');
   return TestVersion.find({ testId }).sort({ createdAt: -1 }).lean();
+}
+
+export async function getVersion(versionId: string) {
+  const version = await TestVersion.findById(versionId).lean();
+  if (!version) throw AppError.notFound('Test version not found.');
+  return version;
+}
+
+/** Replace a draft MBTI version's questions with the approved 60-question assessment. */
+export async function syncMbtiVersion(versionId: string) {
+  const version = await getEditableVersion(versionId);
+  const test = await Test.findById(version.testId);
+  if (!test || test.slug !== 'mbti-style') throw AppError.badRequest('This action is only available for the MBTI test.');
+
+  version.expectedQuestionCount = 60;
+  version.scoringMethod = 'WEIGHTED_DICHOTOMY';
+  version.scoringConfig = MBTI_SCORING_CONFIG;
+  version.categories = MBTI_CATEGORIES;
+  await version.save();
+
+  await Question.deleteMany({ testVersionId: version._id });
+  await Question.insertMany(buildMbtiQuestions().map((question) => ({ ...question, testVersionId: version._id })));
+  return version;
 }
 
 export async function previewVersion(versionId: string, answers: SubmittedAnswer[]) {
