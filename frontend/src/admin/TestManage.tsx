@@ -49,6 +49,7 @@ export function TestManage() {
   }, [testId]);
 
   const test = tests.find((t) => t._id === testId);
+  const isMbti = test?.slug === 'mbti-style';
   useEffect(() => { if (test) setTestForm({ name: test.name, description: test.description, imageUrl: test.imageUrl ?? '', priceCents: test.price?.amount ?? 0, active: test.active }); }, [test]);
   useEffect(() => {
     const selected = versions.find((version) => version._id === versionId);
@@ -198,31 +199,14 @@ export function TestManage() {
 
       {versionId && (
         <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
-          <div className="flex items-start gap-3"><span className="admin-step">2</span><div><h2 className="font-medium text-slate-900">Build and publish this version</h2><p className="mt-1 text-sm text-slate-500">Add all questions and result definitions, validate the version, then publish it for customers.</p></div></div>
+          <div className="flex items-start gap-3"><span className="admin-step">2</span><div><h2 className="font-medium text-slate-900">{isMbti ? 'Publish the MBTI test' : 'Build and publish this version'}</h2><p className="mt-1 text-sm text-slate-500">{isMbti ? 'The approved 60 questions are ready. Follow the three buttons below.' : 'Add all questions and result definitions, validate the version, then publish it for customers.'}</p></div></div>
           <div className="mt-3 flex flex-wrap gap-3 text-sm">
-            <Link to={`/admin/versions/${versionId}/questions`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">
-              Manage questions
-            </Link>
-            <Link to={`/admin/versions/${versionId}/results`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">
-              Manage result definitions
-            </Link>
-            <button onClick={handleValidate} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">
-              Validate
-            </button>
-            <button onClick={handlePreview} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d]">
-              Preview scoring
-            </button>
-            <button onClick={handleMarketingNotification} disabled={!test?.active} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d] disabled:opacity-40">
-              Notify subscribers
-            </button>
-            <button onClick={handlePublish} className="rounded-md bg-emerald-600 px-3 py-1.5 text-white">
-              Publish version
-            </button>
-            {test?.slug === 'mbti-style' && versions.find((version) => version._id === versionId)?.status === 'draft' && <button onClick={handleSyncMbti} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d]">
-              Sync approved MBTI questions
-            </button>}
+            {!isMbti && <><Link to={`/admin/versions/${versionId}/questions`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage questions</Link><Link to={`/admin/versions/${versionId}/results`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage result definitions</Link><button onClick={handlePreview} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d]">Preview scoring</button><button onClick={handleMarketingNotification} disabled={!test?.active} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d] disabled:opacity-40">Notify subscribers</button></>}
+            {isMbti && versions.find((version) => version._id === versionId)?.status === 'draft' && <button onClick={handleSyncMbti} className="rounded-md bg-[#765c8d] px-4 py-2 font-semibold text-white">1. Sync questions</button>}
+            <button onClick={handleValidate} className="rounded-md bg-slate-100 px-4 py-2 font-semibold text-slate-700">{isMbti ? '2. Check version' : 'Validate'}</button>
+            <button onClick={handlePublish} className="rounded-md bg-emerald-600 px-4 py-2 font-semibold text-white">{isMbti ? '3. Publish MBTI' : 'Publish version'}</button>
           </div>
-          {versions.find((version) => version._id === versionId)?.status === 'draft' && <div className="mt-5 grid gap-4 border-t border-slate-100 pt-5 md:grid-cols-3"><label className="admin-field">Version label<input value={versionForm.versionLabel} onChange={(e) => setVersionForm({ ...versionForm, versionLabel: e.target.value })} className="admin-input" /></label><label className="admin-field">Expected questions<input type="number" min="1" value={versionForm.expectedQuestionCount} onChange={(e) => setVersionForm({ ...versionForm, expectedQuestionCount: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field">Scoring method<select value={versionForm.scoringMethod} onChange={(e) => setVersionForm({ ...versionForm, scoringMethod: e.target.value })} className="admin-input">{SCORING_METHODS.map((method) => <option key={method} value={method}>{SCORING_METHOD_INFO[method].label}</option>)}</select></label><label className="admin-field md:col-span-3">Categories JSON<textarea value={versionForm.categoriesJson} onChange={(e) => setVersionForm({ ...versionForm, categoriesJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><label className="admin-field md:col-span-3">Scoring configuration JSON<span className="admin-help">Use this for dichotomies or bands.</span><textarea value={versionForm.scoringConfigJson} onChange={(e) => setVersionForm({ ...versionForm, scoringConfigJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><button onClick={handleSaveVersion} disabled={savingVersion || !versionForm.versionLabel || versionForm.expectedQuestionCount < 1} className="w-fit rounded-xl bg-[#765c8d] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{savingVersion ? 'Saving...' : 'Save version settings'}</button></div>}
+          {versions.find((version) => version._id === versionId)?.status === 'draft' && !isMbti && <div className="mt-5 grid gap-4 border-t border-slate-100 pt-5 md:grid-cols-3"><label className="admin-field">Version label<input value={versionForm.versionLabel} onChange={(e) => setVersionForm({ ...versionForm, versionLabel: e.target.value })} className="admin-input" /></label><label className="admin-field">Expected questions<input type="number" min="1" value={versionForm.expectedQuestionCount} onChange={(e) => setVersionForm({ ...versionForm, expectedQuestionCount: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field">Scoring method<select value={versionForm.scoringMethod} onChange={(e) => setVersionForm({ ...versionForm, scoringMethod: e.target.value })} className="admin-input">{SCORING_METHODS.map((method) => <option key={method} value={method}>{SCORING_METHOD_INFO[method].label}</option>)}</select></label><label className="admin-field md:col-span-3">Categories JSON<textarea value={versionForm.categoriesJson} onChange={(e) => setVersionForm({ ...versionForm, categoriesJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><label className="admin-field md:col-span-3">Scoring configuration JSON<span className="admin-help">Use this for dichotomies or bands.</span><textarea value={versionForm.scoringConfigJson} onChange={(e) => setVersionForm({ ...versionForm, scoringConfigJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><button onClick={handleSaveVersion} disabled={savingVersion || !versionForm.versionLabel || versionForm.expectedQuestionCount < 1} className="w-fit rounded-xl bg-[#765c8d] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{savingVersion ? 'Saving...' : 'Save version settings'}</button></div>}
           {validation && (
             <div className="mt-3 text-sm">
               <p className={validation.valid ? 'text-emerald-600' : 'text-amber-600'}>
