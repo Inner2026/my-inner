@@ -47,6 +47,30 @@ export function TestOverview() {
   }, [slug]);
 
   useEffect(() => {
+    if (!test) return;
+    const absoluteImage = test.imageUrl?.startsWith('http') ? test.imageUrl : `${window.location.origin}${test.imageUrl || '/hero-background.png'}`;
+    const title = `${test.name} | My Inner`;
+    document.title = title;
+    const description = document.querySelector('meta[name="description"]');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    const ogImage = document.querySelector('meta[property="og:image"]');
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    const twitterImage = document.querySelector('meta[name="twitter:image"]');
+    const canonical = document.querySelector('link[rel="canonical"]');
+    description?.setAttribute('content', test.description);
+    ogTitle?.setAttribute('content', title);
+    ogDescription?.setAttribute('content', test.description);
+    ogImage?.setAttribute('content', absoluteImage);
+    twitterTitle?.setAttribute('content', title);
+    twitterDescription?.setAttribute('content', test.description);
+    twitterImage?.setAttribute('content', absoluteImage);
+    canonical?.setAttribute('href', window.location.href);
+    return () => { document.title = 'My Inner — Discover more about yourself'; };
+  }, [test]);
+
+  useEffect(() => {
     let cancelled = false;
     setHasPreviousAttempt(false);
     if (!user || !slug) return () => { cancelled = true; };
