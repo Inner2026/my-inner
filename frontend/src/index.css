@@ -61,7 +61,7 @@ body {
   .test-overview-hero {
     aspect-ratio: auto !important;
     min-height: 45rem;
-    background-position: right bottom;
+    background-position: center bottom;
     background-size: 100% auto;
   }
 
