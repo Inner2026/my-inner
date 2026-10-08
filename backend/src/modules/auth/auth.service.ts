@@ -123,12 +123,16 @@ export async function requestPasswordReset(emailInput: string) {
   if (!email) throw AppError.badRequest('A valid email is required.');
   const user = await User.findOne({ email });
   // The controller always returns the same public response whether or not a user exists.
-  if (!user) return;
+  if (!user) {
+    if (!env.isProd) console.log('[auth] password reset: no matching account');
+    return;
+  }
   const rawToken = randomBytes(32).toString('hex');
   user.passwordResetTokenHash = createHash('sha256').update(rawToken).digest('hex');
   user.passwordResetExpiresAt = new Date(Date.now() + 60 * 60 * 1000);
   await user.save();
   await sendPasswordResetEmail(email, `${env.passwordResetUrl}?token=${rawToken}`);
+  if (!env.isProd) console.log('[auth] password reset email accepted by SMTP server');
 }
 
 export async function resetPassword(rawToken: string, newPassword: string) {

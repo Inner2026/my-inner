@@ -16,6 +16,15 @@ export interface TestRatingSummary {
   count: number;
   userRating: number | null;
   canRate: boolean;
+  reviews: TestReview[];
+}
+
+export interface TestReview {
+  id: string;
+  rating: number;
+  comment: string;
+  author: string;
+  createdAt: string;
 }
 
 export interface AuthUser {

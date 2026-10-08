@@ -141,6 +141,8 @@ export const settingsStatus = asyncHandler(async (_req: Request, res: Response) 
     mailFromConfigured: Boolean(env.mailFrom),
     publicApiUrl: env.publicApiUrl,
     clientOrigin: env.clientOrigin,
-    uploadDirectoryConfigured: Boolean(process.env.UPLOAD_DIR)
+    uploadDirectoryConfigured: Boolean(process.env.UPLOAD_DIR),
+    imageStorage: env.imageStorage,
+    cloudinaryConfigured: Boolean(env.cloudinaryCloudName && env.cloudinaryApiKey && env.cloudinaryApiSecret)
   } });
 });

@@ -10,13 +10,14 @@ import { env } from '../../config/env';
 
 const uploadDirectory = path.resolve(process.cwd(), env.uploadDir);
 const isVercel = process.env.VERCEL === '1';
-if (!isVercel) fs.mkdirSync(uploadDirectory, { recursive: true });
+const useCloudinary = env.imageStorage === 'cloudinary';
+if (!isVercel && !useCloudinary) fs.mkdirSync(uploadDirectory, { recursive: true });
 
 // Vercel's function filesystem is not persistent and its deployed bundle is
 // not writable. Keep uploads in memory there until a cloud storage provider is
 // configured; local development continues to use the uploads directory.
 const imageUpload = multer({
-  storage: isVercel
+  storage: isVercel || useCloudinary
     ? multer.memoryStorage()
     : multer.diskStorage({ destination: uploadDirectory, filename: (_req, file, cb) => cb(null, `${crypto.randomUUID()}${path.extname(file.originalname).toLowerCase()}`) }),
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -55,14 +56,37 @@ export function hasValidImageSignature(filePathOrBuffer: string | Buffer, mimeTy
 
 export const uploadImage = [imageUpload.single('image'), asyncHandler(async (req: Request, res: Response) => {
   if (!req.file) { res.status(400).json({ error: { message: 'Please upload a PNG, JPEG, WEBP, or GIF image up to 5MB.' } }); return; }
-  const imageData = isVercel ? req.file.buffer : req.file.path;
+  const imageData = isVercel || useCloudinary ? req.file.buffer : req.file.path;
   if (!hasValidImageSignature(imageData, req.file.mimetype)) {
-    if (!isVercel) fs.unlinkSync(req.file.path);
+    if (!isVercel && !useCloudinary) fs.unlinkSync(req.file.path);
     res.status(400).json({ error: { message: 'The uploaded file content does not match its image type.' } });
     return;
   }
+  if (useCloudinary) {
+    if (!env.cloudinaryCloudName || !env.cloudinaryApiKey || !env.cloudinaryApiSecret) {
+      res.status(503).json({ error: { message: 'Cloud image storage is enabled but not configured.' } });
+      return;
+    }
+    const timestamp = Math.floor(Date.now() / 1000);
+    const folder = 'my-inner';
+    const signature = crypto.createHash('sha1').update(`folder=${folder}&timestamp=${timestamp}${env.cloudinaryApiSecret}`).digest('hex');
+    const body = new FormData();
+    body.append('file', new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
+    body.append('api_key', env.cloudinaryApiKey);
+    body.append('timestamp', String(timestamp));
+    body.append('folder', folder);
+    body.append('signature', signature);
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${env.cloudinaryCloudName}/image/upload`, { method: 'POST', body });
+    const result = await response.json().catch(() => ({})) as { secure_url?: string; error?: { message?: string } };
+    if (!response.ok || !result.secure_url) {
+      res.status(502).json({ error: { message: 'Cloud image storage could not save the image.' } });
+      return;
+    }
+    res.status(201).json({ imageUrl: result.secure_url });
+    return;
+  }
   if (isVercel) {
-    res.status(503).json({ error: { message: 'Image uploads require persistent cloud storage on this deployment.' } });
+    res.status(503).json({ error: { message: 'Set IMAGE_STORAGE=cloudinary for persistent image uploads on this deployment.' } });
     return;
   }
   res.status(201).json({ imageUrl: `${env.publicApiUrl}/uploads/${req.file.filename}` });

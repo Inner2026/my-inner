@@ -4,6 +4,7 @@ import * as content from './testContent.controller';
 import * as readOnly from './adminReadOnly.controller';
 import { auditAdminAction } from '../../middleware/auditAdminAction';
 import * as marketing from './marketing.controller';
+import * as reviews from './reviews.controller';
 
 export const adminRouter = Router();
 
@@ -52,3 +53,5 @@ adminRouter.get('/analytics', readOnly.analytics);
 adminRouter.get('/marketing/deliveries', readOnly.listMarketingDeliveries);
 adminRouter.get('/settings/status', readOnly.settingsStatus);
 adminRouter.post('/marketing/new-test/:testId', marketing.sendNewTestNotification);
+adminRouter.get('/reviews', reviews.listReviews);
+adminRouter.delete('/reviews/:reviewId', reviews.deleteReview);

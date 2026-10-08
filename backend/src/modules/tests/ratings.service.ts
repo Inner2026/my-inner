@@ -11,10 +11,14 @@ async function findPublicTest(slug: string) {
 }
 
 async function buildSummary(testId: Types.ObjectId, userId?: Types.ObjectId) {
-  const [summary] = await TestRating.aggregate<{ average: number; count: number }>([
+  const [summaryRows, reviews] = await Promise.all([
+    TestRating.aggregate<{ average: number; count: number }>([
     { $match: { testId } },
     { $group: { _id: null, average: { $avg: '$rating' }, count: { $sum: 1 } } }
+    ]),
+    TestRating.find({ testId }).select('rating comment createdAt userId').populate('userId', 'username').sort({ createdAt: -1 }).limit(50).lean()
   ]);
+  const summary = summaryRows[0];
   const [own, completedAttempt] = userId
     ? await Promise.all([
         TestRating.findOne({ testId, userId }).select('rating').lean(),
@@ -25,7 +29,14 @@ async function buildSummary(testId: Types.ObjectId, userId?: Types.ObjectId) {
     average: summary ? Math.round(summary.average * 10) / 10 : 0,
     count: summary?.count ?? 0,
     userRating: own?.rating ?? null,
-    canRate: Boolean(completedAttempt)
+    canRate: Boolean(completedAttempt),
+    reviews: reviews.map((review: any) => ({
+      id: String(review._id),
+      rating: review.rating,
+      comment: review.comment ?? '',
+      author: review.userId?.username || 'Anonymous',
+      createdAt: review.createdAt
+    }))
   };
 }
 

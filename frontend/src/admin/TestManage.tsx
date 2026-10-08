@@ -36,8 +36,9 @@ export function TestManage() {
   // its question/result editors, and validate/publish once versionId is known.
   const [versionId, setVersionId] = useState('');
   const [validation, setValidation] = useState<{ valid: boolean; issues: any[] } | null>(null);
-  const [testForm, setTestForm] = useState({ name: '', description: '', imageUrl: '', priceCents: 0, active: false });
+  const [testForm, setTestForm] = useState({ name: '', description: '', imageUrl: '', priceCents: 0, active: false, marketingSubject: '', marketingMessage: '' });
   const [savingTest, setSavingTest] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [savingVersion, setSavingVersion] = useState(false);
   const [previewResult, setPreviewResult] = useState<any>(null);
   const [marketingMessage, setMarketingMessage] = useState<string | null>(null);
@@ -50,7 +51,7 @@ export function TestManage() {
 
   const test = tests.find((t) => t._id === testId);
   const isMbti = test?.slug === 'mbti-style';
-  useEffect(() => { if (test) setTestForm({ name: test.name, description: test.description, imageUrl: test.imageUrl ?? '', priceCents: test.price?.amount ?? 0, active: test.active }); }, [test]);
+  useEffect(() => { if (test) setTestForm({ name: test.name, description: test.description, imageUrl: test.imageUrl ?? '', priceCents: test.price?.amount ?? 0, active: test.active, marketingSubject: test.marketingSubject ?? '', marketingMessage: test.marketingMessage ?? '' }); }, [test]);
   useEffect(() => {
     const selected = versions.find((version) => version._id === versionId);
     if (selected) setVersionForm({
@@ -67,6 +68,19 @@ export function TestManage() {
     setSavingTest(true); setError(null);
     try { const { test: updated } = await AdminApi.updateTest(testId, testForm); setTests((prev) => prev.map((item) => item._id === updated._id ? updated : item)); }
     catch (e: any) { setError(e.message); } finally { setSavingTest(false); }
+  }
+
+  async function uploadTestImage(file?: File) {
+    if (!file) return;
+    setUploadingImage(true); setError(null);
+    try {
+      const { imageUrl } = await AdminApi.uploadImage(file);
+      setTestForm((current) => ({ ...current, imageUrl }));
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setUploadingImage(false);
+    }
   }
 
   async function handleCreateVersion() {
@@ -157,7 +171,7 @@ export function TestManage() {
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       {marketingMessage && <p className="mt-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">{marketingMessage}</p>}
 
-      <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4"><h2 className="font-medium text-slate-900">Edit test details</h2><p className="mt-1 text-sm text-slate-500">Update the public name, description, image, price, or availability. Published question content remains versioned.</p><div className="mt-4 grid gap-4 md:grid-cols-2"><label className="admin-field">Name<input value={testForm.name} onChange={(e) => setTestForm({ ...testForm, name: e.target.value })} className="admin-input" /></label><label className="admin-field">Price in cents<input type="number" min="0" value={testForm.priceCents} onChange={(e) => setTestForm({ ...testForm, priceCents: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field md:col-span-2">Description<textarea value={testForm.description} onChange={(e) => setTestForm({ ...testForm, description: e.target.value })} className="admin-input min-h-24" /></label><label className="admin-field md:col-span-2">Test page image URL<span className="admin-help">Use an https image URL or a path such as /test-backgrounds/inner-child.png. Leave blank to use the default image.</span><input value={testForm.imageUrl} onChange={(e) => setTestForm({ ...testForm, imageUrl: e.target.value })} className="admin-input" placeholder="https://... or /test-backgrounds/..." /></label>{testForm.imageUrl && <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 md:col-span-2"><img src={testForm.imageUrl} alt="Test page preview" className="h-44 w-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} /></div>}<label className="flex items-center gap-2 text-sm font-semibold text-[#302447]"><input type="checkbox" checked={testForm.active} onChange={(e) => setTestForm({ ...testForm, active: e.target.checked })} /> Active on public website</label></div><button onClick={handleSaveTest} disabled={savingTest || !testForm.name || !testForm.description} className="mt-4 rounded-xl bg-[#765c8d] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{savingTest ? 'Saving...' : 'Save test details'}</button></div>
+      <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4"><h2 className="font-medium text-slate-900">Edit test details</h2><p className="mt-1 text-sm text-slate-500">Update the public name, description, image, price, availability, and the email sent to subscribers.</p><div className="mt-4 grid gap-4 md:grid-cols-2"><label className="admin-field">Name<input value={testForm.name} onChange={(e) => setTestForm({ ...testForm, name: e.target.value })} className="admin-input" /></label><label className="admin-field">Price in cents<input type="number" min="0" value={testForm.priceCents} onChange={(e) => setTestForm({ ...testForm, priceCents: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field md:col-span-2">Description<textarea value={testForm.description} onChange={(e) => setTestForm({ ...testForm, description: e.target.value })} className="admin-input min-h-24" /></label><div className="admin-field md:col-span-2"><span>Test page image</span><span className="admin-help">Upload PNG, JPEG, WEBP, or GIF up to 5MB. Leave empty to use the default image.</span><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(e) => uploadTestImage(e.target.files?.[0])} disabled={uploadingImage} className="admin-input" />{uploadingImage && <p className="mt-2 text-xs text-slate-500">Uploading image...</p>}{testForm.imageUrl && <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50"><img src={testForm.imageUrl} alt="Test page preview" className="h-44 w-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} /></div>}</div><label className="admin-field md:col-span-2">Email subject<span className="admin-help">Leave blank to use the default subject.</span><input value={testForm.marketingSubject} onChange={(e) => setTestForm({ ...testForm, marketingSubject: e.target.value })} className="admin-input" placeholder="New My Inner test: ..." /></label><label className="admin-field md:col-span-2">Email message<span className="admin-help">This text is sent to opted-in subscribers. Leave blank to use the test description.</span><textarea value={testForm.marketingMessage} onChange={(e) => setTestForm({ ...testForm, marketingMessage: e.target.value })} className="admin-input min-h-32" placeholder="Write the message subscribers should receive..." /></label><label className="flex items-center gap-2 text-sm font-semibold text-[#302447]"><input type="checkbox" checked={testForm.active} onChange={(e) => setTestForm({ ...testForm, active: e.target.checked })} /> Active on public website</label></div><button onClick={handleSaveTest} disabled={savingTest || uploadingImage || !testForm.name || !testForm.description} className="mt-4 rounded-xl bg-[#765c8d] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{savingTest ? 'Saving...' : 'Save test details'}</button></div>
 
       <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
         <div className="flex items-start gap-3"><span className="admin-step">1</span><div><h2 className="font-medium text-slate-900">Create a new version</h2><p className="mt-1 text-sm text-slate-500">Start here before adding questions or result definitions.</p></div></div>
@@ -201,7 +215,8 @@ export function TestManage() {
         <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
           <div className="flex items-start gap-3"><span className="admin-step">2</span><div><h2 className="font-medium text-slate-900">{isMbti ? 'Publish the MBTI test' : 'Build and publish this version'}</h2><p className="mt-1 text-sm text-slate-500">{isMbti ? 'The approved 60 questions are ready. Follow the three buttons below.' : 'Add all questions and result definitions, validate the version, then publish it for customers.'}</p></div></div>
           <div className="mt-3 flex flex-wrap gap-3 text-sm">
-            {!isMbti && <><Link to={`/admin/versions/${versionId}/questions`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage questions</Link><Link to={`/admin/versions/${versionId}/results`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage result definitions</Link><button onClick={handlePreview} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d]">Preview scoring</button><button onClick={handleMarketingNotification} disabled={!test?.active} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d] disabled:opacity-40">Notify subscribers</button></>}
+            {!isMbti && <><Link to={`/admin/versions/${versionId}/questions`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage questions</Link><Link to={`/admin/versions/${versionId}/results`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage result definitions</Link><button onClick={handlePreview} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d]">Preview scoring</button></>}
+            <button onClick={handleMarketingNotification} disabled={!test?.active} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d] disabled:cursor-not-allowed disabled:opacity-40">Send email to subscribers</button>
             {isMbti && versions.find((version) => version._id === versionId)?.status === 'draft' && <button onClick={handleSyncMbti} className="rounded-md bg-[#765c8d] px-4 py-2 font-semibold text-white">1. Sync questions</button>}
             <button onClick={handleValidate} className="rounded-md bg-slate-100 px-4 py-2 font-semibold text-slate-700">{isMbti ? '2. Check version' : 'Validate'}</button>
             <button onClick={handlePublish} className="rounded-md bg-emerald-600 px-4 py-2 font-semibold text-white">{isMbti ? '3. Publish MBTI' : 'Publish version'}</button>

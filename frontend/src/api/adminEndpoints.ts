@@ -73,4 +73,6 @@ export const AdminApi = {
   listMarketingDeliveries: (params: { status?: string; page?: number; pageSize?: number } = {}) => { const query = new URLSearchParams(); Object.entries(params).forEach(([key, value]) => { if (value !== undefined && value !== '') query.set(key, String(value)); }); return apiRequest<{ deliveries: any[]; pagination: { page: number; pageSize: number; total: number; pages: number } }>(`/admin/marketing/deliveries?${query.toString()}`); },
   settingsStatus: () => apiRequest<{ settings: Record<string, unknown> }>('/admin/settings/status'),
   sendNewTestNotification: (testId: string) => apiRequest<{ subscribers: number; sent: number; skipped: number; failed: number }>(`/admin/marketing/new-test/${testId}`, { method: 'POST' })
+  ,listReviews: () => apiRequest<{ reviews: any[] }>('/admin/reviews')
+  ,deleteReview: (reviewId: string) => apiRequest<void>(`/admin/reviews/${reviewId}`, { method: 'DELETE' })
 };

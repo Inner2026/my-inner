@@ -34,11 +34,13 @@ export async function createTest(input: { slug: string; name: string; descriptio
   });
 }
 
-export async function updateTest(testId: string, patch: Partial<{ name: string; description: string; imageUrl: string; priceCents: number; active: boolean }>) {
+export async function updateTest(testId: string, patch: Partial<{ name: string; description: string; imageUrl: string; priceCents: number; active: boolean; marketingSubject: string; marketingMessage: string }>) {
   const test = await Test.findById(testId);
   if (!test) throw AppError.notFound('Test not found.');
   if (patch.name !== undefined) { if (!patch.name.trim()) throw AppError.badRequest('Name cannot be empty.'); test.name = patch.name.trim(); }
   if (patch.description !== undefined) { if (!patch.description.trim()) throw AppError.badRequest('Description cannot be empty.'); test.description = patch.description.trim(); }
+  if (patch.marketingSubject !== undefined) test.marketingSubject = patch.marketingSubject.trim();
+  if (patch.marketingMessage !== undefined) test.marketingMessage = patch.marketingMessage.trim();
   if (patch.imageUrl !== undefined) {
     const imageUrl = patch.imageUrl.trim();
     if (imageUrl && !/^https?:\/\//i.test(imageUrl) && !imageUrl.startsWith('/')) {

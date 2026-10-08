@@ -5,6 +5,7 @@ import { PublicTest } from '../types';
 import { TestIcon } from '../components/TestIcon';
 import { LoadingScreen } from '../components/LoadingScreen';
 import { useAuth } from '../context/AuthContext';
+import { TestRating } from '../components/TestRating';
 
 const backgrounds: Record<string, string> = {
   'mbti-style': '/test-backgrounds/mbti-style.png',
@@ -39,10 +40,21 @@ export function TestOverview() {
   const [test, setTest] = useState<PublicTest | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [starting, setStarting] = useState(false);
+  const [hasPreviousAttempt, setHasPreviousAttempt] = useState(false);
 
   useEffect(() => {
     if (slug) TestsApi.getBySlug(slug).then((res) => setTest(res.test)).catch((err) => setError(err.message));
   }, [slug]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setHasPreviousAttempt(false);
+    if (!user || !slug) return () => { cancelled = true; };
+    AttemptsApi.list().then(({ attempts }) => {
+      if (!cancelled) setHasPreviousAttempt(attempts.some((attempt) => attempt.testId?.slug === slug));
+    }).catch(() => undefined);
+    return () => { cancelled = true; };
+  }, [user, slug]);
 
   async function startTest() {
     if (!test || !slug || starting) return;
@@ -52,6 +64,7 @@ export function TestOverview() {
       const { attempts } = await AttemptsApi.list();
       const owned = attempts.find((attempt) => attempt.testId?.slug === test.slug);
       if (!owned) { navigate(`/tests/${slug}/checkout`); return; }
+      setHasPreviousAttempt(true);
       if (owned.status === 'in_progress') { navigate(`/attempts/${owned._id}/instructions`); return; }
       const { attempt } = await AttemptsApi.create(owned.purchaseId);
       navigate(`/attempts/${attempt._id}/instructions`);
@@ -75,10 +88,11 @@ export function TestOverview() {
           <h1 className="mt-5 max-w-md font-serif text-4xl leading-[0.98] tracking-tight text-[#283452] sm:text-6xl">{test.name.replace(' Test', '')}</h1>
           <p className="mt-5 max-w-md text-sm leading-6 text-[#566078] sm:text-base">{test.description}</p>
           <div className="mt-6 flex flex-wrap gap-3 text-xs font-medium text-[#667083]"><span className="rounded-full bg-white/75 px-3 py-2 shadow-sm">◷ 10–25 minutes</span><span className="rounded-full bg-white/75 px-3 py-2 shadow-sm">☷ {test.questionCount} questions</span><span className="rounded-full bg-white/75 px-3 py-2 shadow-sm">✦ Self-assessment</span></div>
-          <button onClick={startTest} disabled={!test.available || starting} className="mt-8 w-fit rounded-full bg-[#354579] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#354579]/20 transition hover:-translate-y-0.5 hover:bg-[#283760] disabled:cursor-not-allowed disabled:opacity-50">{!test.available ? 'Coming Soon' : starting ? 'Opening...' : user ? ' Retake Test  →' : 'Start Test  →'}</button>
+          <button onClick={startTest} disabled={!test.available || starting} className="mt-8 w-fit rounded-full bg-[#354579] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#354579]/20 transition hover:-translate-y-0.5 hover:bg-[#283760] disabled:cursor-not-allowed disabled:opacity-50">{!test.available ? 'Coming Soon' : starting ? 'Opening...' : hasPreviousAttempt ? 'Retake Test  →' : 'Start Test  →'}</button>
         </div>
       </section>
       <section className="mt-8 rounded-[2rem] border border-[#eee7ed] bg-white p-7 shadow-[0_14px_45px_rgba(73,57,88,0.06)] sm:p-10"><div className="grid gap-8 md:grid-cols-[1fr_.7fr]"><div><h2 className="font-serif text-2xl text-[#283452] sm:text-3xl">What You’ll Discover</h2><div className="mt-6 space-y-4">{items.map((item) => <p key={item} className="flex items-center gap-3 text-sm text-[#687184]"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#f5eaf2] text-[#bd7891]">♡</span>{item}</p>)}</div></div><div className="flex items-center border-l border-[#eee5ed] px-5 text-center md:justify-center"><p className="max-w-xs font-serif text-lg leading-7 text-[#69728c]">Take a moment to look within.<br /><span className="text-[#bd7891]">Your answers are uniquely yours.</span></p></div></div></section>
+      <div className="mt-8"><TestRating slug={test.slug} /></div>
     </div>
   </div>;
 }

@@ -5,6 +5,8 @@ export interface ITest extends Document {
   slug: string;
   name: string;
   description: string;
+  marketingSubject?: string;
+  marketingMessage?: string;
   imageUrl?: string;
   price: { amount: number; currency: string };
   active: boolean;
@@ -18,6 +20,8 @@ const testSchema = new Schema<ITest>(
     slug: { type: String, required: true, unique: true, trim: true, lowercase: true },
     name: { type: String, required: true, trim: true },
     description: { type: String, required: true },
+    marketingSubject: { type: String, trim: true, default: '' },
+    marketingMessage: { type: String, trim: true, default: '' },
     imageUrl: { type: String, trim: true, default: '' },
     price: {
       amount: { type: Number, required: true, min: 0 }, // in cents
