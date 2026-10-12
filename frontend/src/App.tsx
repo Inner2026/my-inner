@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { NavBar } from './components/NavBar';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Landing } from './pages/Landing';
@@ -23,10 +24,26 @@ import { Footer } from './components/Footer';
 import { AdminHome } from './admin/AdminHome';
 import { ReferralPromoModal } from './components/ReferralPromoModal';
 import { AnnouncementBar } from './components/AnnouncementBar';
+import { Seo } from './components/Seo';
+import { TestsApi } from './api/endpoints';
+import { seoSiteUrl } from './components/Seo';
+
+function RouteSeo() {
+  const { pathname } = useLocation();
+  const [test, setTest] = useState<any>(null);
+  const testSlug = pathname.match(/^\/tests\/([^/]+)$/)?.[1];
+  useEffect(() => { let cancelled = false; setTest(null); if (testSlug) TestsApi.getBySlug(testSlug).then((result) => { if (!cancelled) setTest(result.test); }).catch(() => undefined); return () => { cancelled = true; }; }, [testSlug]);
+  const noIndex = /^\/(dashboard|profile|admin|results|attempts|checkout|login|register|forgot-password|reset-password)/.test(pathname);
+  const title = pathname === '/tests' ? 'Self-Discovery Tests | My Inner' : pathname === '/about' ? 'About My Inner' : pathname === '/terms' ? 'Terms of Service | My Inner' : undefined;
+  const testImage = test?.imageUrl || '/hero-background.png';
+  const jsonLd = test ? { '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${seoSiteUrl}/tests/${test.slug}`, image: testImage.startsWith('http') ? testImage : `${seoSiteUrl}${testImage}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl } } : undefined;
+  return <Seo title={test ? `${test.name} | My Inner` : title} description={test?.description} canonicalPath={test ? `/tests/${test.slug}` : undefined} image={testImage} noIndex={noIndex} jsonLd={jsonLd} />;
+}
 
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
+      <RouteSeo />
       <AnnouncementBar /><NavBar />
       <main className="flex-1">
         <Routes>
