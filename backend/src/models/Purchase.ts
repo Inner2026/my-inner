@@ -4,7 +4,7 @@ import { Schema, model, Document, Types } from 'mongoose';
 // between a PayPal order being approved and its capture being confirmed --
 // never a stable end state.
 export type PurchaseStatus = 'pending' | 'capturing' | 'paid' | 'failed' | 'refunded';
-export type PaymentProvider = 'paypal' | 'demo';
+export type PaymentProvider = 'paypal' | 'demo' | 'internal';
 
 export interface IPurchase extends Document {
   _id: Types.ObjectId;
@@ -12,6 +12,10 @@ export interface IPurchase extends Document {
   testId: Types.ObjectId;
   testVersionId: Types.ObjectId;
   amount: number;
+  originalAmount?: number;
+  couponCode?: string | null;
+  couponDiscountAmount?: number;
+  creditAppliedCents?: number;
   currency: string;
   status: PurchaseStatus;
   paymentProvider: PaymentProvider;
@@ -29,9 +33,13 @@ const purchaseSchema = new Schema<IPurchase>(
     testId: { type: Schema.Types.ObjectId, ref: 'Test', required: true },
     testVersionId: { type: Schema.Types.ObjectId, ref: 'TestVersion', required: true },
     amount: { type: Number, required: true, min: 0 },
+    originalAmount: { type: Number, min: 0 },
+    couponCode: { type: String, uppercase: true, trim: true, default: null },
+    couponDiscountAmount: { type: Number, min: 0, default: 0 },
+    creditAppliedCents: { type: Number, min: 0, default: 0 },
     currency: { type: String, required: true, default: 'usd' },
     status: { type: String, enum: ['pending', 'capturing', 'paid', 'failed', 'refunded'], default: 'pending' },
-    paymentProvider: { type: String, enum: ['paypal', 'demo'], required: true, default: 'paypal' },
+    paymentProvider: { type: String, enum: ['paypal', 'demo', 'internal'], required: true, default: 'paypal' },
     paypalOrderId: { type: String, required: true, unique: true },
     paypalCaptureId: { type: String, default: null },
     // NOTE: deliberately no `default: null` here. The uniqueness guarantee

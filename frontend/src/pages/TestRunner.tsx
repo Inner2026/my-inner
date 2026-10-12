@@ -68,6 +68,7 @@ export function TestRunner() {
 
   async function handleSubmit() {
     if (!attemptId || !allAnswered) return;
+    if (!window.confirm('Are you ready to submit your answers? You will not be able to edit this attempt afterward.')) return;
     setSubmitting(true); setError(null);
     try { await AttemptsApi.submit(attemptId, questions.map((q) => ({ questionId: q.id, answerOptionId: answers[q.id] }))); if (draftKey) localStorage.removeItem(draftKey); setShowRating(true); }
     catch (err) { setError(err instanceof ApiError ? err.message : 'Could not submit your answers.'); }

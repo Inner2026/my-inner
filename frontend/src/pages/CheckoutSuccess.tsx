@@ -37,7 +37,18 @@ export function CheckoutSuccess() {
     let cancelled = false;
 
     async function startAttempt() {
-      const { attempt } = await AttemptsApi.create(purchaseId!);
+      let attempt: any;
+      try {
+        ({ attempt } = await AttemptsApi.create(purchaseId!));
+      } catch (error) {
+        // The success page can be re-entered or mounted twice while the
+        // payment callback and redirect race. Reuse the already-created
+        // active attempt instead of surfacing a false duplicate error.
+        if (!(error instanceof ApiError) || error.status !== 409) throw error;
+        const existing = await AttemptsApi.list();
+        attempt = existing.attempts.find((item) => item.purchaseId === purchaseId && (item.status === 'in_progress' || item.status === 'scoring'));
+        if (!attempt) throw error;
+      }
       if (!cancelled) {
         setAttemptId(attempt._id);
         const detail = await AttemptsApi.get(attempt._id);
@@ -53,7 +64,7 @@ export function CheckoutSuccess() {
       try {
         const { purchase } = await PurchasesApi.get(purchaseId!);
         if (purchase.status === 'paid') {
-          setStatus('paid');
+          setStatus('paid'); window.dispatchEvent(new CustomEvent('myinner:purchase-success', { detail: { purchaseId } }));
           await startAttempt();
         } else if (purchase.status === 'pending' && attemptsLeft > 0) {
           // A transient network error or a competing return-page request can
@@ -62,7 +73,7 @@ export function CheckoutSuccess() {
           try {
             const retry = await PurchasesApi.capture(purchaseId!, paypalOrderId);
             if (retry.purchase.status === 'paid') {
-              setStatus('paid');
+              setStatus('paid'); window.dispatchEvent(new CustomEvent('myinner:purchase-success', { detail: { purchaseId } }));
               await startAttempt();
               return;
             }
@@ -95,7 +106,7 @@ export function CheckoutSuccess() {
         try {
           const { purchase } = await PurchasesApi.get(purchaseId!);
           if (purchase.status === 'paid') {
-            setStatus('paid');
+            setStatus('paid'); window.dispatchEvent(new CustomEvent('myinner:purchase-success', { detail: { purchaseId } }));
             await startAttempt();
           } else {
             setStatus('error');
@@ -114,7 +125,7 @@ export function CheckoutSuccess() {
       try {
         const { purchase } = await PurchasesApi.capture(purchaseId!, paypalOrderId);
         if (purchase.status === 'paid') {
-          setStatus('paid');
+          setStatus('paid'); window.dispatchEvent(new CustomEvent('myinner:purchase-success', { detail: { purchaseId } }));
           await startAttempt();
           return;
         }

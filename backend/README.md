@@ -205,3 +205,12 @@ placeholder text (`[PLACEHOLDER TEXT ...]`, see `src/seed/builders.ts`) --
 for placeholder markers (`src/utils/placeholderContent.ts`) and refuses to
 publish while one is present, regardless of which test it is. None of the 7
 can accidentally go live. See root `README.md` for the full breakdown.
+## Referral / Invite & Earn (Phase 1)
+
+Referral codes are generated securely for new users and lazily for existing users when they first open their referral overview. Registration accepts `?ref=CODE`; the backend validates and permanently records the attribution in `Referral`. A successful paid purchase triggers one idempotent `WalletLedger` credit of 100 USD cents to the referrer. Registration, link clicks, PayPal order creation, and PayPal approval do not qualify a referral.
+
+Phase 2 checkout uses `POST /api/purchases/quote` and the same server-side calculation during order creation. Coupons are validated from `Coupon`, stacked before referral credit, and all amounts remain integer cents. Credit is atomically reserved in `WalletAccount` and a `credit_reservation` ledger entry, then consumed only after payment confirmation or released on failed/expired checkout. Fully credit-funded purchases use an auditable internal purchase and never create a zero-value PayPal order.
+
+The authenticated dashboard consumes the referral overview, history, and ledger APIs. The first confirmed paid purchase dispatches the frontend referral invitation, which is dismissible and persisted locally; it never grants credit itself.
+
+Authenticated endpoints are `GET /api/referrals`, `/history`, `/ledger`, and `/balance`. Admin-only reporting is available at `/api/admin/referrals` and `/api/admin/referrals/totals`. Balances are ledger-derived; no withdrawal or payout flow exists. Refund/chargeback reversal is intentionally not automatic because this codebase has no implemented refund provider workflow; any future refund integration must create an auditable reversal ledger entry using a new idempotency key rather than deleting the reward.

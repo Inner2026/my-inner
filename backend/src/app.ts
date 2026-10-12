@@ -13,6 +13,8 @@ import { attemptsRouter } from './modules/attempts/attempts.routes';
 import { resultsRouter } from './modules/results/results.routes';
 import { purchasesRouter } from './modules/purchases/purchases.routes';
 import { paypalWebhookRouter } from './modules/purchases/paypalWebhook.routes';
+import { referralsRouter } from './modules/referrals/referrals.routes';
+import { promotionRouter } from './modules/admin/promotion.routes';
 
 export function createApp() {
   const app = express();
@@ -41,7 +43,13 @@ export function createApp() {
   app.use('/api/purchases/webhook', paypalWebhookRouter);
 
   app.use(express.json({ limit: '1mb' }));
-  app.use('/api/uploads', express.static(path.resolve(process.cwd(), env.uploadDir)));
+  app.use('/api/uploads', (req, res, next) => {
+    // The SPA and API commonly run on different localhost origins in
+    // development (5173 vs 4000). Allow image elements/backgrounds to load
+    // uploaded assets while keeping the rest of Helmet's protections intact.
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+  }, express.static(path.resolve(process.cwd(), env.uploadDir)));
 
   app.get('/api/health', (_req: Request, res: Response) => {
     res.json({
@@ -61,6 +69,8 @@ export function createApp() {
   app.use('/api/attempts', attemptsRouter);
   app.use('/api/results', resultsRouter);
   app.use('/api/purchases', purchasesRouter);
+  app.use('/api/referrals', referralsRouter);
+  app.use('/api/promotion', promotionRouter);
   app.use('/api/admin', adminRouter);
 
   app.use(notFoundHandler);

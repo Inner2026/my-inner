@@ -1,244 +1,36 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AdminApi } from '../api/adminEndpoints';
 
-const SCORING_METHODS = [
-  'WEIGHTED_DICHOTOMY',
-  'CATEGORY_SUM_RANGE',
-  'CATEGORY_SUM_RANKING',
-  'CORRECT_ANSWER_PERCENTAGE',
-  'TALLY_MAPPING',
-  'CATEGORY_AVERAGE_BAND',
-  'FRAMEWORK_SNIPPET_ASSEMBLY'
-  ,'TRAIT_BAND_ASSEMBLY'
-];
-
-const SCORING_METHOD_INFO: Record<string, { label: string; help: string }> = {
-  WEIGHTED_DICHOTOMY: { label: 'اختيارات ثنائية بأوزان', help: 'يحسب النتيجة بين اتجاهين أو أكثر باستخدام وزن كل إجابة، مثل MBTI.' },
-  CATEGORY_SUM_RANGE: { label: 'مجموع الفئات ونطاقات النتائج', help: 'يجمع نقاط كل فئة ثم يحدد النتيجة حسب نطاق النقاط.' },
-  CATEGORY_SUM_RANKING: { label: 'ترتيب الفئات حسب المجموع', help: 'يرتب الفئات من الأعلى إلى الأقل ويحدد النتيجة الأساسية والثانوية.' },
-  CORRECT_ANSWER_PERCENTAGE: { label: 'نسبة الإجابات الصحيحة', help: 'يقارن الإجابات الصحيحة بالإجابات الكاملة ويحسب النسبة المئوية.' },
-  TALLY_MAPPING: { label: 'تجميع وربط النتائج', help: 'يجمع اختيار المستخدم ويربطه بنتيجة محددة، مثل اختبار الحيوان.' },
-  CATEGORY_AVERAGE_BAND: { label: 'متوسط الفئة والنطاق', help: 'يحسب متوسط كل فئة ثم يصنفه إلى منخفض أو متوسط أو مرتفع.' },
-  FRAMEWORK_SNIPPET_ASSEMBLY: { label: 'تركيب النتيجة من أجزاء', help: 'يجمع أجزاء وصفية من الإجابات لتكوين نتيجة مركبة، مثل اختبار المكعب.' }
-  ,TRAIT_BAND_ASSEMBLY: { label: 'شرائح سمات', help: 'يحسب أوزان السمات ثم يطابقها مع نطاقات النتائج المحددة.' }
-};
+const METHODS = ['WEIGHTED_DICHOTOMY', 'CATEGORY_SUM_RANGE', 'CATEGORY_SUM_RANKING', 'CORRECT_ANSWER_PERCENTAGE', 'TALLY_MAPPING', 'CATEGORY_AVERAGE_BAND', 'FRAMEWORK_SNIPPET_ASSEMBLY', 'TRAIT_BAND_ASSEMBLY'];
+const methodNames: Record<string, string> = { WEIGHTED_DICHOTOMY: 'Weighted dichotomy', CATEGORY_SUM_RANGE: 'Category score ranges', CATEGORY_SUM_RANKING: 'Category ranking', CORRECT_ANSWER_PERCENTAGE: 'Correct answer percentage', TALLY_MAPPING: 'Tally mapping', CATEGORY_AVERAGE_BAND: 'Category average bands', FRAMEWORK_SNIPPET_ASSEMBLY: 'Framework snippets', TRAIT_BAND_ASSEMBLY: 'Trait bands' };
+const imageTypes = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/gif']);
+const maxImageBytes = 5 * 1024 * 1024;
 
 export function TestManage() {
-  const { testId } = useParams<{ testId: string }>();
-  const [tests, setTests] = useState<any[]>([]);
-  const [versions, setVersions] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [newVersion, setNewVersion] = useState({ versionLabel: '1.0', expectedQuestionCount: 10, scoringMethod: SCORING_METHODS[0], categoriesJson: '[]', scoringConfigJson: '{}' });
+  const { testId } = useParams<{ testId: string }>(); const [test, setTest] = useState<any>(null); const [versions, setVersions] = useState<any[]>([]); const [versionId, setVersionId] = useState(''); const [error, setError] = useState<string | null>(null); const [message, setMessage] = useState<string | null>(null); const [saving, setSaving] = useState(false); const [uploading, setUploading] = useState(false); const [preview, setPreview] = useState<any>(null); const [validation, setValidation] = useState<any>(null);
+  const [form, setForm] = useState({ name: '', description: '', imageUrl: '', priceCents: 0, active: false, marketingSubject: '', marketingMessage: '' }); const [newVersion, setNewVersion] = useState({ versionLabel: '1.0', expectedQuestionCount: 10, scoringMethod: METHODS[0], categoriesJson: '[]', scoringConfigJson: '{}' }); const [versionForm, setVersionForm] = useState({ versionLabel: '', expectedQuestionCount: 0, scoringMethod: METHODS[0], categoriesJson: '[]', scoringConfigJson: '{}' });
+  const currentVersion = versions.find((v) => v._id === versionId); const isMbti = test?.slug === 'mbti-style';
+  useEffect(() => { if (!testId) return; Promise.all([AdminApi.getTest(testId), AdminApi.listVersions(testId)]).then(([t, v]) => { setTest(t.test); setForm({ name: t.test.name, description: t.test.description, imageUrl: t.test.imageUrl ?? '', priceCents: t.test.price?.amount ?? 0, active: t.test.active, marketingSubject: t.test.marketingSubject ?? '', marketingMessage: t.test.marketingMessage ?? '' }); setVersions(v.versions); setVersionId(v.versions.find((item) => item.isCurrent)?._id ?? v.versions[0]?._id ?? ''); }).catch((e) => setError(e.message)); }, [testId]);
+  useEffect(() => { if (currentVersion) setVersionForm({ versionLabel: currentVersion.versionLabel, expectedQuestionCount: currentVersion.expectedQuestionCount, scoringMethod: currentVersion.scoringMethod, categoriesJson: JSON.stringify(currentVersion.categories ?? [], null, 2), scoringConfigJson: JSON.stringify(currentVersion.scoringConfig ?? {}, null, 2) }); }, [versionId, versions]);
+  function fail(e: any) { setError(e.message); }
+  async function saveTest() { if (!testId) return; setSaving(true); setError(null); try { const result = await AdminApi.updateTest(testId, form); setTest(result.test); setMessage('Test details saved.'); } catch (e: any) { fail(e); } finally { setSaving(false); } }
+  async function uploadImage(file?: File) { if (!file) return; if (!imageTypes.has(file.type)) { setError('Please choose a PNG, JPEG, WEBP, or GIF image.'); return; } if (file.size > maxImageBytes) { setError('Image must be 5MB or smaller.'); return; } setError(null); setUploading(true); try { const result = await AdminApi.uploadImage(file); setForm((f) => ({ ...f, imageUrl: result.imageUrl })); setMessage('Image uploaded. Save changes to apply it.'); } catch (e: any) { fail(e); } finally { setUploading(false); } }
+  async function createVersion() { try { const categories = JSON.parse(newVersion.categoriesJson); const scoringConfig = JSON.parse(newVersion.scoringConfigJson); const result = await AdminApi.createVersion({ testId: testId!, versionLabel: newVersion.versionLabel, expectedQuestionCount: newVersion.expectedQuestionCount, scoringMethod: newVersion.scoringMethod, categories, scoringConfig }); setVersions((v) => [result.version, ...v]); setVersionId(result.version._id); setMessage('New version created.'); } catch (e: any) { fail(e); } }
+  async function cloneVersion() { if (!currentVersion) return; try { const result = await AdminApi.cloneVersion(currentVersion._id, `${currentVersion.versionLabel}-draft`); setVersions((v) => [result.version, ...v]); setVersionId(result.version._id); } catch (e: any) { fail(e); } }
+  async function saveVersion() { try { const result = await AdminApi.updateVersion(versionId, { versionLabel: versionForm.versionLabel, expectedQuestionCount: versionForm.expectedQuestionCount, scoringMethod: versionForm.scoringMethod, categories: JSON.parse(versionForm.categoriesJson), scoringConfig: JSON.parse(versionForm.scoringConfigJson) }); setVersions((v) => v.map((item) => item._id === result.version._id ? result.version : item)); setMessage('Version settings saved.'); } catch (e: any) { fail(e); } }
+  async function validate() { try { setValidation(await AdminApi.validateVersion(versionId)); } catch (e: any) { fail(e); } }
+  async function publish() { try { await AdminApi.publishVersion(versionId); setMessage('Version published successfully.'); } catch (e: any) { fail(e); } }
+  async function syncMbti() { if (!window.confirm('Replace this draft with the approved 60-question MBTI assessment?')) return; try { const result = await AdminApi.syncMbtiVersion(versionId); setVersions((v) => v.map((item) => item._id === result.version._id ? result.version : item)); setMessage('MBTI questions and scoring synced.'); } catch (e: any) { fail(e); } }
+  async function previewVersion() { try { const { questions } = await AdminApi.listQuestions(versionId); if (!questions.length) throw new Error('Add questions before previewing.'); const result = await AdminApi.previewVersion(versionId, questions.map((q: any) => ({ questionId: q._id, answerOptionId: q.answerOptions[0]?._id })).filter((a: any) => a.answerOptionId)); setPreview(result.result); } catch (e: any) { fail(e); } }
 
-  // NOTE: the backend does not (yet) expose a "list versions for a test" endpoint,
-  // so this simplified admin view lets you create a version and jump straight to
-  // its question/result editors, and validate/publish once versionId is known.
-  const [versionId, setVersionId] = useState('');
-  const [validation, setValidation] = useState<{ valid: boolean; issues: any[] } | null>(null);
-  const [testForm, setTestForm] = useState({ name: '', description: '', imageUrl: '', priceCents: 0, active: false, marketingSubject: '', marketingMessage: '' });
-  const [savingTest, setSavingTest] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [savingVersion, setSavingVersion] = useState(false);
-  const [previewResult, setPreviewResult] = useState<any>(null);
-  const [marketingMessage, setMarketingMessage] = useState<string | null>(null);
-  const [versionForm, setVersionForm] = useState({ versionLabel: '', expectedQuestionCount: 0, scoringMethod: SCORING_METHODS[0], categoriesJson: '[]', scoringConfigJson: '{}' });
-
-  useEffect(() => {
-    if (!testId) return;
-    Promise.all([AdminApi.listTests(), AdminApi.listVersions(testId)]).then(([testRes, versionRes]) => { setTests(testRes.tests); setVersions(versionRes.versions); setVersionId(versionRes.versions.find((version) => version.isCurrent)?._id ?? versionRes.versions[0]?._id ?? ''); }).catch((e) => setError(e.message));
-  }, [testId]);
-
-  const test = tests.find((t) => t._id === testId);
-  const isMbti = test?.slug === 'mbti-style';
-  useEffect(() => { if (test) setTestForm({ name: test.name, description: test.description, imageUrl: test.imageUrl ?? '', priceCents: test.price?.amount ?? 0, active: test.active, marketingSubject: test.marketingSubject ?? '', marketingMessage: test.marketingMessage ?? '' }); }, [test]);
-  useEffect(() => {
-    const selected = versions.find((version) => version._id === versionId);
-    if (selected) setVersionForm({
-      versionLabel: selected.versionLabel,
-      expectedQuestionCount: selected.expectedQuestionCount,
-      scoringMethod: selected.scoringMethod,
-      categoriesJson: JSON.stringify(selected.categories ?? [], null, 2),
-      scoringConfigJson: JSON.stringify(selected.scoringConfig ?? {}, null, 2)
-    });
-  }, [versionId, versions]);
-
-  async function handleSaveTest() {
-    if (!testId) return;
-    setSavingTest(true); setError(null);
-    try { const { test: updated } = await AdminApi.updateTest(testId, testForm); setTests((prev) => prev.map((item) => item._id === updated._id ? updated : item)); }
-    catch (e: any) { setError(e.message); } finally { setSavingTest(false); }
-  }
-
-  async function uploadTestImage(file?: File) {
-    if (!file) return;
-    setUploadingImage(true); setError(null);
-    try {
-      const { imageUrl } = await AdminApi.uploadImage(file);
-      setTestForm((current) => ({ ...current, imageUrl }));
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setUploadingImage(false);
-    }
-  }
-
-  async function handleCreateVersion() {
-    if (!testId) return;
-    setError(null);
-    try {
-      const categories = JSON.parse(newVersion.categoriesJson);
-      const scoringConfig = JSON.parse(newVersion.scoringConfigJson);
-      if (!Array.isArray(categories) || typeof scoringConfig !== 'object' || scoringConfig === null || Array.isArray(scoringConfig)) throw new Error('Categories must be an array and scoring config must be a JSON object.');
-      const { version } = await AdminApi.createVersion({ testId, versionLabel: newVersion.versionLabel, expectedQuestionCount: newVersion.expectedQuestionCount, scoringMethod: newVersion.scoringMethod, categories, scoringConfig });
-      setVersionId(version._id);
-      setVersions((prev) => [version, ...prev]);
-    } catch (e: any) {
-      setError(e.message);
-    }
-  }
-
-  async function handleCloneVersion() {
-    const current = versions.find((version) => version._id === versionId);
-    if (!current) return;
-    try { const { version } = await AdminApi.cloneVersion(current._id, `${current.versionLabel}-draft`); setVersions((prev) => [version, ...prev]); setVersionId(version._id); }
-    catch (e: any) { setError(e.message); }
-  }
-
-  async function handleSaveVersion() {
-    if (!versionId) return;
-    setSavingVersion(true); setError(null);
-    try {
-      const categories = JSON.parse(versionForm.categoriesJson);
-      const scoringConfig = JSON.parse(versionForm.scoringConfigJson);
-      if (!Array.isArray(categories) || typeof scoringConfig !== 'object' || scoringConfig === null || Array.isArray(scoringConfig)) throw new Error('Categories must be an array and scoring config must be a JSON object.');
-      const { version } = await AdminApi.updateVersion(versionId, { versionLabel: versionForm.versionLabel, expectedQuestionCount: versionForm.expectedQuestionCount, scoringMethod: versionForm.scoringMethod, categories, scoringConfig });
-      setVersions((prev) => prev.map((item) => item._id === version._id ? version : item));
-    }
-    catch (e: any) { setError(e.message); } finally { setSavingVersion(false); }
-  }
-
-  async function handleValidate() {
-    if (!versionId) return;
-    const report = await AdminApi.validateVersion(versionId);
-    setValidation(report);
-  }
-
-  async function handlePreview() {
-    if (!versionId) return;
-    setError(null); setPreviewResult(null);
-    try {
-      const { questions } = await AdminApi.listQuestions(versionId);
-      if (!questions.length) throw new Error('Add questions before previewing this version.');
-      const answers = questions.map((question: any) => ({ questionId: question._id, answerOptionId: question.answerOptions[0]?._id })).filter((answer: any) => answer.answerOptionId);
-      const { result } = await AdminApi.previewVersion(versionId, answers);
-      setPreviewResult(result);
-    } catch (e: any) { setError(e.message); }
-  }
-
-  async function handleMarketingNotification() {
-    if (!testId || !window.confirm('Send this notification to opted-in users with email addresses?')) return;
-    setError(null); setMarketingMessage(null);
-    try { const result = await AdminApi.sendNewTestNotification(testId); setMarketingMessage(`Notification: ${result.sent} sent, ${result.skipped} skipped, ${result.failed} failed.`); }
-    catch (e: any) { setError(e.message); }
-  }
-
-
-  async function handlePublish() {
-    if (!versionId) return;
-    setError(null);
-    try {
-      await AdminApi.publishVersion(versionId);
-      alert('Version published. You can now choose Active or Inactive from the test details or Tests list.');
-    } catch (e: any) {
-      setError(e.message);
-    }
-  }
-
-  async function handleSyncMbti() {
-    if (!versionId || !window.confirm('Replace this draft with the approved 60-question MBTI assessment?')) return;
-    setError(null);
-    try {
-      const { version } = await AdminApi.syncMbtiVersion(versionId);
-      setVersions((prev) => prev.map((item) => item._id === version._id ? version : item));
-      alert('MBTI questions and scoring were synced from the approved assessment.');
-    } catch (e: any) { setError(e.message); }
-  }
-
-  return (
-    <div>
-      <div className="flex flex-wrap items-start justify-between gap-4"><div><Link to="/admin" className="text-xs font-semibold text-[#765c8d]">← Back to tests</Link><h1 className="mt-3 text-xl font-semibold text-slate-900">{test?.name ?? 'Test'}</h1><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">Create and publish the content version that customers will take. A version keeps questions, scoring, and result definitions together.</p></div>{test && <span className={`rounded-full px-3 py-1 text-xs font-semibold ${test.active ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{test.active ? 'Published' : 'Draft'}</span>}</div>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
-      {marketingMessage && <p className="mt-2 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">{marketingMessage}</p>}
-
-      <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4"><h2 className="font-medium text-slate-900">Edit test details</h2><p className="mt-1 text-sm text-slate-500">Update the public name, description, image, price, availability, and the email sent to subscribers.</p><div className="mt-4 grid gap-4 md:grid-cols-2"><label className="admin-field">Name<input value={testForm.name} onChange={(e) => setTestForm({ ...testForm, name: e.target.value })} className="admin-input" /></label><label className="admin-field">Price in cents<input type="number" min="0" value={testForm.priceCents} onChange={(e) => setTestForm({ ...testForm, priceCents: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field md:col-span-2">Description<textarea value={testForm.description} onChange={(e) => setTestForm({ ...testForm, description: e.target.value })} className="admin-input min-h-24" /></label><div className="admin-field md:col-span-2"><span>Test page image</span><span className="admin-help">Upload PNG, JPEG, WEBP, or GIF up to 5MB. Leave empty to use the default image.</span><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(e) => uploadTestImage(e.target.files?.[0])} disabled={uploadingImage} className="admin-input" />{uploadingImage && <p className="mt-2 text-xs text-slate-500">Uploading image...</p>}{testForm.imageUrl && <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50"><img src={testForm.imageUrl} alt="Test page preview" className="h-44 w-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} /></div>}</div><label className="admin-field md:col-span-2">Email subject<span className="admin-help">Leave blank to use the default subject.</span><input value={testForm.marketingSubject} onChange={(e) => setTestForm({ ...testForm, marketingSubject: e.target.value })} className="admin-input" placeholder="New My Inner test: ..." /></label><label className="admin-field md:col-span-2">Email message<span className="admin-help">This text is sent to opted-in subscribers. Leave blank to use the test description.</span><textarea value={testForm.marketingMessage} onChange={(e) => setTestForm({ ...testForm, marketingMessage: e.target.value })} className="admin-input min-h-32" placeholder="Write the message subscribers should receive..." /></label><label className="flex items-center gap-2 text-sm font-semibold text-[#302447]"><input type="checkbox" checked={testForm.active} onChange={(e) => setTestForm({ ...testForm, active: e.target.checked })} /> Active on public website</label></div><button onClick={handleSaveTest} disabled={savingTest || uploadingImage || !testForm.name || !testForm.description} className="mt-4 rounded-xl bg-[#765c8d] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{savingTest ? 'Saving...' : 'Save test details'}</button></div>
-
-      <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
-        <div className="flex items-start gap-3"><span className="admin-step">1</span><div><h2 className="font-medium text-slate-900">Create a new version</h2><p className="mt-1 text-sm text-slate-500">Start here before adding questions or result definitions.</p></div></div>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <label className="admin-field">Version label<span className="admin-help">Example: 1.0</span>
-          <input
-            placeholder="Version label (e.g. 1.0)"
-            value={newVersion.versionLabel}
-            onChange={(e) => setNewVersion({ ...newVersion, versionLabel: e.target.value })}
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm"
-          /></label>
-          <label className="admin-field">Expected question count<span className="admin-help">Must match the questions you upload</span>
-          <input
-            type="number"
-            placeholder="Expected question count"
-            value={newVersion.expectedQuestionCount}
-            onChange={(e) => setNewVersion({ ...newVersion, expectedQuestionCount: parseInt(e.target.value, 10) })}
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm"
-          /></label>
-          <label className="admin-field">طريقة احتساب النتيجة<span className="admin-help">كيف تتحول الإجابات إلى نتيجة</span>
-          <select
-            value={newVersion.scoringMethod}
-            onChange={(e) => setNewVersion({ ...newVersion, scoringMethod: e.target.value })}
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm"
-          >
-            {SCORING_METHODS.map((m) => (
-              <option key={m} value={m}>{SCORING_METHOD_INFO[m].label}</option>
-            ))}
-          </select><span className="admin-help">{SCORING_METHOD_INFO[newVersion.scoringMethod]?.help}</span></label>
-          <label className="admin-field md:col-span-3">Categories JSON<span className="admin-help">Example: [{`{ "key": "trust", "name": "Trust" }`}]</span><textarea value={newVersion.categoriesJson} onChange={(e) => setNewVersion({ ...newVersion, categoriesJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label>
-          <label className="admin-field md:col-span-3">Scoring configuration JSON<span className="admin-help">Example: {`{ "dichotomies": [["E", "I"], ["S", "N"]] }`}</span><textarea value={newVersion.scoringConfigJson} onChange={(e) => setNewVersion({ ...newVersion, scoringConfigJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label>
-        </div>
-        <button onClick={handleCreateVersion} className="mt-5 rounded-xl bg-[#765c8d] px-5 py-2.5 text-sm font-semibold text-white shadow-sm">
-          Create version
-        </button>
-      </div>
-
-      <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4"><div className="flex items-start justify-between gap-3"><div><h2 className="font-medium text-slate-900">Version history</h2><p className="mt-1 text-sm text-slate-500">Published versions remain immutable so historical results stay traceable.</p></div><button onClick={handleCloneVersion} disabled={!versionId} className="rounded-lg bg-[#f1ebf5] px-3 py-2 text-xs font-semibold text-[#765c8d] disabled:opacity-40">Clone selected</button></div><div className="mt-4 space-y-2">{versions.length === 0 ? <p className="text-sm text-slate-500">No versions yet.</p> : versions.map((version) => <button key={version._id} onClick={() => setVersionId(version._id)} className={`flex w-full items-center justify-between rounded-xl border p-3 text-left text-sm ${version._id === versionId ? 'border-[#765c8d] bg-[#faf6fc]' : 'border-slate-200'}`}><span><b>{version.versionLabel}</b><small className="ml-2 text-slate-400">{version.expectedQuestionCount} questions · {version.scoringMethod}</small></span><span className="text-xs text-slate-500">{version.isCurrent ? 'Current · ' : ''}{version.status}</span></button>)}</div></div>
-
-      {versionId && (
-        <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4">
-          <div className="flex items-start gap-3"><span className="admin-step">2</span><div><h2 className="font-medium text-slate-900">{isMbti ? 'Publish the MBTI test' : 'Build and publish this version'}</h2><p className="mt-1 text-sm text-slate-500">{isMbti ? 'The approved 60 questions are ready. Follow the three buttons below.' : 'Add all questions and result definitions, validate the version, then publish it for customers.'}</p></div></div>
-          <div className="mt-3 flex flex-wrap gap-3 text-sm">
-            {!isMbti && <><Link to={`/admin/versions/${versionId}/questions`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage questions</Link><Link to={`/admin/versions/${versionId}/results`} className="rounded-md bg-slate-100 px-3 py-1.5 text-slate-700">Manage result definitions</Link><button onClick={handlePreview} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d]">Preview scoring</button></>}
-            <button onClick={handleMarketingNotification} disabled={!test?.active} className="rounded-md bg-[#f1ebf5] px-3 py-1.5 text-[#765c8d] disabled:cursor-not-allowed disabled:opacity-40">Send email to subscribers</button>
-            {isMbti && versions.find((version) => version._id === versionId)?.status === 'draft' && <button onClick={handleSyncMbti} className="rounded-md bg-[#765c8d] px-4 py-2 font-semibold text-white">1. Sync questions</button>}
-            <button onClick={handleValidate} className="rounded-md bg-slate-100 px-4 py-2 font-semibold text-slate-700">{isMbti ? '2. Check version' : 'Validate'}</button>
-            <button onClick={handlePublish} className="rounded-md bg-emerald-600 px-4 py-2 font-semibold text-white">{isMbti ? '3. Publish MBTI' : 'Publish version'}</button>
-          </div>
-          {versions.find((version) => version._id === versionId)?.status === 'draft' && !isMbti && <div className="mt-5 grid gap-4 border-t border-slate-100 pt-5 md:grid-cols-3"><label className="admin-field">Version label<input value={versionForm.versionLabel} onChange={(e) => setVersionForm({ ...versionForm, versionLabel: e.target.value })} className="admin-input" /></label><label className="admin-field">Expected questions<input type="number" min="1" value={versionForm.expectedQuestionCount} onChange={(e) => setVersionForm({ ...versionForm, expectedQuestionCount: Number(e.target.value) })} className="admin-input" /></label><label className="admin-field">Scoring method<select value={versionForm.scoringMethod} onChange={(e) => setVersionForm({ ...versionForm, scoringMethod: e.target.value })} className="admin-input">{SCORING_METHODS.map((method) => <option key={method} value={method}>{SCORING_METHOD_INFO[method].label}</option>)}</select></label><label className="admin-field md:col-span-3">Categories JSON<textarea value={versionForm.categoriesJson} onChange={(e) => setVersionForm({ ...versionForm, categoriesJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><label className="admin-field md:col-span-3">Scoring configuration JSON<span className="admin-help">Use this for dichotomies or bands.</span><textarea value={versionForm.scoringConfigJson} onChange={(e) => setVersionForm({ ...versionForm, scoringConfigJson: e.target.value })} className="admin-input min-h-24 font-mono text-xs" /></label><button onClick={handleSaveVersion} disabled={savingVersion || !versionForm.versionLabel || versionForm.expectedQuestionCount < 1} className="w-fit rounded-xl bg-[#765c8d] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{savingVersion ? 'Saving...' : 'Save version settings'}</button></div>}
-          {validation && (
-            <div className="mt-3 text-sm">
-              <p className={validation.valid ? 'text-emerald-600' : 'text-amber-600'}>
-                {validation.valid ? 'Valid -- ready to publish.' : 'Not ready to publish:'}
-              </p>
-              <ul className="mt-1 list-disc pl-5 text-slate-600">
-                {validation.issues.map((issue, i) => (
-                  <li key={i}>
-                    [{issue.field}] {issue.message}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {previewResult && <div className="mt-4 rounded-xl border border-[#d9cedd] bg-[#faf6fc] p-4"><p className="text-xs font-semibold uppercase tracking-wide text-[#765c8d]">Preview result</p><h3 className="mt-1 font-semibold text-[#302447]">{previewResult.snapshot?.title}</h3><p className="mt-1 whitespace-pre-line text-sm text-slate-600">{previewResult.snapshot?.description}</p><p className="mt-2 text-xs text-slate-500">Result key: {previewResult.resultKey}</p></div>}
-        </div>
-      )}
-    </div>
-  );
+  if (!test && !error) return <div className="rounded-2xl bg-white p-10 text-center text-sm text-slate-500">Loading test workspace...</div>;
+  return <div className="min-w-0 space-y-5 pb-10"><header className="flex flex-col gap-4 border-b border-[#eee5e9] pb-5 sm:flex-row sm:items-start sm:justify-between"><div><Link to="/admin/tests" className="text-xs font-semibold text-[#765c8d]">← Back to tests</Link><div className="mt-3 flex flex-wrap items-center gap-3"><h1 className="text-2xl font-semibold tracking-tight text-[#302447]">{test?.name ?? 'Test workspace'}</h1>{test && <span className={`rounded-full px-3 py-1 text-xs font-semibold ${test.active ? 'bg-[#e4f0eb] text-[#52796c]' : 'bg-[#f8efe2] text-[#a47e4d]'}`}>{test.active ? 'Active' : 'Inactive'}</span>}</div><p className="mt-2 max-w-2xl text-sm leading-6 text-[#8b8190]">Manage the public details, content versions, questions, results, and publishing.</p></div></header>{error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}{message && <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</p>}
+    <Panel title="Test details" subtitle="The information customers see on the public test page."><div className="grid gap-4 sm:grid-cols-2"><Field label="Test name"><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="admin-input" /></Field><Field label="Price (cents)"><input type="number" min="0" value={form.priceCents} onChange={(e) => setForm({ ...form, priceCents: Number(e.target.value) })} className="admin-input" /></Field><Field label="Description" wide><textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="admin-input min-h-24" /></Field><Field label="Test image" wide><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={(e) => uploadImage(e.target.files?.[0])} disabled={uploading} className="admin-input" />{form.imageUrl && <img src={form.imageUrl} alt="Test page preview" className="mt-3 h-40 w-full rounded-xl bg-white object-contain p-2" />}</Field><details className="sm:col-span-2"><summary className="cursor-pointer text-sm font-semibold text-[#765c8d]">Marketing email settings</summary><div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label="Subject"><input value={form.marketingSubject} onChange={(e) => setForm({ ...form, marketingSubject: e.target.value })} className="admin-input" /></Field><Field label="Message"><textarea value={form.marketingMessage} onChange={(e) => setForm({ ...form, marketingMessage: e.target.value })} className="admin-input min-h-20" /></Field></div></details><label className="flex items-center gap-2 text-sm font-semibold text-[#302447]"><input type="checkbox" checked={form.active} onChange={(e) => setForm({ ...form, active: e.target.checked })} /> Active on public website</label></div><button type="button" onClick={saveTest} disabled={saving || uploading} className="mt-5 rounded-xl bg-[#765c8d] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{saving ? 'Saving...' : 'Save changes'}</button></Panel>
+    <Panel title="Content versions" subtitle="Choose the version you want to work on."><div className="flex flex-col gap-3 rounded-xl bg-[#faf7fb] p-4 sm:flex-row sm:items-end"><Field label="Version label"><input value={newVersion.versionLabel} onChange={(e) => setNewVersion({ ...newVersion, versionLabel: e.target.value })} className="admin-input" /></Field><Field label="Questions"><input type="number" min="1" value={newVersion.expectedQuestionCount} onChange={(e) => setNewVersion({ ...newVersion, expectedQuestionCount: Number(e.target.value) })} className="admin-input" /></Field><Field label="Scoring method"><select value={newVersion.scoringMethod} onChange={(e) => setNewVersion({ ...newVersion, scoringMethod: e.target.value })} className="admin-input">{METHODS.map((m) => <option key={m} value={m}>{methodNames[m]}</option>)}</select></Field><button type="button" onClick={createVersion} className="h-[2.7rem] shrink-0 rounded-xl bg-[#765c8d] px-4 text-sm font-semibold text-white">＋ New version</button></div><div className="mt-5 grid gap-2">{versions.length === 0 ? <p className="text-sm text-[#8b8190]">No versions created yet.</p> : versions.map((version) => <button type="button" key={version._id} onClick={() => setVersionId(version._id)} className={`flex w-full min-w-0 items-center justify-between gap-3 rounded-xl border p-4 text-left transition ${version._id === versionId ? 'border-[#765c8d] bg-[#faf6fc] shadow-sm' : 'border-[#eee5e9] bg-white hover:border-[#d8c9df]'}`}><span className="min-w-0 truncate"><b className="text-[#302447]">{version.versionLabel}</b><small className="ml-2 text-[#9a919e]">{version.expectedQuestionCount} questions · {methodNames[version.scoringMethod] ?? version.scoringMethod}</small></span><span className="shrink-0 text-xs text-[#8b8190]">{version.isCurrent ? 'Current · ' : ''}{version.status}</span></button>)}</div></Panel>
+    {versionId && <Panel title={isMbti ? 'Publish MBTI content' : 'Work on this version'} subtitle={isMbti ? 'Sync, review, validate, then publish.' : 'Manage questions and results, then publish when ready.'}><div className="flex flex-wrap gap-2">{!isMbti && <><Link to={`/admin/versions/${versionId}/questions`} className="action-link">Questions</Link><button type="button" onClick={previewVersion} className="action-link">Preview</button></>}<Link to={`/admin/versions/${versionId}/results`} className="action-link">Results</Link>{isMbti && currentVersion?.status === 'draft' && <button type="button" onClick={syncMbti} className="action-primary">Sync questions</button>}<button type="button" onClick={validate} className="action-neutral">Validate</button><button type="button" onClick={publish} className="action-success">Publish</button><button type="button" onClick={cloneVersion} className="action-link">Clone draft</button></div><details className="mt-5 border-t border-[#eee5e9] pt-4"><summary className="cursor-pointer text-sm font-semibold text-[#765c8d]">Advanced version settings</summary><div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label="Version label"><input value={versionForm.versionLabel} onChange={(e) => setVersionForm({ ...versionForm, versionLabel: e.target.value })} className="admin-input" /></Field><Field label="Expected questions"><input type="number" min="1" value={versionForm.expectedQuestionCount} onChange={(e) => setVersionForm({ ...versionForm, expectedQuestionCount: Number(e.target.value) })} className="admin-input" /></Field><Field label="Scoring method" wide><select value={versionForm.scoringMethod} onChange={(e) => setVersionForm({ ...versionForm, scoringMethod: e.target.value })} className="admin-input">{METHODS.map((m) => <option key={m} value={m}>{methodNames[m]}</option>)}</select></Field><Field label="Categories JSON" wide><textarea value={versionForm.categoriesJson} onChange={(e) => setVersionForm({ ...versionForm, categoriesJson: e.target.value })} className="admin-input min-h-20 font-mono text-xs" /></Field><Field label="Scoring configuration JSON" wide><textarea value={versionForm.scoringConfigJson} onChange={(e) => setVersionForm({ ...versionForm, scoringConfigJson: e.target.value })} className="admin-input min-h-20 font-mono text-xs" /></Field><button type="button" onClick={saveVersion} className="w-fit rounded-xl bg-[#765c8d] px-4 py-2.5 text-sm font-semibold text-white">Save settings</button></div></details>{validation && <div className={`mt-5 rounded-xl p-4 text-sm ${validation.valid ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}><b>{validation.valid ? 'Version is ready to publish.' : 'Version needs attention.'}</b>{!validation.valid && <ul className="mt-2 list-disc pl-5">{validation.issues.map((issue: any, index: number) => <li key={index}>{issue.field}: {issue.message}</li>)}</ul>}</div>}{preview && <div className="mt-5 rounded-xl bg-[#faf6fc] p-4"><p className="text-xs font-semibold uppercase tracking-wide text-[#765c8d]">Preview result</p><h3 className="mt-1 font-semibold text-[#302447]">{preview.snapshot?.title}</h3><p className="mt-1 whitespace-pre-line text-sm text-slate-600">{preview.snapshot?.description}</p></div>}</Panel>}
+  </div>;
 }
+
+function Panel({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) { return <section className="rounded-[1.35rem] border border-[#eee5e9] bg-white p-5 shadow-[0_8px_24px_rgba(73,57,88,.045)] sm:p-6"><h2 className="text-lg font-semibold text-[#302447]">{title}</h2><p className="mt-1 text-sm leading-6 text-[#8b8190]">{subtitle}</p><div className="mt-5">{children}</div></section>; }
+function Field({ label, children, wide = false }: { label: string; children: React.ReactNode; wide?: boolean }) { return <label className={`admin-field ${wide ? 'sm:col-span-2' : ''}`}>{label}{children}</label>; }

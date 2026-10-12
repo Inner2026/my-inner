@@ -4,8 +4,8 @@ import { registerUser, loginUser, requestPasswordReset, resetPassword, revokeSes
 import { User } from '../../models/User';
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
-  const { username, email, phone, password, marketingEmails } = req.body ?? {};
-  const { user, token } = await registerUser({ username, email, phone, password, marketingEmails: marketingEmails === true });
+  const { username, email, phone, password, marketingEmails, referralCode } = req.body ?? {};
+  const { user, token } = await registerUser({ username, email, phone, password, referralCode, marketingEmails: marketingEmails === true });
   res.status(201).json({ token, user: user.toJSON() });
 });
 

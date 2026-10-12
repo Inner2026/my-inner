@@ -21,11 +21,13 @@ import { Profile } from './pages/Profile';
 import { NotFound } from './pages/NotFound';
 import { Footer } from './components/Footer';
 import { AdminHome } from './admin/AdminHome';
+import { ReferralPromoModal } from './components/ReferralPromoModal';
+import { AnnouncementBar } from './components/AnnouncementBar';
 
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
-      <NavBar />
+      <AnnouncementBar /><NavBar />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -85,6 +87,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <ReferralPromoModal />
     </div>
   );
 }

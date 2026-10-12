@@ -4,6 +4,9 @@ import { Purchase } from '../../models/Purchase';
 import { reconcileCapturedOrder, verifyWebhookSignature } from './paypal.service';
 import { PaymentProviderError, safePaymentLog } from './paymentErrors';
 import { asyncHandler } from '../../utils/asyncHandler';
+import { processReferralReward } from '../referrals/referrals.service';
+import { isDbConnected } from '../../config/db';
+import { consumeCredit } from './checkout.service';
 
 export const paypalWebhookRouter = Router();
 
@@ -60,10 +63,14 @@ export async function processVerifiedCaptureEvent(event: {
   });
   if (result.captureId !== resource.id) return 'rejected';
 
-  await Purchase.updateOne(
+  const updated = await Purchase.updateOne(
     { _id: purchase._id, paypalOrderId: purchase.paypalOrderId, status: { $in: ['pending', 'capturing'] } },
     { $set: { status: 'paid', paypalCaptureId: result.captureId, paidAt: new Date() } }
   );
+  if (updated.modifiedCount === 1 && isDbConnected()) {
+    await consumeCredit(purchase);
+    await processReferralReward(purchase.userId, purchase._id);
+  }
   return 'paid';
 }
 

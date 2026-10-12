@@ -6,6 +6,7 @@
 
 body {
   @apply bg-[#fbfaf8] text-slate-900 antialiased;
+  overflow-x: clip;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -206,11 +207,16 @@ input[type='password']::-ms-clear {
 .profile-label { display: block; margin-top: 1.25rem; color: #62596c; font-size: .75rem; font-weight: 600; }
 .profile-input { display: block; width: 100%; margin-top: .5rem; border: 1px solid #e6dfe9; border-radius: .65rem; padding: .75rem .85rem; color: #302447; outline: none; font-size: .85rem; }
 .profile-input:focus { border-color: #765c8d; box-shadow: 0 0 0 3px rgba(118,92,141,.1); }
-.admin-shell { background: #f8f6f8; }
-.admin-sidebar { min-height: calc(100vh - 114px); box-shadow: 0 18px 45px rgba(48,36,71,.12); }
+.admin-shell { background: #f8f6f8; overflow: visible; }
+.site-footer { position: relative; z-index: 30; }
+.admin-sidebar { min-height: auto; height: auto !important; overflow: visible !important; box-shadow: 0 18px 45px rgba(48,36,71,.12); }
+@media (min-width: 1024px) {
+  .admin-shell > div > div:has(> .admin-sidebar) { height: auto !important; }
+  .admin-sidebar { position: fixed !important; left: auto !important; z-index: 10; }
+}
 .admin-nav { display: flex; align-items: center; gap: .75rem; border-radius: .75rem; padding: .75rem; color: rgba(255,255,255,.62); font-size: .82rem; transition: .2s; }
 .admin-nav:hover, .admin-nav.active { background: rgba(255,255,255,.13); color: white; }
-.admin-content { border-radius: 1rem; }
+.admin-content { min-width: 0; max-width: 100%; border-radius: 1rem; overflow-x: hidden; }
 .admin-stat { display: flex; align-items: center; gap: .9rem; border: 1px solid #eee5e9; border-radius: 1rem; background: white; padding: 1rem; box-shadow: 0 5px 18px rgba(73,57,88,.04); }
 .admin-stat-icon { display: flex; height: 2.75rem; width: 2.75rem; align-items: center; justify-content: center; border-radius: .8rem; font-size: 1.2rem; }
 .admin-table-wrap { overflow-x: auto; border: 1px solid #eee5e9; border-radius: 1rem; background: white; box-shadow: 0 5px 18px rgba(73,57,88,.04); -webkit-overflow-scrolling: touch; }
@@ -228,14 +234,25 @@ input[type='password']::-ms-clear {
 .admin-content input:focus, .admin-content textarea:focus, .admin-content select:focus { border-color: #765c8d; box-shadow: 0 0 0 3px rgba(118,92,141,.1); }
 .admin-content button, .admin-content a.rounded-md { transition: filter .2s, transform .2s; }
 .admin-content button:hover { filter: brightness(.97); }
+.admin-content .action-link, .admin-content .action-primary, .admin-content .action-neutral, .admin-content .action-success { display: inline-flex; min-height: 2.65rem; align-items: center; justify-content: center; border-radius: .75rem; padding: .65rem 1rem; font-size: .82rem; font-weight: 650; transition: .2s; }
+.admin-content .action-link { border: 1px solid #e5dce8; background: #fcf9fd; color: #765c8d; }
+.admin-content .action-primary { background: #765c8d; color: white; }
+.admin-content .action-neutral { border: 1px solid #d9cedd; background: white; color: #62596c; }
+.admin-content .action-success { background: #719b8d; color: white; }
+.admin-content label:has(textarea.font-mono) { display: none; }
 .admin-step { display: inline-flex; height: 1.8rem; width: 1.8rem; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 999px; background: #f0eaf5; color: #765c8d; font-size: .8rem; font-weight: 700; }
 .admin-field { display: flex; flex-direction: column; gap: .45rem; color: #302447; font-size: .8rem; font-weight: 600; }
 .admin-help { color: #9a919e; font-size: .7rem; font-weight: 400; }
 .admin-input { display: block; width: 100%; border: 1px solid #e5dce8; border-radius: .65rem; background: white; color: #302447; padding: .7rem .8rem; outline: none; font-size: .85rem; }
 .admin-input:focus { border-color: #765c8d; box-shadow: 0 0 0 3px rgba(118,92,141,.1); }
+.admin-content img, .admin-content svg, .admin-content video { max-width: 100%; }
+.admin-content img[alt*="preview"] { object-fit: contain !important; background: #fff; padding: .5rem; }
+.admin-content pre, .admin-content code { max-width: 100%; overflow-x: auto; }
+@media (max-width: 1023px) { .admin-shell > div { width: 100%; } }
 @media (max-width: 639px) {
   .admin-content table { min-width: 620px; }
-  .admin-content > div { max-width: 100%; overflow-x: hidden; }
+  .admin-content > div { min-width: 0; max-width: 100%; overflow-x: hidden; }
+  .admin-content table { display: block; max-width: 100%; overflow-x: auto; }
   .admin-sidebar { min-height: auto; }
   .admin-stat { min-width: 0; padding: .85rem; }
   .admin-stat-icon { height: 2.4rem; width: 2.4rem; }
@@ -255,5 +272,16 @@ input[type='password']::-ms-clear {
 .about-copy-item:nth-child(3) { animation-delay: .34s; }
 .about-copy-item:nth-child(4) { animation-delay: .48s; }
 @keyframes about-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-@media (prefers-reduced-motion: reduce) { .about-copy-item { animation: none; } }
+@keyframes myinner-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes myinner-pop { 0% { opacity: 0; transform: scale(.88) translateY(18px); } 70% { transform: scale(1.02) translateY(-2px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes myinner-float { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-7px) rotate(3deg); } }
+.announcement-track { width: max-content; animation: myinner-marquee 24s linear infinite; padding-right: 3.5rem; }
+.announcement-bar:hover .announcement-track { animation-play-state: paused; }
+.referral-modal { animation: myinner-pop .42s cubic-bezier(.2,.8,.2,1) both; }
+.referral-gift { animation: myinner-float 2.8s ease-in-out infinite; }
+.referral-confetti { position: absolute; color: #f3dfc9; font-size: 1.5rem; opacity: .85; animation: myinner-float 2.2s ease-in-out infinite; }
+.referral-confetti-one { right: 4.2rem; top: 2rem; }
+.referral-confetti-two { right: 2.5rem; top: 7.5rem; animation-delay: .35s; }
+.referral-confetti-three { left: 1.5rem; top: 5rem; color: #dce9df; animation-delay: .7s; }
+@media (prefers-reduced-motion: reduce) { .about-copy-item, .announcement-track, .referral-modal, .referral-gift, .referral-confetti { animation: none; } }
 @media (max-width: 1023px) { .about-page { background-size: auto 100%; background-position: 62% center; } .about-art { min-height: 22rem; } }

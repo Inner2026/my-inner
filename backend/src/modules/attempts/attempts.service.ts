@@ -21,6 +21,7 @@ export async function createAttemptFromPurchase(userId: Types.ObjectId, purchase
   const session = await mongoose.startSession();
   try {
     let createdAttemptId: Types.ObjectId | null = null;
+    let existingAttemptId: Types.ObjectId | null = null;
 
     await session.withTransaction(async () => {
       const purchase = await Purchase.findOne({ _id: purchaseId, userId }).session(session);
@@ -38,7 +39,13 @@ export async function createAttemptFromPurchase(userId: Types.ObjectId, purchase
           userId,
           status: { $in: ['in_progress', 'scoring'] }
         }).session(session);
-        if (activeAttempt) throw AppError.conflict('This purchase already has an active attempt.');
+        if (activeAttempt) {
+          // Creating an attempt is intentionally idempotent. A double click,
+          // two tabs, or a retry after a slow response should reopen the
+          // existing active attempt instead of returning a confusing 409.
+          existingAttemptId = activeAttempt._id;
+          return;
+        }
       }
 
       const [attempt] = await TestAttempt.create(
@@ -69,7 +76,7 @@ export async function createAttemptFromPurchase(userId: Types.ObjectId, purchase
       createdAttemptId = attempt._id;
     });
 
-    return await TestAttempt.findById(createdAttemptId);
+    return await TestAttempt.findById(existingAttemptId ?? createdAttemptId);
   } finally {
     await session.endSession();
   }
@@ -83,7 +90,7 @@ export async function getOwnedAttempt(userId: Types.ObjectId, attemptId: string)
 
 export async function listOwnedAttempts(userId: Types.ObjectId) {
   return TestAttempt.find({ userId })
-    .sort({ startedAt: -1 })
+    .sort({ startedAt: -1, _id: -1 })
     .populate('testId', 'slug name')
     .select('_id purchaseId testId status startedAt completedAt')
     .lean();

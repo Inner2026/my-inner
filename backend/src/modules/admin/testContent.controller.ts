@@ -29,6 +29,10 @@ export const createTest = asyncHandler(async (req: Request, res: Response) => {
   res.status(201).json({ test });
 });
 
+export const getTest = asyncHandler(async (req: Request, res: Response) => {
+  res.json({ test: await svc.getTest(req.params.testId) });
+});
+
 export const updateTest = asyncHandler(async (req: Request, res: Response) => {
   const test = await svc.updateTest(req.params.testId, req.body);
   res.json({ test });
@@ -79,7 +83,9 @@ export const uploadImage = [imageUpload.single('image'), asyncHandler(async (req
     const response = await fetch(`https://api.cloudinary.com/v1_1/${env.cloudinaryCloudName}/image/upload`, { method: 'POST', body });
     const result = await response.json().catch(() => ({})) as { secure_url?: string; error?: { message?: string } };
     if (!response.ok || !result.secure_url) {
-      res.status(502).json({ error: { message: 'Cloud image storage could not save the image.' } });
+      const providerMessage = result.error?.message ?? `Provider returned HTTP ${response.status}.`;
+      console.error(`[cloudinary] upload failed: ${providerMessage}`);
+      res.status(502).json({ error: { message: env.isProd ? 'Cloud image storage could not save the image.' : `Cloudinary upload failed: ${providerMessage}` } });
       return;
     }
     res.status(201).json({ imageUrl: result.secure_url });

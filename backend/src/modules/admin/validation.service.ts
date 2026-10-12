@@ -148,6 +148,18 @@ export async function validateTestVersionForActivation(testVersionId: Types.Obje
 
   validateNoPlaceholderContent(resultDefinitions, issues);
 
+  const invertedRanges = resultDefinitions.filter(
+    (definition) =>
+      definition.minScore !== null &&
+      definition.minScore !== undefined &&
+      definition.maxScore !== null &&
+      definition.maxScore !== undefined &&
+      definition.minScore > definition.maxScore
+  );
+  if (invertedRanges.length > 0) {
+    fail(issues, 'resultDefinitions', 'Every score range must have minScore less than or equal to maxScore.');
+  }
+
   if (questions.length === 0) {
     fail(issues, 'questions', 'The test version has no questions.');
   } else {

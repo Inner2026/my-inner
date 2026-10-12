@@ -22,3 +22,10 @@ export async function sendNewTestMarketingEmail(to: string, userId: Types.Object
   const safeMessage = escapeHtml(message).replace(/\r?\n/g, '<br />');
   await transporter.sendMail({ from: env.mailFrom, to, subject, text: `${message}\n\nExplore the test: ${env.clientOrigin}/tests/${test.slug}\n\nUnsubscribe: ${unsubscribeUrl}`, html: `<h1>${escapeHtml(test.name)}</h1><p>${safeMessage}</p><p><a href="${env.clientOrigin}/tests/${test.slug}">Explore the test</a></p><p><a href="${unsubscribeUrl}">Unsubscribe from marketing emails</a></p>` });
 }
+
+export async function sendReferralUsedEmail(to: string, subject: string, message: string) {
+  if (!env.smtpHost || !env.smtpUser || !env.smtpPassword) throw new Error('SMTP is not configured for referral emails.');
+  const transporter = nodemailer.createTransport({ host: env.smtpHost, port: env.smtpPort, secure: env.smtpPort === 465, auth: { user: env.smtpUser, pass: env.smtpPassword } });
+  const safe = escapeHtml(message).replace(/\r?\n/g, '<br />');
+  await transporter.sendMail({ from: env.mailFrom, to, subject: subject.trim(), text: message, html: `<div style="font-family:Arial,sans-serif"><h2>My Inner</h2><p>${safe}</p></div>` });
+}

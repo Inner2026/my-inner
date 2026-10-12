@@ -20,6 +20,12 @@ async function getEditableVersion(testVersionId: string): Promise<ITestVersion> 
 
 // ---- Tests ----
 
+export async function getTest(testId: string) {
+  const test = await Test.findById(testId).lean();
+  if (!test) throw AppError.notFound('Test not found.');
+  return test;
+}
+
 export async function createTest(input: { slug: string; name: string; description: string; imageUrl?: string; priceCents: number }) {
   if (!input.slug?.trim() || !input.name?.trim() || !input.description?.trim()) throw AppError.badRequest('Slug, name, and description are required.');
   if (!Number.isInteger(input.priceCents) || input.priceCents < 0) throw AppError.badRequest('Price must be a non-negative integer in cents.');

@@ -8,6 +8,7 @@ import { JwtPayload } from './auth.types';
 import { createHash, randomBytes } from 'crypto';
 import { verifyMarketingUnsubscribeToken } from './marketingToken';
 import { sendPasswordResetEmail } from './mailer';
+import { createReferralAttribution, validateReferralCode } from '../referrals/referrals.service';
 
 const SALT_ROUNDS = 12;
 const MIN_PASSWORD_LENGTH = 8;
@@ -18,6 +19,7 @@ export interface RegisterInput {
   phone?: string;
   password: string;
   marketingEmails?: boolean;
+  referralCode?: string;
 }
 
 export interface LoginInput {
@@ -61,6 +63,10 @@ export async function registerUser(input: RegisterInput): Promise<{ user: IUser;
   }
   validatePassword(input.password);
 
+  // Validate before creating the account so invalid links cannot leave a
+  // partially attributed registration. Attribution itself is immutable.
+  if (input.referralCode) await validateReferralCode(input.referralCode);
+
   const existing = await User.findOne({
     $or: [{ username }, ...(email ? [{ email }] : []), ...(phone ? [{ phone }] : [])]
   });
@@ -72,9 +78,28 @@ export async function registerUser(input: RegisterInput): Promise<{ user: IUser;
   const passwordHash = await bcrypt.hash(input.password, SALT_ROUNDS);
 
   const marketingEmails = input.marketingEmails === true;
-  const user = await User.create({ username, email, phone, passwordHash, role: 'user', marketingEmails, marketingConsentAt: marketingEmails ? new Date() : null });
+  let user: IUser | null = null;
+  for (let attempt = 0; attempt < 8 && !user; attempt += 1) {
+    try {
+      user = await User.create({ username, email, phone, passwordHash, role: 'user', referralCode: await ensureNewReferralCode(), marketingEmails, marketingConsentAt: marketingEmails ? new Date() : null });
+    } catch (error: any) {
+      if (error?.code !== 11000 || attempt === 7) throw error;
+    }
+  }
+  if (!user) throw AppError.internal('Could not create account.');
+  await createReferralAttribution(user._id, input.referralCode);
   const token = signToken(user);
   return { user, token };
+}
+
+async function ensureNewReferralCode() {
+  // The service's lazy allocator is intentionally used for existing users;
+  // new users receive a code at creation time so they are eligible immediately.
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const code = randomBytes(8).toString('base64url').replace(/[^a-z0-9]/gi, '').slice(0, 10).toUpperCase();
+    if (!(await User.exists({ referralCode: code }))) return code;
+  }
+  throw AppError.internal('Could not allocate a unique referral code.');
 }
 
 export async function loginUser(input: LoginInput): Promise<{ user: IUser; token: string }> {

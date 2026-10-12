@@ -13,6 +13,7 @@ export const AdminApi = {
   },
   overview: () => apiRequest<{ stats: any; recentUsers: any[]; recentOrders: any[]; recentAttempts: any[] }>('/admin/overview'),
   listTests: (params: { search?: string; active?: string; page?: number; pageSize?: number } = {}) => { const query = new URLSearchParams(); Object.entries(params).forEach(([key, value]) => { if (value !== undefined && value !== '') query.set(key, String(value)); }); return apiRequest<{ tests: any[]; pagination: { page: number; pageSize: number; total: number; pages: number } }>(`/admin/tests?${query.toString()}`); },
+  getTest: (testId: string) => apiRequest<{ test: any }>(`/admin/tests/${testId}`),
   listVersions: (testId: string) => apiRequest<{ versions: any[] }>(`/admin/tests/${testId}/versions`),
   getVersion: (versionId: string) => apiRequest<{ version: any }>(`/admin/versions/${versionId}`),
   syncMbtiVersion: (versionId: string) => apiRequest<{ version: any }>(`/admin/versions/${versionId}/sync-mbti`, { method: 'POST' }),
@@ -72,6 +73,12 @@ export const AdminApi = {
   analytics: (params: { from?: string; to?: string } = {}) => { const query = new URLSearchParams(); Object.entries(params).forEach(([key, value]) => { if (value) query.set(key, value); }); return apiRequest<any>(`/admin/analytics?${query.toString()}`); },
   listMarketingDeliveries: (params: { status?: string; page?: number; pageSize?: number } = {}) => { const query = new URLSearchParams(); Object.entries(params).forEach(([key, value]) => { if (value !== undefined && value !== '') query.set(key, String(value)); }); return apiRequest<{ deliveries: any[]; pagination: { page: number; pageSize: number; total: number; pages: number } }>(`/admin/marketing/deliveries?${query.toString()}`); },
   settingsStatus: () => apiRequest<{ settings: Record<string, unknown> }>('/admin/settings/status'),
+  promotionSettings: () => apiRequest<{ settings: any }>('/admin/promotion-settings'),
+  updatePromotionSettings: (patch: Record<string, unknown>) => apiRequest<{ settings: any }>('/admin/promotion-settings', { method: 'PATCH', body: patch }),
+  listCoupons: () => apiRequest<{ coupons: any[] }>('/admin/coupons'),
+  createCoupon: (input: Record<string, unknown>) => apiRequest<{ coupon: any }>('/admin/coupons', { method: 'POST', body: input }),
+  updateCoupon: (couponId: string, patch: Record<string, unknown>) => apiRequest<{ coupon: any }>(`/admin/coupons/${couponId}`, { method: 'PATCH', body: patch }),
+  deleteCoupon: (couponId: string) => apiRequest<void>(`/admin/coupons/${couponId}`, { method: 'DELETE' }),
   sendNewTestNotification: (testId: string) => apiRequest<{ subscribers: number; sent: number; skipped: number; failed: number }>(`/admin/marketing/new-test/${testId}`, { method: 'POST' })
   ,listReviews: () => apiRequest<{ reviews: any[] }>('/admin/reviews')
   ,deleteReview: (reviewId: string) => apiRequest<void>(`/admin/reviews/${reviewId}`, { method: 'DELETE' })

@@ -1,14 +1,17 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ApiError } from '../api/client';
 import { AuthArtwork } from '../components/AuthArtwork';
 import { PasswordVisibilityIcon } from '../components/PasswordVisibilityIcon';
+import { ReferralsApi } from '../api/endpoints';
 
 export function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const referralCode = new URLSearchParams(location.search).get('ref')?.trim() || sessionStorage.getItem('myinner_referral_code') || '';
+  useEffect(() => { const code = new URLSearchParams(location.search).get('ref')?.trim(); if (code) sessionStorage.setItem('myinner_referral_code', code); }, [location.search]);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +20,7 @@ export function Login() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault(); setError(null); setSubmitting(true);
-    try { await login(identifier, password); navigate((location.state as { from?: string } | null)?.from ?? '/tests'); }
+    try { await login(identifier, password); if (referralCode) { await ReferralsApi.claim(referralCode).catch(() => undefined); sessionStorage.removeItem('myinner_referral_code'); } navigate((location.state as { from?: string } | null)?.from ?? '/tests'); }
     catch (err) { setError(err instanceof ApiError ? err.message : 'Login failed.'); }
     finally { setSubmitting(false); }
   }

@@ -34,6 +34,15 @@ function setup() {
   (Purchase.create as jest.Mock).mockImplementation(async (input: any) => ({ ...input, _id: 'purchase-new', save: jest.fn() }));
 }
 
+function mockLookups(activePurchase: any) {
+  // The first Purchase.findOne call checks for an active paid entitlement and
+  // is a Mongoose query chain (findOne().sort()). The second checks for an
+  // unfinished checkout and resolves to the supplied document.
+  (Purchase.findOne as jest.Mock)
+    .mockImplementationOnce(() => ({ sort: jest.fn().mockResolvedValue(null) }))
+    .mockResolvedValue(activePurchase);
+}
+
 describe('expired purchase recovery', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -41,7 +50,7 @@ describe('expired purchase recovery', () => {
   });
 
   it('expires a pending checkout and allows a new checkout', async () => {
-    (Purchase.findOne as jest.Mock).mockResolvedValue({ _id: 'old', status: 'pending', expiresAt: new Date(Date.now() - 1000) });
+    mockLookups({ _id: 'old', status: 'pending', expiresAt: new Date(Date.now() - 1000) });
 
     const result = await initiatePurchase(userId, 'test');
 
@@ -53,7 +62,7 @@ describe('expired purchase recovery', () => {
   });
 
   it('reconciles an expired capturing checkout before creating a new one', async () => {
-    (Purchase.findOne as jest.Mock).mockResolvedValue({ _id: 'old', status: 'capturing', paypalOrderId: 'ORDER-OLD', amount: 499, currency: 'USD', expiresAt: new Date(Date.now() - 1000) });
+    mockLookups({ _id: 'old', status: 'capturing', paypalOrderId: 'ORDER-OLD', amount: 499, currency: 'USD', expiresAt: new Date(Date.now() - 1000) });
     (reconcileCapturedOrder as jest.Mock).mockResolvedValue({ status: 'COMPLETED', captureId: 'CAP-OLD' });
 
     await initiatePurchase(userId, 'test');
@@ -66,7 +75,7 @@ describe('expired purchase recovery', () => {
   });
 
   it('keeps expired capturing checkout recoverable during a temporary outage', async () => {
-    (Purchase.findOne as jest.Mock).mockResolvedValue({ _id: 'old', status: 'capturing', paypalOrderId: 'ORDER-OLD', amount: 499, currency: 'USD', expiresAt: new Date(Date.now() - 1000) });
+    mockLookups({ _id: 'old', status: 'capturing', paypalOrderId: 'ORDER-OLD', amount: 499, currency: 'USD', expiresAt: new Date(Date.now() - 1000) });
     (reconcileCapturedOrder as jest.Mock).mockRejectedValue(new PaymentProviderError('PAYPAL_CAPTURE_FAILED', 'temporarily unavailable', { httpStatus: 503, retryable: true }));
 
     await expect(initiatePurchase(userId, 'test')).rejects.toThrow(/temporarily unavailable/);
@@ -75,7 +84,7 @@ describe('expired purchase recovery', () => {
   });
 
   it('allows failed and paid historical purchases without treating them as active locks', async () => {
-    (Purchase.findOne as jest.Mock).mockResolvedValue(null);
+    mockLookups(null);
     await initiatePurchase(userId, 'test');
 
     expect(Purchase.findOne).toHaveBeenCalledWith({ userId, testId: 'test-1', status: { $in: ['pending', 'capturing'] } });

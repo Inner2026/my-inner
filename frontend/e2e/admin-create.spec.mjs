@@ -17,11 +17,12 @@ test('admin can create a draft test with an uploaded image', async ({ page }) =>
   await page.getByLabel('Version label').fill('1.0');
   await page.getByLabel('Expected question count').fill('1');
   await page.getByLabel('Categories').fill('A | Example category');
-  await page.getByLabel('Scoring config JSON').fill('{}');
+  // The create form defaults this optional field to `{}`. Do not target the
+  // hidden textarea copy rendered by the responsive admin layout.
   await page.locator('input[type="file"]').setInputFiles({ name: 'animal.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64') });
   await expect(page.getByText('Uploading image...')).toBeHidden({ timeout: 30000 });
-  await expect(page.getByLabel('Test image URL')).toHaveValue(/\/uploads\//);
+  await expect(page.getByAltText('New test preview')).toHaveAttribute('src', /\/uploads\//);
   await page.getByRole('button', { name: 'Create test and continue' }).click();
-  await expect(page.getByText('Build and publish this version')).toBeVisible({ timeout: 30000 });
-  await expect(page.getByText('Manage questions')).toBeVisible();
+  await expect(page.getByText('Work on this version')).toBeVisible({ timeout: 30000 });
+  await expect(page.getByRole('link', { name: 'Questions' })).toBeVisible();
 });

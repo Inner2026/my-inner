@@ -7,9 +7,33 @@ import { env } from '../../config/env';
 import { AppError } from '../../utils/AppError';
 import { createOrder, captureOrder, reconcileCapturedOrder } from './paypal.service';
 import { PaymentProviderError, safePaymentLog } from './paymentErrors';
+import { processReferralReward } from '../referrals/referrals.service';
+import { isDbConnected } from '../../config/db';
+import { calculateCheckout, reserveCredit, consumeCredit, releaseCredit } from './checkout.service';
+
+async function awardReferralIfAvailable(userId: Types.ObjectId, purchaseId: Types.ObjectId) {
+  // Payment confirmation remains successful even if a later ledger write needs
+  // retrying. The unique ledger key makes this safe to retry from a callback.
+  if (isDbConnected()) await processReferralReward(userId, purchaseId);
+}
+
+async function finalizeCreditAndReward(purchase: any) {
+  if (isDbConnected()) {
+    await consumeCredit(purchase);
+    await awardReferralIfAvailable(purchase.userId, purchase._id);
+  }
+}
 
 function checkoutExpiry() {
   return new Date(Date.now() + Math.max(1, env.paypalCheckoutTimeoutMinutes) * 60_000);
+}
+
+export const PURCHASE_ACCESS_WINDOW_DAYS = 90;
+const PURCHASE_ACCESS_WINDOW_MS = PURCHASE_ACCESS_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+
+export async function getActivePaidPurchase(userId: Types.ObjectId, testId: Types.ObjectId) {
+  const cutoff = new Date(Date.now() - PURCHASE_ACCESS_WINDOW_MS);
+  return Purchase.findOne({ userId, testId, status: 'paid', paidAt: { $gt: cutoff } }).sort({ paidAt: -1 });
 }
 
 function isExpired(purchase: { expiresAt?: Date | null; createdAt?: Date }) {
@@ -42,6 +66,7 @@ async function recoverExpiredPurchase(purchase: any) {
       { _id: purchase._id, paypalOrderId: purchase.paypalOrderId, status: 'capturing' },
       { $set: { status: 'paid', paypalCaptureId: result.captureId, paidAt: new Date() } }
     );
+    await finalizeCreditAndReward(purchase);
   } catch (err) {
     if (err instanceof PaymentProviderError) safePaymentLog(err, purchase._id.toString());
     if (err instanceof PaymentProviderError && err.metadata.retryable) {
@@ -54,22 +79,18 @@ async function recoverExpiredPurchase(purchase: any) {
   }
 }
 
-export async function initiatePurchase(userId: Types.ObjectId, testSlug: string) {
-  const test = await Test.findOne({ slug: testSlug, active: true });
-  if (!test || !test.currentVersionId) {
-    throw AppError.notFound('Test not found or not currently available for purchase.');
-  }
-  const version = await TestVersion.findOne({ _id: test.currentVersionId, status: 'published' });
-  if (!version) {
-    throw AppError.notFound('Test not found or not currently available for purchase.');
-  }
+export async function initiatePurchase(userId: Types.ObjectId, testSlug: string, couponCode?: string, applyCredit = false) {
+  const quote = await calculateCheckout(userId, testSlug, couponCode, applyCredit);
+
+  const existingEntitlement = await getActivePaidPurchase(userId, quote.testId);
+  if (existingEntitlement) throw AppError.conflict('You already own this test. Your access is valid for 90 days.');
 
   const user = await User.findById(userId);
   if (!user) throw AppError.unauthorized('User not found.');
 
   if (!['paypal', 'demo'].includes(env.paymentsMode)) throw AppError.internal('Unsupported payment mode.');
 
-  const activePurchase = await Purchase.findOne({ userId: user._id, testId: test._id, status: { $in: ['pending', 'capturing'] } });
+  const activePurchase = await Purchase.findOne({ userId: user._id, testId: quote.testId, status: { $in: ['pending', 'capturing'] } });
   if (activePurchase) {
     if (isExpired(activePurchase)) {
       await recoverExpiredPurchase(activePurchase);
@@ -78,19 +99,44 @@ export async function initiatePurchase(userId: Types.ObjectId, testSlug: string)
     }
   }
 
+  if (quote.payableAmountCents === 0) {
+    const internalPurchase = await Purchase.create({ userId: user._id, testId: quote.testId, testVersionId: quote.testVersionId, amount: 0, originalAmount: quote.originalAmountCents, couponCode: quote.couponCode, couponDiscountAmount: quote.couponDiscountCents, creditAppliedCents: quote.referralCreditAppliedCents, currency: quote.currency, status: 'pending', paymentProvider: 'internal', paypalOrderId: `internal-${new Types.ObjectId().toString()}`, paidAt: null, expiresAt: null });
+    try {
+      await reserveCredit(user._id, internalPurchase._id, quote.referralCreditAppliedCents);
+      await Purchase.updateOne({ _id: internalPurchase._id, status: 'pending' }, { $set: { status: 'paid', paidAt: new Date() } });
+      internalPurchase.status = 'paid';
+      await finalizeCreditAndReward(internalPurchase);
+      return { purchase: internalPurchase, approvalUrl: null };
+    } catch (error) {
+      await releaseCredit(internalPurchase);
+      await Purchase.updateOne({ _id: internalPurchase._id, status: 'pending' }, { $set: { status: 'failed' } });
+      throw error;
+    }
+  }
+
   if (env.paymentsMode === 'demo') {
     const demoPurchase = await Purchase.create({
       userId: user._id,
-      testId: test._id,
-      testVersionId: version._id,
-      amount: test.price.amount,
+      testId: quote.testId,
+      testVersionId: quote.testVersionId,
+      amount: quote.payableAmountCents,
+      originalAmount: quote.originalAmountCents,
+      couponCode: quote.couponCode,
+      couponDiscountAmount: quote.couponDiscountCents,
+      creditAppliedCents: quote.referralCreditAppliedCents,
       currency: env.paypalCurrency,
-      status: 'paid',
-      paymentProvider: 'demo',
+      status: quote.referralCreditAppliedCents ? 'pending' : 'paid',
+      paymentProvider: quote.payableAmountCents === 0 ? 'internal' : 'demo',
       paypalOrderId: `demo-${new Types.ObjectId().toString()}`,
       paidAt: new Date(),
       expiresAt: null
     });
+    if (quote.referralCreditAppliedCents) {
+      await reserveCredit(user._id, demoPurchase._id, quote.referralCreditAppliedCents);
+      await Purchase.updateOne({ _id: demoPurchase._id, status: 'pending' }, { $set: { status: 'paid', paidAt: new Date() } });
+      demoPurchase.status = 'paid';
+    }
+    await finalizeCreditAndReward(demoPurchase);
     return { purchase: demoPurchase, approvalUrl: null };
   }
 
@@ -99,9 +145,13 @@ export async function initiatePurchase(userId: Types.ObjectId, testSlug: string)
   try {
     purchase = await Purchase.create({
       userId: user._id,
-      testId: test._id,
-      testVersionId: version._id,
-      amount: test.price.amount,
+      testId: quote.testId,
+      testVersionId: quote.testVersionId,
+      amount: quote.payableAmountCents,
+      originalAmount: quote.originalAmountCents,
+      couponCode: quote.couponCode,
+      couponDiscountAmount: quote.couponDiscountCents,
+      creditAppliedCents: quote.referralCreditAppliedCents,
       currency: env.paypalCurrency,
       status: 'pending',
       paymentProvider: 'paypal',
@@ -113,15 +163,21 @@ export async function initiatePurchase(userId: Types.ObjectId, testSlug: string)
     throw err;
   }
 
+  if (quote.referralCreditAppliedCents) {
+    try { await reserveCredit(user._id, purchase._id, quote.referralCreditAppliedCents); }
+    catch (error) { await Purchase.updateOne({ _id: purchase._id, status: 'pending' }, { $set: { status: 'failed' } }); throw error; }
+  }
+
   let order;
   try {
     order = await createOrder({
       purchaseId: purchase._id.toString(),
-      testName: test.name,
-      amountCents: test.price.amount,
-      currency: test.price.currency
+      testName: quote.testName,
+      amountCents: quote.payableAmountCents,
+      currency: quote.currency
     });
   } catch (err) {
+    await releaseCredit(purchase);
     await Purchase.updateOne({ _id: purchase._id, status: 'pending' }, { $set: { status: 'failed' } });
     if (err instanceof PaymentProviderError) safePaymentLog(err, purchase._id.toString());
     throw err;
@@ -196,8 +252,10 @@ export async function capturePurchase(userId: Types.ObjectId, purchaseId: string
     const update: Record<string, unknown> = { status: 'paid', paidAt: new Date() };
     if (result.captureId) update.paypalCaptureId = result.captureId;
     const finalDoc = await Purchase.findOneAndUpdate({ _id: purchaseId, status: 'capturing' }, { $set: update }, { new: true });
+    if (finalDoc) await awardReferralIfAvailable(finalDoc.userId, finalDoc._id);
     return finalDoc ?? (await Purchase.findById(purchaseId))!;
   } catch (err) {
+    await releaseCredit(claimed);
     if (err instanceof PaymentProviderError) {
       safePaymentLog(err, purchaseId);
     }

@@ -6,7 +6,7 @@ interface AuthContextValue {
   user: AuthUser | null;
   loading: boolean;
   login: (identifier: string, password: string) => Promise<void>;
-  register: (input: { username: string; email?: string; phone?: string; password: string; marketingEmails?: boolean }) => Promise<void>;
+  register: (input: { username: string; email?: string; phone?: string; password: string; marketingEmails?: boolean; referralCode?: string }) => Promise<void>;
   logout: () => void;
 }
 
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(loggedInUser);
   }
 
-  async function register(input: { username: string; email?: string; phone?: string; password: string; marketingEmails?: boolean }) {
+  async function register(input: { username: string; email?: string; phone?: string; password: string; marketingEmails?: boolean; referralCode?: string }) {
     const { token, user: newUser } = await AuthApi.register(input);
     localStorage.setItem('myinner_token', token);
     setUser(newUser);

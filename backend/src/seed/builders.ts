@@ -314,11 +314,25 @@ export function buildSpiritAnimalQuestions(): QuestionPayload[] {
 }
 
 export function buildSpiritAnimalResultDefinitions(): ResultDefinitionPayload[] {
-  const animals = ['Wolf', 'Eagle', 'Fox', 'Serpent', 'Lion', 'Panther', 'Dragon', 'Unicorn', 'Phoenix', 'Bear', 'Owl', 'Stag'];
+  const profiles: Record<string, { traits: string; story: string }> = {
+    Wolf: { traits: 'loyalty, instinct, and independence', story: 'You protect the bonds that matter while trusting your instincts and keeping a strong sense of self.' },
+    Eagle: { traits: 'freedom, vision, and perspective', story: 'You naturally step back, see the wider picture, and need room to choose your own direction.' },
+    Fox: { traits: 'strategy, adaptability, and intelligence', story: 'You read situations quickly, find creative routes forward, and adapt without losing your purpose.' },
+    Serpent: { traits: 'intuition, transformation, and depth', story: 'You notice what is beneath the surface and have the ability to change deeply when life asks it of you.' },
+    Lion: { traits: 'courage, authority, and presence', story: 'You can take responsibility, stand visibly in your truth, and bring decisive energy when pressure rises.' },
+    Panther: { traits: 'independence, intensity, and observation', story: 'You move carefully and powerfully, seeing more than you reveal and protecting your inner world.' },
+    Dragon: { traits: 'power, imagination, and transformation', story: 'You carry ambitious creative energy and are drawn toward growth that changes what is possible.' },
+    Unicorn: { traits: 'individuality, idealism, and authenticity', story: 'You value an honest inner compass and would rather live meaningfully than fit someone else’s expectations.' },
+    Phoenix: { traits: 'resilience, renewal, and rebirth', story: 'You can turn endings into beginnings and keep becoming someone stronger through change.' },
+    Bear: { traits: 'protection, strength, and stability', story: 'You create safety through steadiness, endurance, and a powerful instinct to protect what you love.' },
+    Owl: { traits: 'wisdom, observation, and discernment', story: 'You watch closely, think beneath the obvious, and prefer understanding before action.' },
+    Stag: { traits: 'sensitivity, dignity, and emotional depth', story: 'You feel deeply without losing your dignity, and your sensitivity helps you recognize what others miss.' }
+  };
+  const animals = Object.keys(profiles);
   return animals.flatMap((primary) => animals.filter((secondary) => secondary !== primary).map((secondary) => ({
     resultKey: `${primary}+${secondary}`,
     title: `${primary} + ${secondary}`,
-    description: `Your symbolic primary animal is ${primary}, with ${secondary} as a secondary influence. This is an entertainment and self-reflection result, not a clinical assessment.`
+    description: `Your primary animal is ${primary}, shaped by ${profiles[primary].traits}. Your secondary influence is ${secondary}, adding ${profiles[secondary].traits}. ${profiles[primary].story} Together, these energies describe a symbolic animal story for entertainment and self-reflection, not a clinical or scientifically validated assessment.`
   })));
 }
 

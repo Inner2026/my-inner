@@ -179,15 +179,16 @@ describe('paid purchase access gating', () => {
     expect(Purchase.updateOne).not.toHaveBeenCalled();
   });
 
-  it('rejects a second active retake without creating another attempt', async () => {
+  it('reuses a second active retake without creating another attempt', async () => {
     const purchase = { _id: oid(), userId, testId: oid(), testVersionId: oid(), status: 'paid', attemptId: oid() };
     const activeAttempt = { _id: oid(), status: 'in_progress' };
     const session = { withTransaction: jest.fn(async (callback: () => Promise<void>) => callback()), endSession: jest.fn() };
     jest.spyOn(mongoose, 'startSession').mockResolvedValue(session as any);
     (Purchase.findOne as jest.Mock).mockReturnValue({ session: jest.fn().mockResolvedValue(purchase) });
     (TestAttempt.findOne as jest.Mock).mockReturnValue({ session: jest.fn().mockResolvedValue(activeAttempt) });
+    (TestAttempt.findById as jest.Mock).mockResolvedValue(activeAttempt);
 
-    await expect(createAttemptFromPurchase(userId, purchaseId)).rejects.toThrow(/active attempt/i);
+    await expect(createAttemptFromPurchase(userId, purchaseId)).resolves.toBe(activeAttempt);
     expect(TestAttempt.create).not.toHaveBeenCalled();
   });
 

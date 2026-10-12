@@ -5,6 +5,8 @@ import * as readOnly from './adminReadOnly.controller';
 import { auditAdminAction } from '../../middleware/auditAdminAction';
 import * as marketing from './marketing.controller';
 import * as reviews from './reviews.controller';
+import { listReferrals, referralTotals } from '../referrals/referrals.admin.controller';
+import * as promotion from './promotion.controller';
 
 export const adminRouter = Router();
 
@@ -12,6 +14,7 @@ adminRouter.use(requireAuth, requireAdmin, auditAdminAction);
 
 // Tests
 adminRouter.get('/tests', content.listTests);
+adminRouter.get('/tests/:testId', content.getTest);
 adminRouter.post('/uploads', content.uploadImage);
 adminRouter.get('/tests/:testId/versions', content.listVersions);
 adminRouter.post('/tests', content.createTest);
@@ -55,3 +58,11 @@ adminRouter.get('/settings/status', readOnly.settingsStatus);
 adminRouter.post('/marketing/new-test/:testId', marketing.sendNewTestNotification);
 adminRouter.get('/reviews', reviews.listReviews);
 adminRouter.delete('/reviews/:reviewId', reviews.deleteReview);
+adminRouter.get('/referrals', listReferrals);
+adminRouter.get('/referrals/totals', referralTotals);
+adminRouter.get('/promotion-settings', promotion.adminSettings);
+adminRouter.patch('/promotion-settings', promotion.updateSettings);
+adminRouter.get('/coupons', promotion.listCoupons);
+adminRouter.post('/coupons', promotion.createCoupon);
+adminRouter.patch('/coupons/:couponId', promotion.updateCoupon);
+adminRouter.delete('/coupons/:couponId', promotion.deleteCoupon);

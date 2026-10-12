@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ApiError } from '../api/client';
@@ -7,6 +7,9 @@ import { PasswordVisibilityIcon } from '../components/PasswordVisibilityIcon';
 
 export function Register() {
   const { register } = useAuth(); const navigate = useNavigate(); const location = useLocation();
+  const referralFromUrl = new URLSearchParams(location.search).get('ref')?.trim() || '';
+  const [referralCode] = useState(() => referralFromUrl || sessionStorage.getItem('myinner_referral_code') || '');
+  useEffect(() => { if (referralFromUrl) sessionStorage.setItem('myinner_referral_code', referralFromUrl); }, [referralFromUrl]);
   const [mode, setMode] = useState<'email' | 'phone'>('email'); const [username, setUsername] = useState(''); const [email, setEmail] = useState(''); const [phone, setPhone] = useState(''); const [password, setPassword] = useState(''); const [confirmPassword, setConfirmPassword] = useState(''); const [acceptedTerms, setAcceptedTerms] = useState(false); const [marketingEmails, setMarketingEmails] = useState(false); const [showPassword, setShowPassword] = useState(false); const [showConfirmPassword, setShowConfirmPassword] = useState(false); const [error, setError] = useState<string | null>(null); const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
@@ -14,7 +17,7 @@ export function Register() {
     if (!acceptedTerms) { setError('Please accept the Terms & Conditions to continue.'); return; }
     if (password !== confirmPassword) { setError('Passwords do not match.'); return; }
     setSubmitting(true);
-    try { await register(mode === 'email' ? { username, email, password, marketingEmails } : { username, phone, password, marketingEmails }); navigate((location.state as { from?: string } | null)?.from ?? '/tests'); }
+    try { await register(mode === 'email' ? { username, email, password, marketingEmails, referralCode: referralCode || undefined } : { username, phone, password, marketingEmails, referralCode: referralCode || undefined }); sessionStorage.removeItem('myinner_referral_code'); navigate((location.state as { from?: string } | null)?.from ?? '/tests'); }
     catch (err) { setError(err instanceof ApiError ? err.message : 'Registration failed.'); }
     finally { setSubmitting(false); }
   }
@@ -37,7 +40,7 @@ export function Register() {
             {mode === 'email' && <label className="flex items-start gap-3 text-sm leading-5 text-[#6a6473]"><input type="checkbox" checked={marketingEmails} onChange={(e) => setMarketingEmails(e.target.checked)} className="mt-1 accent-[#765c8d]" /><span>Send me occasional updates about new My Inner tests and offers. You can unsubscribe anytime.</span></label>}
             {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}<button type="submit" disabled={submitting} className="w-full rounded-full bg-[#765c8d] px-4 py-3.5 font-semibold text-white shadow-lg shadow-[#765c8d]/20 transition hover:-translate-y-0.5 hover:bg-[#634a78] disabled:opacity-60">{submitting ? 'Creating account...' : 'Create account'}</button>
           </form>
-          <p className="mt-7 text-center text-sm text-[#6a6473]">Already have an account? <Link to="/login" className="font-semibold text-[#765c8d] hover:underline">Log in</Link></p><p className="mt-8 text-center text-xs leading-5 text-[#aaa2ae]">Your account and saved results are kept private.</p>
+          <p className="mt-7 text-center text-sm text-[#6a6473]">Already have an account? <Link to={referralCode ? `/login?ref=${encodeURIComponent(referralCode)}` : '/login'} className="font-semibold text-[#765c8d] hover:underline">Log in and use this invite</Link></p><p className="mt-8 text-center text-xs leading-5 text-[#aaa2ae]">Your account and saved results are kept private.</p>
         </div></div>
       </div>
     </div>

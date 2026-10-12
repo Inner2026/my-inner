@@ -13,6 +13,7 @@ export interface IUser extends Document {
   sessionVersion: number;
   marketingEmails: boolean;
   marketingConsentAt?: Date | null;
+  referralCode?: string | null;
   passwordResetTokenHash?: string | null;
   passwordResetExpiresAt?: Date | null;
   createdAt: Date;
@@ -30,6 +31,7 @@ const userSchema = new Schema<IUser>(
     sessionVersion: { type: Number, default: 0, required: true },
     marketingEmails: { type: Boolean, default: false, required: true },
     marketingConsentAt: { type: Date, default: null }
+    ,referralCode: { type: String, trim: true, uppercase: true, unique: true, sparse: true }
     ,passwordResetTokenHash: { type: String, default: null, select: false }
     ,passwordResetExpiresAt: { type: Date, default: null, select: false }
   },

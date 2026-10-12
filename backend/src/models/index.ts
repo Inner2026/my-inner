@@ -8,3 +8,7 @@ export * from './TestAttempt';
 export * from './TestRating';
 export * from './AuditLog';
 export * from './MarketingDelivery';
+export * from './Referral';
+export * from './WalletLedger';
+export * from './Coupon';
+export * from './WalletAccount';

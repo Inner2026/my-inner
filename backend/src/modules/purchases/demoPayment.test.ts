@@ -22,7 +22,12 @@ describe('secure demo payment mode', () => {
     (Test.findOne as jest.Mock).mockResolvedValue({ _id: 'test-1', slug: 'inner', name: 'Inner Test', currentVersionId: 'version-1', price: { amount: 499, currency: 'USD' } });
     (TestVersion.findOne as jest.Mock).mockResolvedValue({ _id: 'version-1' });
     (User.findById as jest.Mock).mockResolvedValue({ _id: 'user-1' });
-    (Purchase.findOne as jest.Mock).mockResolvedValue(null);
+    // getActivePaidPurchase uses the Mongoose query chain findOne().sort().
+    // Keep the first lookup chainable, then let the active-checkout lookup
+    // resolve normally.
+    (Purchase.findOne as jest.Mock)
+      .mockImplementationOnce(() => ({ sort: jest.fn().mockResolvedValue(null) }))
+      .mockResolvedValue(null);
     (Purchase.create as jest.Mock).mockImplementation(async (input: any) => ({ ...input, _id: 'purchase-demo' }));
   });
 

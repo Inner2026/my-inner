@@ -8,6 +8,17 @@ export class ApiError extends Error {
   }
 }
 
+function friendlyApiMessage(status: number, fallback: string): string {
+  if (status === 409 && /active attempt/i.test(fallback)) {
+    return 'لديك محاولة مفتوحة بالفعل. سيتم فتحها لك بدل إنشاء محاولة جديدة.';
+  }
+  if (status === 401) return 'انتهت الجلسة. سجّل الدخول مرة أخرى للمتابعة.';
+  if (status === 403) return 'ليس لديك صلاحية لتنفيذ هذا الإجراء.';
+  if (status === 404) return 'المحتوى المطلوب غير موجود أو لم يعد متاحًا.';
+  if (status >= 500) return 'حدث خطأ في الخادم. حاول مرة أخرى بعد قليل.';
+  return fallback;
+}
+
 function getToken(): string | null {
   return localStorage.getItem('myinner_token');
 }
@@ -36,7 +47,8 @@ export async function apiRequest<T>(
       localStorage.removeItem('myinner_token');
       window.dispatchEvent(new Event('myinner:unauthorized'));
     }
-    throw new ApiError(data?.error?.message ?? 'Something went wrong.', res.status);
+    const serverMessage = data?.error?.message ?? 'Something went wrong.';
+    throw new ApiError(friendlyApiMessage(res.status, serverMessage), res.status);
   }
   return data as T;
 }

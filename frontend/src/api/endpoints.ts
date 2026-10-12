@@ -2,7 +2,7 @@ import { apiRequest } from './client';
 import { PublicTest, AuthUser, AttemptQuestion, ResultSummary, ResultDetail, TestRatingSummary } from '../types';
 
 export const AuthApi = {
-  register: (input: { username: string; email?: string; phone?: string; password: string; marketingEmails?: boolean }) =>
+  register: (input: { username: string; email?: string; phone?: string; password: string; marketingEmails?: boolean; referralCode?: string }) =>
     apiRequest<{ token: string; user: AuthUser }>('/auth/register', { method: 'POST', body: input, auth: false }),
   login: (input: { identifier: string; password: string }) =>
     apiRequest<{ token: string; user: AuthUser }>('/auth/login', { method: 'POST', body: input, auth: false }),
@@ -11,6 +11,14 @@ export const AuthApi = {
   logout: () => apiRequest<void>('/auth/logout', { method: 'POST' })
   ,forgotPassword: (email: string) => apiRequest<{ message: string }>('/auth/forgot-password', { method: 'POST', body: { email }, auth: false })
   ,resetPassword: (token: string, password: string) => apiRequest<{ message: string }>('/auth/reset-password', { method: 'POST', body: { token, password }, auth: false })
+};
+
+export const ReferralsApi = {
+  claim: (referralCode: string) => apiRequest<{ attributed: boolean }>('/referrals/claim', { method: 'POST', body: { referralCode } }),
+  overview: () => apiRequest<any>('/referrals'),
+  history: () => apiRequest<{ referrals: any[] }>('/referrals/history'),
+  ledger: () => apiRequest<{ entries: any[] }>('/referrals/ledger'),
+  balance: () => apiRequest<{ currency: string; availableReferralCreditCents: number }>('/referrals/balance')
 };
 
 export const TestsApi = {
@@ -25,8 +33,11 @@ export const PaymentsApi = {
 };
 
 export const PurchasesApi = {
-  create: (testSlug: string) =>
-    apiRequest<{ purchaseId: string; paypalOrderId: string; approvalUrl: string | null; paymentProvider: 'paypal' | 'demo' }>('/purchases', { method: 'POST', body: { testSlug } }),
+  entitlement: (testSlug: string) => apiRequest<{ owned: boolean; purchaseId: string | null; expiresAt: string | null }>(`/purchases/entitlement/${encodeURIComponent(testSlug)}`),
+  quote: (testSlug: string, couponCode?: string, applyCredit = false) =>
+    apiRequest<{ quote: any }>('/purchases/quote', { method: 'POST', body: { testSlug, couponCode: couponCode || undefined, applyCredit } }),
+  create: (testSlug: string, couponCode?: string, applyCredit = false) =>
+    apiRequest<{ purchaseId: string; paypalOrderId: string; approvalUrl: string | null; paymentProvider: 'paypal' | 'demo' | 'internal'; pricing?: any }>('/purchases', { method: 'POST', body: { testSlug, couponCode: couponCode || undefined, applyCredit } }),
   get: (purchaseId: string) => apiRequest<{ purchase: any }>(`/purchases/${purchaseId}`),
   capture: (purchaseId: string, orderId?: string) => apiRequest<{ purchase: any }>(`/purchases/${purchaseId}/capture`, { method: 'POST', body: orderId ? { orderId } : undefined })
 };
