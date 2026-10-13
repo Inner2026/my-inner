@@ -49,9 +49,20 @@ export const updateSettings = asyncHandler(async (req: Request, res: Response) =
   const patch: Record<string, unknown> = {};
   if (typeof req.body.announcementEnabled === 'boolean') patch.announcementEnabled = req.body.announcementEnabled;
   for (const key of ['announcementText', 'referralEmailSubject', 'referralEmailMessage']) if (typeof req.body[key] === 'string' && req.body[key].trim()) patch[key] = req.body[key].trim();
+  if (typeof req.body.announcementTagline === 'string') patch.announcementTagline = req.body.announcementTagline.trim();
+  if (typeof req.body.footerMessage === 'string') patch.footerMessage = req.body.footerMessage.trim();
   if (req.body.announcementEndsAt === null || req.body.announcementEndsAt === '') patch.announcementEndsAt = null;
   else if (req.body.announcementEndsAt) { const date = new Date(req.body.announcementEndsAt); if (Number.isNaN(date.getTime())) throw AppError.badRequest('Invalid announcement end date.'); patch.announcementEndsAt = date; }
   if (req.body.referralCreditExpiryDays !== undefined) { const days = Number(req.body.referralCreditExpiryDays); if (!Number.isInteger(days) || days < 1 || days > 3650) throw AppError.badRequest('Expiry must be between 1 and 3650 days.'); patch.referralCreditExpiryDays = days; }
+  if (req.body.socialLinks && typeof req.body.socialLinks === 'object' && !Array.isArray(req.body.socialLinks)) {
+    const socialLinks: Record<string, string> = {};
+    for (const key of ['facebook', 'instagram', 'tiktok', 'snapchat', 'youtube', 'linkedin', 'x']) {
+      const value = String(req.body.socialLinks[key] ?? '').trim();
+      if (value && !/^https:\/\//i.test(value)) throw AppError.badRequest(`${key} link must be an https URL.`);
+      socialLinks[key] = value;
+    }
+    patch.socialLinks = socialLinks;
+  }
   const settings = await PromotionSettings.findOneAndUpdate({ key: 'default' }, { $set: patch, $setOnInsert: { key: 'default' } }, { upsert: true, new: true, setDefaultsOnInsert: true });
   res.json({ settings });
 });

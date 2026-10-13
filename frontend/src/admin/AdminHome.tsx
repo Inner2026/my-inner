@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { Routes, Route, NavLink, Link, useLocation } from 'react-router-dom';
 import { AdminDashboard } from './AdminDashboard';
 import { AdminTests } from './AdminTests';
@@ -20,30 +19,7 @@ import { AdminPromotion } from './AdminPromotion';
 const links = [['/admin', 'Overview'], ['/admin/tests', 'Tests'], ['/admin/reviews', 'Reviews'], ['/admin/users', 'Users'], ['/admin/purchases', 'Orders'], ['/admin/attempts', 'Attempts'], ['/admin/analytics', 'Analytics'], ['/admin/marketing-deliveries', 'Marketing'], ['/admin/promotion', 'Promotion'], ['/admin/settings', 'Settings']];
 
 function AdminSidebar() {
-  const sidebarRef = useRef<HTMLElement>(null);
-  useEffect(() => {
-    const updatePosition = () => {
-      const sidebar = sidebarRef.current;
-      const nav = document.querySelector<HTMLElement>('.site-nav');
-      const footer = document.querySelector<HTMLElement>('.site-footer');
-      if (!sidebar || !nav) return;
-      const safeTop = nav.getBoundingClientRect().bottom + 16;
-      let nextTop = safeTop;
-      if (footer) {
-        const footerTop = footer.getBoundingClientRect().top;
-        const spaceAboveFooter = footerTop - sidebar.offsetHeight - 16;
-        if (footerTop < window.innerHeight && spaceAboveFooter > safeTop) nextTop = spaceAboveFooter;
-      }
-      sidebar.style.top = `${nextTop}px`;
-    };
-    let frame = 0;
-    const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(updatePosition); };
-    schedule();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); };
-  }, []);
-  return <div className="hidden w-56 shrink-0 lg:block"><aside ref={sidebarRef} className="admin-sidebar fixed left-[max(1rem,calc((100vw-1440px)/2))] top-[6.5rem] z-10 w-56 rounded-2xl bg-[#302447] p-4 text-white shadow-lg"><Link to="/admin" className="flex items-center gap-2 border-b border-white/10 px-3 pb-5 font-serif text-xl"><img src="/my-inner-logo.png" alt="" className="h-9 w-9 rounded-lg bg-white/10" />My Inner</Link><nav className="mt-6 space-y-1">{links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/admin'} className={({ isActive }) => `admin-nav ${isActive ? 'active' : ''}`}>{label}</NavLink>)}</nav></aside></div>;
+  return <div className="hidden w-56 shrink-0 self-stretch lg:block"><aside className="admin-sidebar sticky top-[6.5rem] z-10 w-56 rounded-2xl bg-[#302447] p-4 text-white shadow-lg"><Link to="/admin" className="flex items-center gap-2 border-b border-white/10 px-3 pb-5 font-serif text-xl"><img src="/my-inner-logo.png" alt="" className="h-9 w-9 rounded-lg bg-white/10" />My Inner</Link><nav className="mt-6 space-y-1">{links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/admin'} className={({ isActive }) => `admin-nav ${isActive ? 'active' : ''}`}>{label}</NavLink>)}</nav></aside></div>;
 }
 
 export function AdminHome() {

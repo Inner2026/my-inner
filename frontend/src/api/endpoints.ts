@@ -28,6 +28,10 @@ export const TestsApi = {
   rate: (slug: string, rating: number, comment = '') => apiRequest<{ rating: TestRatingSummary }>(`/tests/${slug}/ratings`, { method: 'POST', body: { rating, comment } })
 };
 
+export const PromotionApi = {
+  get: () => apiRequest<{ promotion: { socialLinks?: Record<string, string>; footerMessage?: string } }>('/promotion', { auth: false })
+};
+
 export const PaymentsApi = {
   mode: () => apiRequest<{ mode: 'paypal' | 'demo' }>('/config/payment-mode', { auth: false })
 };
