@@ -18,6 +18,16 @@ async function getEditableVersion(testVersionId: string): Promise<ITestVersion> 
   return version;
 }
 
+/** Result copy may be corrected on the live version; historical attempts keep a snapshot. */
+async function getEditableResultVersion(testVersionId: string): Promise<ITestVersion> {
+  const version = await TestVersion.findById(testVersionId);
+  if (!version) throw AppError.notFound('Test version not found.');
+  if (version.status === 'archived') {
+    throw AppError.forbidden('Archived test versions are immutable. Create a new version to make changes.');
+  }
+  return version;
+}
+
 // ---- Tests ----
 
 export async function getTest(testId: string) {
@@ -338,7 +348,7 @@ export async function upsertResultDefinition(input: {
   relationships?: string | null;
   recommendations?: string | null;
 }) {
-  await getEditableVersion(input.testVersionId);
+  await getEditableResultVersion(input.testVersionId);
   if (input.imageUrl && !/^https?:\/\//i.test(input.imageUrl.trim()) && !input.imageUrl.trim().startsWith('/')) {
     throw AppError.badRequest('Image URL must be an https URL or an app path starting with /.');
   }
@@ -352,7 +362,7 @@ export async function upsertResultDefinition(input: {
 export async function deleteResultDefinition(resultDefinitionId: string) {
   const def = await ResultDefinition.findById(resultDefinitionId);
   if (!def) throw AppError.notFound('Result definition not found.');
-  await getEditableVersion(def.testVersionId.toString());
+  await getEditableResultVersion(def.testVersionId.toString());
   await def.deleteOne();
 }
 

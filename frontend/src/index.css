@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+button:not(:disabled),
+a[href],
+[role="button"],
+summary {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 :root {
   --color-brand: #6d5dfc;
 }
