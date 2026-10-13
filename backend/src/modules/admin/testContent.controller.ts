@@ -102,6 +102,10 @@ export const listVersions = asyncHandler(async (req: Request, res: Response) => 
   res.json({ versions: await svc.listVersions(req.params.testId) });
 });
 
+export const makeLatestMbtiVersionPrimary = asyncHandler(async (req: Request, res: Response) => {
+  res.json(await svc.makeLatestMbtiVersionPrimary(req.params.testId));
+});
+
 export const getVersion = asyncHandler(async (req: Request, res: Response) => {
   res.json({ version: await svc.getVersion(req.params.versionId) });
 });

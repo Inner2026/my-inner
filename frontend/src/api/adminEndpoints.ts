@@ -15,6 +15,7 @@ export const AdminApi = {
   listTests: (params: { search?: string; active?: string; page?: number; pageSize?: number } = {}) => { const query = new URLSearchParams(); Object.entries(params).forEach(([key, value]) => { if (value !== undefined && value !== '') query.set(key, String(value)); }); return apiRequest<{ tests: any[]; pagination: { page: number; pageSize: number; total: number; pages: number } }>(`/admin/tests?${query.toString()}`); },
   getTest: (testId: string) => apiRequest<{ test: any }>(`/admin/tests/${testId}`),
   listVersions: (testId: string) => apiRequest<{ versions: any[] }>(`/admin/tests/${testId}/versions`),
+  makeLatestMbtiVersionPrimary: (testId: string) => apiRequest<{ version: any; removedVersions: number }>(`/admin/tests/${testId}/versions/make-latest-mbti-primary`, { method: 'POST' }),
   getVersion: (versionId: string) => apiRequest<{ version: any }>(`/admin/versions/${versionId}`),
   syncMbtiVersion: (versionId: string) => apiRequest<{ version: any }>(`/admin/versions/${versionId}/sync-mbti`, { method: 'POST' }),
   createTest: (input: { slug: string; name: string; description: string; imageUrl?: string; priceCents: number }) =>

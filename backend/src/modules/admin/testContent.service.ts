@@ -3,6 +3,8 @@ import { Test } from '../../models/Test';
 import { TestVersion, ITestVersion } from '../../models/TestVersion';
 import { Question } from '../../models/Question';
 import { ResultDefinition } from '../../models/ResultDefinition';
+import { TestAttempt } from '../../models/TestAttempt';
+import { Purchase } from '../../models/Purchase';
 import { AppError } from '../../utils/AppError';
 import { validateTestVersionForActivation } from './validation.service';
 import { scoreAttempt } from '../scoring/scoringEngine';
@@ -12,8 +14,8 @@ import { buildMbtiQuestions, MBTI_CATEGORIES, MBTI_SCORING_CONFIG } from '../../
 async function getEditableVersion(testVersionId: string): Promise<ITestVersion> {
   const version = await TestVersion.findById(testVersionId);
   if (!version) throw AppError.notFound('Test version not found.');
-  if (version.status === 'published' || version.status === 'archived') {
-    throw AppError.forbidden('Published or archived test versions are immutable. Create a new version to make changes.');
+  if (version.status === 'archived') {
+    throw AppError.forbidden('Archived test versions are immutable. Create a new version to make changes.');
   }
   return version;
 }
@@ -104,6 +106,43 @@ export async function listVersions(testId: string) {
   const test = await Test.findById(testId);
   if (!test) throw AppError.notFound('Test not found.');
   return TestVersion.find({ testId }).sort({ createdAt: -1 }).lean();
+}
+
+/** Make the newest published MBTI version primary and safely remove unused older versions. */
+export async function makeLatestMbtiVersionPrimary(testId: string) {
+  const test = await Test.findById(testId);
+  if (!test) throw AppError.notFound('Test not found.');
+  if (test.slug !== 'mbti-style') throw AppError.badRequest('This action is only available for the MBTI test.');
+  const versions = await TestVersion.find({ testId }).sort({ createdAt: -1 });
+  const latest = versions.find((version) => version.status === 'published');
+  if (!latest) throw AppError.badRequest('Publish the latest MBTI version before making it primary.');
+
+  for (const version of versions) {
+    if (version._id.equals(latest._id)) continue;
+    const [hasAttempts, hasPurchases] = await Promise.all([
+      TestAttempt.exists({ testVersionId: version._id }),
+      Purchase.exists({ testVersionId: version._id })
+    ]);
+    if (hasAttempts || hasPurchases) {
+      version.isCurrent = false;
+      if (version.status !== 'archived') { version.status = 'archived'; version.archivedAt = new Date(); }
+      await version.save();
+      continue;
+    }
+    await Promise.all([
+      Question.deleteMany({ testVersionId: version._id }),
+      ResultDefinition.deleteMany({ testVersionId: version._id })
+    ]);
+    await version.deleteOne();
+  }
+
+  await TestVersion.updateMany({ testId, _id: { $ne: latest._id } }, { $set: { isCurrent: false } });
+  latest.status = 'published';
+  latest.isCurrent = true;
+  await latest.save();
+  test.currentVersionId = latest._id;
+  await test.save();
+  return { version: latest, removedVersions: versions.filter((version) => !version._id.equals(latest._id)).length };
 }
 
 export async function getVersion(versionId: string) {

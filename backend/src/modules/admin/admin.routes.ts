@@ -17,6 +17,7 @@ adminRouter.get('/tests', content.listTests);
 adminRouter.get('/tests/:testId', content.getTest);
 adminRouter.post('/uploads', content.uploadImage);
 adminRouter.get('/tests/:testId/versions', content.listVersions);
+adminRouter.post('/tests/:testId/versions/make-latest-mbti-primary', content.makeLatestMbtiVersionPrimary);
 adminRouter.post('/tests', content.createTest);
 adminRouter.patch('/tests/:testId', content.updateTest);
 adminRouter.delete('/tests/:testId', content.archiveTest);
