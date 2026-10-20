@@ -75,3 +75,23 @@ Phase 2 verification:
 - PASS — backend tests remain unchanged and were previously verified at 16 suites / 84 tests; rerun if backend code or deployment configuration changes.
 
 Known limitation: this is metadata prerendering, not full React HTML rendering. The initial body remains the SPA root and public content still hydrates from JavaScript/API data. Full content SSR/prerendering would require a larger architecture change or a reliable unauthenticated API build integration.
+
+## Phase 3: performance, share image and indexing fixes (2026-10-20)
+
+Observed before this phase: the live site at https://my-inner.com still served the old title ("My Inner — Discover more about yourself"), so Phases 1–2 were not yet deployed.
+
+Changes:
+
+- Images: 10 background images converted from PNG to WebP (15.0 MB → 0.7 MB total; homepage hero 1.8 MB → 65 KB) with no visible quality loss. All references in `src/` and `index.css` now point to the `.webp` files. The original PNGs are kept in `public/` and can be deleted after deployment is checked.
+- Logo: a 256 px `my-inner-logo.webp` replaces the 654 KB 1254 px PNG wherever the logo is displayed. Added `favicon-48.png`, `apple-touch-icon.png` (180 px) and `logo-512.png` (used for Organization structured data).
+- Share image: new `og-image.jpg` (1200×630, 85 KB) with the brand name and tagline, plus `og:image:width/height`. Previously the share image was a 1.8 MB text-free background.
+- LCP: the homepage prerendered shell preloads `hero-background.webp` with `fetchpriority="high"` (the hero is a CSS background the browser discovers late).
+- JavaScript: dashboard, profile, results, test runner, checkout (PayPal) and admin screens are lazy-loaded. JavaScript loaded by public pages fell from 544 KB to 344 KB (148 → 107 KB gzip).
+- Structured data: Organization/WebSite (homepage) and Quiz (each assessment) JSON-LD is now in the initial HTML, using the same `data-seo-jsonld` marker so React replaces it rather than duplicating it.
+- Sitemap: `dist/sitemap.xml` is now generated at build time from the same public route list, with `lastmod` dates, so new assessments are included automatically.
+- Soft 404s: unknown URLs and unknown assessment slugs are now `noindex` with the title "Page Not Found | My Inner" (the SPA rewrite returns HTTP 200 for them).
+- robots.txt: removed `Disallow` for login, register, password reset and checkout pages. These pages carry `noindex`; blocking them in robots.txt prevented Google from seeing that directive. Admin, dashboard, profile, results, attempts and API stay blocked.
+
+Verification (Linux build of the same sources): `npm run build` PASS, `npm run verify:seo` PASS (now also checks sitemap lastmod, homepage JSON-LD, hero preload and new assets), oxlint warnings only (pre-existing), headless Chromium check of `/`, `/about`, `/login` and an unknown URL: correct titles and robots values, no failed asset requests, no JS errors.
+
+Still required after deploy: confirm on Vercel that `/about` serves the prerendered `about/index.html` (view source must show the About title), add the site to Google Search Console, submit the sitemap, and run PageSpeed Insights on the homepage.

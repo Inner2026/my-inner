@@ -136,7 +136,7 @@ body {
     min-height: 12rem;
     height: auto;
     background-color: #f4eaed;
-    background-image: url('/discover-banner.png');
+    background-image: url('/discover-banner.webp');
     background-position: left center;
     background-size: auto 100%;
     background-repeat: no-repeat;
@@ -183,9 +183,9 @@ input[type='password']::-ms-clear {
 
 .checkout-page, .success-page { background: #fcfaf9; }
 .checkout-page { background-image: radial-gradient(circle at 88% 18%, rgba(235,222,235,.45), transparent 20rem), radial-gradient(circle at 8% 90%, rgba(241,230,235,.35), transparent 18rem); }
-.success-page { position: relative; background: #fbf8f5 url('/payment-success-background.png') center top / 100% 100% no-repeat; }
+.success-page { position: relative; background: #fbf8f5 url('/payment-success-background.webp') center top / 100% 100% no-repeat; }
 .success-page::before, .success-page::after { display: none; }
-.result-page { background: #fbf8f5 url('/payment-success-background.png') center / cover fixed; }
+.result-page { background: #fbf8f5 url('/payment-success-background.webp') center / cover fixed; }
 .result-sidebar { align-self: start; }
 .result-nav { display: block; border-radius: .55rem; padding: .55rem .75rem; transition: .2s; }
 .result-nav:hover, .result-nav.active { background: #f2ebf7; color: #765c8d; font-weight: 600; }
@@ -290,7 +290,7 @@ input[type='password']::-ms-clear {
 .instructions-page { background-image: radial-gradient(circle at 90% 15%, rgba(238,229,243,.35), transparent 20rem), radial-gradient(circle at 8% 90%, rgba(241,230,235,.3), transparent 18rem); }
 .tests-page { background: radial-gradient(circle at 90% 5%, rgba(238,229,243,.4), transparent 22rem), #fcfaf9; }
 .test-card::after { content: ''; position: absolute; top: 0; left: 1.5rem; right: 1.5rem; height: 2px; background: linear-gradient(90deg, transparent, rgba(118,92,141,.18), transparent); }
-.about-page { background: #fbf8f5 url('/about-background.png') center / 100% 100% no-repeat; }
+.about-page { background: #fbf8f5 url('/about-background.webp') center / 100% 100% no-repeat; }
 .about-art { min-height: 22rem; }
 .about-copy-item { animation: about-rise .75s cubic-bezier(.2,.75,.25,1) both; }
 .about-copy-item:nth-child(1) { animation-delay: .08s; }

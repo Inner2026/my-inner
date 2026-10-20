@@ -23,7 +23,7 @@ export function Landing() {
   useEffect(() => { TestsApi.list().then((res) => setTests(res.tests)).catch(() => undefined); }, []);
 
   return <div className="landing-page bg-[#fbfaf8] text-[#302447]">
-    <section className="landing-hero relative overflow-hidden border-b border-[#ebe4e8] bg-[#fbf4f4] bg-cover bg-center px-5 pb-14 pt-14 sm:pb-20 sm:pt-20" style={{ backgroundImage: "url('/hero-background.png')" }}>
+    <section className="landing-hero relative overflow-hidden border-b border-[#ebe4e8] bg-[#fbf4f4] bg-cover bg-center px-5 pb-14 pt-14 sm:pb-20 sm:pt-20" style={{ backgroundImage: "url('/hero-background.webp')" }}>
       <div className="absolute inset-0 bg-white/10" />
       <div className="relative z-10 mx-auto max-w-6xl">
         <div className="max-w-xl"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#765c8d]">A space to look within</p><h1 className="mt-5 max-w-xl font-serif text-5xl leading-[1.02] tracking-tight text-[#283452] sm:text-7xl">Discover more<br />about yourself.</h1><p className="mt-6 max-w-lg text-lg leading-8 text-[#5e6170]">Explore thoughtfully designed assessments that help you understand your personality, emotions, relationships, and the way you see yourself.</p><div className="mt-8 flex flex-wrap gap-3"><Link to="/tests" className="rounded-full bg-[#765c8d] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#765c8d]/20 transition hover:-translate-y-0.5 hover:bg-[#634a78]">Explore Tests <span className="ml-2">→</span></Link><a href="#how-it-works" className="rounded-full border border-[#bcaec5] px-6 py-3.5 text-sm font-semibold text-[#4d4162] transition hover:bg-white/80">How It Works</a></div></div>
@@ -40,6 +40,6 @@ export function Landing() {
 
     <section className="border-y border-[#ebe4e8] bg-[#f5edf1] px-5 py-14 text-center"><h2 className="font-serif text-3xl text-[#283452]">Ready to discover more about yourself?</h2><p className="mt-2 text-sm text-[#737080]">Start with an assessment and take a closer look within.</p><Link to="/tests" className="mt-5 inline-block rounded-full bg-[#765c8d] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#765c8d]/20">Explore Tests →</Link></section>
 
-    <footer className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-8 text-sm text-[#737080] sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-serif text-lg text-[#302447]"><img src="/my-inner-logo.png" alt="" className="h-10 w-10 object-contain object-top" />My Inner</div><p>Self-discovery. Understanding. Growth.</p><p className="text-xs">© 2026 My Inner. All rights reserved.</p></footer>
+    <footer className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-8 text-sm text-[#737080] sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-serif text-lg text-[#302447]"><img src="/my-inner-logo.webp" alt="" className="h-10 w-10 object-contain object-top" />My Inner</div><p>Self-discovery. Understanding. Growth.</p><p className="text-xs">© 2026 My Inner. All rights reserved.</p></footer>
   </div>;
 }

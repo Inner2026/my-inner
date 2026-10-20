@@ -69,14 +69,33 @@ function renderRoute(route) {
   html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/?\s*>/i, `<link rel="canonical" href="${canonical}" />`);
   html = html.replace(/<meta name="robots" content="[^"]*"\s*\/?\s*>/i, `<meta name="robots" content="${route.noIndex ? 'noindex, nofollow' : 'index, follow'}" />`);
   if (!/<meta name="robots"/i.test(html)) html = html.replace('</head>', `    <meta name="robots" content="${route.noIndex ? 'noindex, nofollow' : 'index, follow'}" />\n  </head>`);
+  const extraHead = [];
+  // The homepage hero is a CSS background, which the browser discovers late; preload it to improve LCP.
+  if (route.path === '/') extraHead.push('<link rel="preload" as="image" href="/hero-background.webp" type="image/webp" fetchpriority="high" />');
+  // Same data-seo-jsonld marker the client Seo component uses, so React replaces it instead of duplicating it.
+  if (route.jsonLd) extraHead.push(`<script type="application/ld+json" data-seo-jsonld="true">${JSON.stringify(route.jsonLd).replaceAll('<', '\\u003c')}</script>`);
+  if (extraHead.length) html = html.replace('</head>', `    ${extraHead.join('\n    ')}\n  </head>`);
   return html;
 }
 
+const organization = { '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: siteUrl, logo: `${siteUrl}/logo-512.png` };
+staticRoutes[0].jsonLd = [organization, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${siteUrl}/` }];
+const testJsonLd = (test) => ({ '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${siteUrl}/tests/${test.slug}`, image: `${siteUrl}/og-image.jpg`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: siteUrl } });
+
+function renderSitemap(paths) {
+  const lastmod = new Date().toISOString().slice(0, 10);
+  const urls = paths.map((path) => `  <url><loc>${siteUrl}${path === '/' ? '/' : path}</loc><lastmod>${lastmod}</lastmod></url>`);
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
+}
+
 const tests = await getPublicTests();
-for (const route of [...staticRoutes, ...tests.map((test) => ({ path: `/tests/${test.slug}`, title: `${test.name} | My Inner`, description: test.description })), ...privateRoutes]) {
+const testRoutes = tests.map((test) => ({ path: `/tests/${test.slug}`, title: `${test.name} | My Inner`, description: test.description, jsonLd: testJsonLd(test) }));
+for (const route of [...staticRoutes, ...testRoutes, ...privateRoutes]) {
   const targetDir = route.path === '/' ? new URL('../dist/', import.meta.url) : new URL(`../dist${route.path}/`, import.meta.url);
   await mkdir(targetDir, { recursive: true });
   await writeFile(new URL('index.html', targetDir), renderRoute(route), 'utf8');
 }
+// Regenerate the sitemap from the same public route list so new assessments are included automatically.
+await writeFile(new URL('../dist/sitemap.xml', import.meta.url), renderSitemap([...staticRoutes, ...testRoutes].map((route) => route.path)), 'utf8');
 
 console.log(`[prerender] Generated ${staticRoutes.length + tests.length} public and ${privateRoutes.length} private route HTML shells in ${join(distDir.pathname, '')}`);

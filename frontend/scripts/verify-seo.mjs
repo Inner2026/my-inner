@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 const index = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const robots = await readFile(new URL('../public/robots.txt', import.meta.url), 'utf8');
-const sitemap = await readFile(new URL('../public/sitemap.xml', import.meta.url), 'utf8');
+const sitemap = await readFile(new URL('../dist/sitemap.xml', import.meta.url), 'utf8');
 const distIndex = await readFile(new URL('../dist/index.html', import.meta.url), 'utf8');
 
 const fail = (message) => { throw new Error(message); };
@@ -14,6 +14,10 @@ const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[
 if (urls.some((url) => !url.startsWith('https://my-inner.com/'))) fail('sitemap contains a non-canonical origin');
 if (urls.some((url) => /\?|#|\/checkout|\/dashboard|\/admin|\/results|\/attempts/.test(url))) fail('sitemap contains a private, transactional, or parameterized URL');
 if (new Set(urls).size !== urls.length) fail('sitemap contains duplicate URLs');
+if ((sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g) ?? []).length !== urls.length) fail('every sitemap URL must have a lastmod date');
+if (!/application\/ld\+json" data-seo-jsonld="true">[^<]*"Organization"/.test(distIndex)) fail('built homepage must contain Organization JSON-LD');
+if (!/rel="preload" as="image" href="\/hero-background\.webp"/.test(distIndex)) fail('built homepage must preload the hero image');
+for (const asset of ['og-image.jpg', 'logo-512.png', 'favicon-48.png', 'apple-touch-icon.png', 'hero-background.webp']) await readFile(new URL(`../dist/${asset}`, import.meta.url)).catch(() => fail(`missing public asset ${asset}`));
 const expectedRoutes = ['/', '/tests', '/about', '/terms', '/tests/mbti-style', '/tests/inner-child', '/tests/five-love-languages', '/tests/hidden-animal', '/tests/cube-personality'];
 for (const route of expectedRoutes) {
   const relative = route === '/' ? '../dist/index.html' : `../dist${route}/index.html`;

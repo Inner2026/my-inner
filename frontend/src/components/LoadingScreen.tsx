@@ -6,7 +6,7 @@ export function LoadingScreen({ message = 'Preparing your reflection...', detail
       <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#eee5f4]" />
       <div className="absolute -bottom-20 -left-12 h-36 w-36 rounded-full bg-[#e8f1ec]" />
       <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-[1.7rem] bg-gradient-to-br from-[#f0e7f5] to-[#e7f1ec] shadow-inner">
-        <img src="/my-inner-logo.png" alt="My Inner" className="h-12 w-12 rounded-2xl object-cover" />
+        <img src="/my-inner-logo.webp" alt="My Inner" className="h-12 w-12 rounded-2xl object-cover" />
         <span className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#765c8d] shadow-sm"><Sparkles className="h-4 w-4 animate-pulse" /></span>
       </div>
       <div className="relative mx-auto mt-7 h-1.5 w-40 overflow-hidden rounded-full bg-[#eee8f0]"><span className="loading-progress absolute inset-y-0 left-0 w-1/2 rounded-full bg-gradient-to-r from-[#765c8d] to-[#9bbca8]" /></div>

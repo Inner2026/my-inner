@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { TestRating } from '../components/TestRating';
 
 const backgrounds: Record<string, string> = {
-  'mbti-style': '/test-backgrounds/mbti-style.png', 'inner-child': '/test-backgrounds/inner-child.png', 'five-love-languages': '/test-backgrounds/five-love-languages.png', 'hidden-animal': '/test-backgrounds/hidden-animal.png', 'cube-personality': '/test-backgrounds/cube-personality.png'
+  'mbti-style': '/test-backgrounds/mbti-style.webp', 'inner-child': '/test-backgrounds/inner-child.webp', 'five-love-languages': '/test-backgrounds/five-love-languages.webp', 'hidden-animal': '/test-backgrounds/hidden-animal.webp', 'cube-personality': '/test-backgrounds/cube-personality.webp'
 };
 const wideBackgrounds = new Set(['mbti-style', 'cube-personality']);
 const labels: Record<string, string> = { 'mbti-style': 'Personality Test', 'inner-child': 'Healing Test', 'five-love-languages': 'Relationship Test', 'hidden-animal': 'Personality Test', 'cube-personality': 'Personality Test' };

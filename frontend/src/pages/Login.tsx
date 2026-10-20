@@ -34,7 +34,7 @@ export function Login() {
         </div>
         <div className="flex items-center justify-center bg-[#fffdfb]/90 px-5 py-10 sm:px-12">
           <div className="w-full max-w-md">
-            <div className="mb-8 lg:hidden"><img src="/my-inner-logo.png" alt="My Inner" className="h-16 w-auto object-contain object-left" /></div>
+            <div className="mb-8 lg:hidden"><img src="/my-inner-logo.webp" alt="My Inner" className="h-16 w-auto object-contain object-left" /></div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#765c8d]">Your journey inward</p><h1 className="mt-3 text-4xl font-semibold tracking-tight text-[#302447]">Welcome back</h1><p className="mt-3 text-[#6a6473]">Sign in to continue your My Inner journey.</p>
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
               <label className="block text-sm font-medium text-[#302447]">Email or phone<input required placeholder="you@example.com or 010..." value={identifier} onChange={(e) => setIdentifier(e.target.value)} className="mt-2 w-full rounded-xl border border-[#d9cfdb] bg-white px-4 py-3.5 text-slate-800 outline-none transition placeholder:text-[#aaa2ae] focus:border-[#765c8d] focus:ring-4 focus:ring-[#765c8d]/10" /></label>

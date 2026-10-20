@@ -1,16 +1,12 @@
 User-agent: *
 Allow: /
+# Private areas. Login, register, password and checkout pages are NOT blocked here on purpose:
+# they send a noindex directive, and Google can only see that directive if it is allowed to crawl them.
 Disallow: /admin
 Disallow: /dashboard
 Disallow: /profile
 Disallow: /results
 Disallow: /attempts
-Disallow: /checkout
-Disallow: /login
-Disallow: /register
-Disallow: /forgot-password
-Disallow: /reset-password
-Disallow: /tests/*/checkout
 Disallow: /api/
 
 Sitemap: https://my-inner.com/sitemap.xml

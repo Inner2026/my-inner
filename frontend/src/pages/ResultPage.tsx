@@ -61,7 +61,7 @@ function AnimalResultView({ result, retaking, onRetake }: { result: ResultDetail
   return <div className="result-page min-h-[calc(100vh-74px)] bg-[#fbfaf4] px-4 py-8 sm:px-8 sm:py-12">
     <div className="mx-auto max-w-5xl">
       <section className="relative isolate overflow-hidden rounded-[2.25rem] border border-[#e8dfca] bg-[#f2ead7] shadow-[0_24px_70px_rgba(91,73,40,0.13)]">
-        <img src="/test-backgrounds/hidden-animal.png" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25 mix-blend-multiply" />
+        <img src="/test-backgrounds/hidden-animal.webp" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25 mix-blend-multiply" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#fff9e9]/95 via-[#f4edda]/80 to-[#dbe8d9]/80" />
         <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[#d6e4d0]/70" />
         <div className="relative grid items-center gap-8 p-7 sm:p-12 md:grid-cols-[1fr_250px]">

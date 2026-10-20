@@ -1,10 +1,9 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { NavBar } from './components/NavBar';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Landing } from './pages/Landing';
 import { TestCatalog } from './pages/TestCatalog';
-import { TestDetail } from './pages/TestDetail';
 import { TestOverview } from './pages/TestOverview';
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
@@ -12,32 +11,41 @@ import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
 import { CheckoutCancel } from './pages/CheckoutCancel';
 import { Terms } from './pages/Terms';
-import { CheckoutSuccess } from './pages/CheckoutSuccess';
-import { Instructions } from './pages/Instructions';
-import { TestRunner } from './pages/TestRunner';
-import { ResultPage } from './pages/ResultPage';
-import { Dashboard } from './pages/Dashboard';
 import { About } from './pages/About';
-import { Profile } from './pages/Profile';
 import { NotFound } from './pages/NotFound';
 import { Footer } from './components/Footer';
-import { AdminHome } from './admin/AdminHome';
 import { ReferralPromoModal } from './components/ReferralPromoModal';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Seo } from './components/Seo';
 import { TestsApi } from './api/endpoints';
 import { seoSiteUrl } from './components/Seo';
+import { LoadingScreen } from './components/LoadingScreen';
+
+// Private, payment and admin screens are split into separate chunks so public pages load less JavaScript.
+const TestDetail = lazy(() => import('./pages/TestDetail').then((module) => ({ default: module.TestDetail })));
+const CheckoutSuccess = lazy(() => import('./pages/CheckoutSuccess').then((module) => ({ default: module.CheckoutSuccess })));
+const Instructions = lazy(() => import('./pages/Instructions').then((module) => ({ default: module.Instructions })));
+const TestRunner = lazy(() => import('./pages/TestRunner').then((module) => ({ default: module.TestRunner })));
+const ResultPage = lazy(() => import('./pages/ResultPage').then((module) => ({ default: module.ResultPage })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then((module) => ({ default: module.Dashboard })));
+const Profile = lazy(() => import('./pages/Profile').then((module) => ({ default: module.Profile })));
+const AdminHome = lazy(() => import('./admin/AdminHome').then((module) => ({ default: module.AdminHome })));
 
 function RouteSeo() {
-  const { pathname } = useLocation();
+  const { pathname: rawPathname } = useLocation();
+  const pathname = rawPathname.length > 1 ? rawPathname.replace(/\/+$/, '') : rawPathname;
   const [test, setTest] = useState<any>(null);
+  const [testMissing, setTestMissing] = useState(false);
   const testSlug = pathname.match(/^\/tests\/([^/]+)$/)?.[1];
-  useEffect(() => { let cancelled = false; setTest(null); if (testSlug) TestsApi.getBySlug(testSlug).then((result) => { if (!cancelled) setTest(result.test); }).catch(() => undefined); return () => { cancelled = true; }; }, [testSlug]);
-  const noIndex = /^\/(dashboard|profile|admin|results|attempts|checkout|login|register|forgot-password|reset-password)(\/|$)/.test(pathname) || /^\/tests\/[^/]+\/checkout(\/|$)/.test(pathname);
-  const title = pathname === '/' ? 'My Inner | Self-Awareness & Personal Growth' : pathname === '/tests' ? 'Self-Discovery Tests | My Inner' : pathname === '/about' ? 'About My Inner | Self-Discovery & Personal Growth' : pathname === '/terms' ? 'Terms of Service | My Inner' : pathname === '/login' ? 'Log In | My Inner' : pathname === '/register' ? 'Create an Account | My Inner' : pathname === '/forgot-password' ? 'Reset Your Password | My Inner' : undefined;
+  useEffect(() => { let cancelled = false; setTest(null); setTestMissing(false); if (testSlug) TestsApi.getBySlug(testSlug).then((result) => { if (!cancelled) setTest(result.test); }).catch(() => { if (!cancelled) setTestMissing(true); }); return () => { cancelled = true; }; }, [testSlug]);
+  const isPrivate = /^\/(dashboard|profile|admin|results|attempts|checkout|login|register|forgot-password|reset-password)(\/|$)/.test(pathname) || /^\/tests\/[^/]+\/checkout(\/|$)/.test(pathname);
+  // Unknown URLs render the NotFound page with HTTP 200 (SPA rewrite), so keep them out of the index to avoid soft-404s.
+  const isKnownPublic = /^\/(tests|about|terms)?$/.test(pathname) || (Boolean(testSlug) && !testMissing);
+  const noIndex = isPrivate || !isKnownPublic;
+  const title = pathname === '/' ? 'My Inner | Self-Awareness & Personal Growth' : pathname === '/tests' ? 'Self-Discovery Tests | My Inner' : pathname === '/about' ? 'About My Inner | Self-Discovery & Personal Growth' : pathname === '/terms' ? 'Terms of Service | My Inner' : pathname === '/login' ? 'Log In | My Inner' : pathname === '/register' ? 'Create an Account | My Inner' : pathname === '/forgot-password' ? 'Reset Your Password | My Inner' : !isPrivate && !isKnownPublic ? 'Page Not Found | My Inner' : undefined;
   const description = pathname === '/' ? 'Explore My Inner for self-reflection, personal growth, and emotional wellness resources designed to support your journey toward greater self-awareness.' : pathname === '/tests' ? 'Explore self-discovery assessments from My Inner for personality, emotions, relationships, and personal reflection.' : pathname === '/about' ? 'Learn about My Inner and our approach to self-discovery, personal growth, and thoughtful assessments.' : pathname === '/terms' ? 'Read the My Inner terms of service for using our self-discovery assessment platform.' : undefined;
-  const testImage = test?.imageUrl || '/hero-background.png';
-  const jsonLd = test ? { '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${seoSiteUrl}/tests/${test.slug}`, image: testImage.startsWith('http') ? testImage : `${seoSiteUrl}${testImage}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl } } : pathname === '/' ? [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: seoSiteUrl, logo: `${seoSiteUrl}/my-inner-logo.png` }, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${seoSiteUrl}/` }] : undefined;
+  const testImage = test?.imageUrl || '/og-image.jpg';
+  const jsonLd = test ? { '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${seoSiteUrl}/tests/${test.slug}`, image: testImage.startsWith('http') ? testImage : `${seoSiteUrl}${testImage}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl } } : pathname === '/' ? [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: seoSiteUrl, logo: `${seoSiteUrl}/logo-512.png` }, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${seoSiteUrl}/` }] : undefined;
   return <Seo title={test ? `${test.name} | My Inner` : title} description={test?.description ?? description} canonicalPath={test ? `/tests/${test.slug}` : undefined} image={testImage} noIndex={noIndex} jsonLd={jsonLd} />;
 }
 
@@ -47,6 +55,7 @@ export default function App() {
       <RouteSeo />
       <AnnouncementBar /><NavBar />
       <main className="flex-1">
+        <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/tests" element={<TestCatalog />} />
@@ -103,6 +112,7 @@ export default function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </Suspense>
       </main>
       <Footer />
       <ReferralPromoModal />

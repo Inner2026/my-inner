@@ -20,7 +20,7 @@ export function NavBar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <Link to="/" className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-[#302447]">
           <span className="relative h-10 w-10 overflow-hidden rounded-xl border border-[#e5d9e7] bg-white shadow-sm">
-            <img src="/my-inner-logo.png" alt="" className="absolute left-0 top-0 h-auto w-full" />
+            <img src="/my-inner-logo.webp" alt="" className="absolute left-0 top-0 h-auto w-full" />
           </span>
           <span>My Inner</span>
         </Link>
