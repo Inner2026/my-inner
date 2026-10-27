@@ -45,6 +45,12 @@ function isExpired(purchase: { expiresAt?: Date | null; createdAt?: Date }) {
   return Boolean(expiry && expiry <= new Date());
 }
 
+/** Cancel a still-pending (never captured) checkout and give back any reserved referral credit. */
+async function cancelUnpaidCheckout(purchase: any) {
+  const result = await Purchase.updateOne({ _id: purchase._id, status: 'pending' }, { $set: { status: 'failed' } });
+  if (result.modifiedCount === 1) await releaseCredit(purchase);
+}
+
 async function recoverExpiredPurchase(purchase: any) {
   if (purchase.status === 'pending') {
     await Purchase.updateOne(
@@ -92,10 +98,16 @@ export async function initiatePurchase(userId: Types.ObjectId, testSlug: string,
 
   const activePurchase = await Purchase.findOne({ userId: user._id, testId: quote.testId, status: { $in: ['pending', 'capturing'] } });
   if (activePurchase) {
-    if (isExpired(activePurchase)) {
+    if (activePurchase.status === 'pending') {
+      // An unpaid checkout (e.g. a PayPal window the user abandoned, or a
+      // checkout started before applying a coupon) must not block a new one.
+      // Nothing was charged: PayPal money only moves when our backend
+      // captures the order, and capture refuses non-pending purchases.
+      await cancelUnpaidCheckout(activePurchase);
+    } else if (isExpired(activePurchase)) {
       await recoverExpiredPurchase(activePurchase);
     } else {
-      throw AppError.conflict('This test already has an active checkout.');
+      throw AppError.conflict('Your previous payment for this test is still being confirmed. Please wait a minute and refresh the page.');
     }
   }
 

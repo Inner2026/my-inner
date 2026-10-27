@@ -55,10 +55,26 @@ describe('expired purchase recovery', () => {
     const result = await initiatePurchase(userId, 'test');
 
     expect(Purchase.updateOne).toHaveBeenCalledWith(
-      { _id: 'old', status: 'pending', expiresAt: expect.any(Date) },
+      { _id: 'old', status: 'pending' },
       { $set: { status: 'failed' } }
     );
     expect(result.purchase._id).toBe('purchase-new');
+  });
+
+  it('cancels a NON-expired unpaid checkout instead of blocking a new one', async () => {
+    mockLookups({ _id: 'old', status: 'pending', expiresAt: new Date(Date.now() + 20 * 60_000) });
+
+    const result = await initiatePurchase(userId, 'test');
+
+    expect(Purchase.updateOne).toHaveBeenCalledWith({ _id: 'old', status: 'pending' }, { $set: { status: 'failed' } });
+    expect(Purchase.create).toHaveBeenCalled();
+    expect(result.approvalUrl).toBe('https://paypal.test/approve');
+  });
+
+  it('still blocks while a previous payment is being captured', async () => {
+    mockLookups({ _id: 'old', status: 'capturing', expiresAt: new Date(Date.now() + 20 * 60_000) });
+    await expect(initiatePurchase(userId, 'test')).rejects.toThrow(/still being confirmed/);
+    expect(Purchase.create).not.toHaveBeenCalled();
   });
 
   it('reconciles an expired capturing checkout before creating a new one', async () => {
