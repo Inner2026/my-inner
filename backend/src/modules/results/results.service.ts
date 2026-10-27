@@ -35,6 +35,7 @@ export async function getUserResult(userId: Types.ObjectId, attemptId: string) {
     testName: test?.name ?? 'Unknown test',
     completedAt: attempt.completedAt,
     categoryScores: attempt.result.categoryScores,
+    rawScores: attempt.result.rawScores,
     resultKey: attempt.result.resultKey,
     snapshot: attempt.result.snapshot
   };
