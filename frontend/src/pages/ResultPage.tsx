@@ -277,6 +277,62 @@ function MbtiResultView({ result, retaking, onRetake }: { result: ResultDetail; 
   </div>;
 }
 
+/**
+ * Generic view for the "Highest category wins" scoring method (e.g. the
+ * Energy Animal test). Driven by the scoring output, not by a test slug, so
+ * any future pick-one personality test gets it automatically.
+ */
+function HighestCategoryResultView({ result, retaking, onRetake }: { result: ResultDetail; retaking: boolean; onRetake: () => void }) {
+  const raw = (result.rawScores ?? {}) as { outcome?: 'single' | 'blend' | 'mixed'; counts?: Record<string, number>; total?: number; percentages?: Record<string, number>; primaryKeys?: string[]; secondaryKeys?: string[]; categoryNames?: Record<string, string> };
+  const names = raw.categoryNames ?? {};
+  const percentages = raw.percentages ?? (result.categoryScores as Record<string, number>);
+  const counts = raw.counts ?? {};
+  const outcome = raw.outcome ?? (result.snapshot.results.length > 2 ? 'mixed' : result.snapshot.results.length === 2 ? 'blend' : 'single');
+  const items = result.snapshot.results;
+  const secondary = raw.secondaryKeys ?? [];
+  const label = (key: string) => names[key] ?? key;
+  const ranked = Object.keys(percentages).sort((a, b) => (percentages[b] ?? 0) - (percentages[a] ?? 0));
+  const heading = outcome === 'single' ? (items[0]?.title ?? result.snapshot.title) : result.snapshot.title;
+  const eyebrow = outcome === 'single' ? 'Your energy' : outcome === 'blend' ? 'Your blended energy' : 'Your mixed energy';
+  const intro = outcome === 'blend'
+    ? `Your answers are evenly split between two energies, so your aura blends ${items.map((i) => label(i.resultKey)).join(' and ')}.`
+    : outcome === 'mixed'
+      ? `Your answers are evenly shared across ${items.length} energies: ${items.map((i) => label(i.resultKey)).join(', ')}. You move easily between them.`
+      : null;
+  const sectionFields: Array<[string, keyof typeof items[number]]> = [['Strengths', 'strengths'], ['Challenges', 'challenges'], ['Communication', 'communication'], ['Relationships', 'relationships'], ['Growth opportunities', 'recommendations']];
+
+  return <div className="result-page min-h-[calc(100vh-74px)] px-4 py-8 sm:px-8 sm:py-12">
+    <div className="mx-auto max-w-5xl">
+      <section className="rounded-[2rem] border border-[#eee5ed] bg-gradient-to-br from-[#faf5fd] via-white to-[#fff8ef] px-6 py-9 shadow-sm sm:px-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#765c8d]">{eyebrow}</p>
+        <p className="mt-4 text-sm text-[#777080]">{result.testName}</p>
+        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-[#302447] sm:text-5xl">{heading}</h1>
+        {outcome === 'single' && items[0] && names[items[0].resultKey] && names[items[0].resultKey] !== heading && <p className="mt-2 text-lg font-medium text-[#765c8d]">{names[items[0].resultKey]}</p>}
+        {intro && <p className="mt-4 max-w-2xl leading-7 text-[#5f6270]">{intro}</p>}
+        {outcome === 'single' && secondary.length > 0 && <p className="mt-5 inline-flex flex-wrap gap-1 rounded-full bg-white px-4 py-2 text-sm text-[#5d4b82] shadow-sm"><span className="font-semibold">{secondary.length > 1 ? 'Secondary energies' : 'Secondary energy'}:</span> {secondary.map((key) => `${label(key)} (${percentages[key] ?? 0}%)`).join(', ')}</p>}
+      </section>
+
+      {items.map((item) => <section key={item.resultKey} className="mt-5 rounded-2xl border border-[#eee5ed] bg-white p-6 shadow-sm sm:p-8">
+        {items.length > 1 && <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#765c8d]">{label(item.resultKey)} · {percentages[item.resultKey] ?? 0}%</p>}
+        {items.length > 1 && <h2 className="mt-1 text-2xl font-semibold text-[#302447]">{item.title}</h2>}
+        {item.imageUrl && <img src={item.imageUrl} alt={item.title} className="mt-4 max-h-72 w-full rounded-xl object-cover" />}
+        <p className="mt-4 whitespace-pre-line leading-7 text-[#5f6270]">{item.description}</p>
+        {sectionFields.filter(([, field]) => Boolean(item[field])).map(([title, field]) => <div key={title} className="mt-5"><h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-600">{title}</h3><p className="mt-2 whitespace-pre-line leading-7 text-slate-600">{String(item[field])}</p></div>)}
+      </section>)}
+
+      {ranked.length > 0 && <section className="mt-5 rounded-2xl border border-[#eee5ed] bg-white p-6 shadow-sm sm:p-8">
+        <h2 className="text-sm font-semibold text-[#302447]">Your energy mix</h2>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">{ranked.map((key, index) => { const pct = Math.max(0, Math.min(100, Number(percentages[key] ?? 0))); return <div key={key}><div className="flex justify-between gap-3 text-xs font-semibold text-[#666879]"><span>{label(key)}</span><span>{pct}%{typeof counts[key] === 'number' && raw.total ? ` · ${counts[key]}/${raw.total}` : ''}</span></div><div className="mt-2 h-2 rounded-full bg-[#eeeaf1]"><span className={`block h-2 rounded-full ${index === 0 ? 'bg-[#765c8d]' : 'bg-[#b9a6cb]'}`} style={{ width: `${pct}%` }} /></div></div>; })}</div>
+      </section>}
+
+      <div className="mt-8 flex flex-wrap gap-3">
+        <button onClick={onRetake} disabled={retaking} className="rounded-full bg-violet-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-800 disabled:opacity-50">{retaking ? 'Starting...' : 'Retake within 90 days'}</button>
+        <Link to="/dashboard" className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-700">View all my results</Link>
+      </div>
+    </div>
+  </div>;
+}
+
 export function ResultPage() {
   const { attemptId } = useParams<{ attemptId: string }>();
   const navigate = useNavigate();
@@ -323,6 +379,7 @@ export function ResultPage() {
     }
   }
 
+  if ((result.rawScores as any)?.method === 'CATEGORY_HIGHEST_SCORE') return <HighestCategoryResultView result={result} retaking={retaking} onRetake={retakeTest} />;
   if (result.testSlug === 'inner-child') return <InnerChildResultView result={result} retaking={retaking} onRetake={retakeTest} />;
   if (result.testSlug === 'five-love-languages') return <LoveLanguageResultView result={result} retaking={retaking} onRetake={retakeTest} />;
   if (result.testSlug === 'cube-personality') return <CubeResultView result={result} retaking={retaking} onRetake={retakeTest} />;
