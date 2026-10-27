@@ -23,6 +23,7 @@ export const AdminApi = {
   updateTest: (testId: string, patch: Record<string, unknown>) =>
     apiRequest<{ test: any }>(`/admin/tests/${testId}`, { method: 'PATCH', body: patch }),
   archiveTest: (testId: string) => apiRequest<{ test: any }>(`/admin/tests/${testId}`, { method: 'DELETE' }),
+  deleteTest: (testId: string) => apiRequest<{ mode: 'deleted' | 'removed'; testId: string; purchases: number; attempts: number }>(`/admin/tests/${testId}/permanent`, { method: 'DELETE' }),
 
   createVersion: (input: {
     testId: string;
