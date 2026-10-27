@@ -11,6 +11,8 @@ export interface ITest extends Document {
   price: { amount: number; currency: string };
   active: boolean;
   currentVersionId: Types.ObjectId | null;
+  /** Set when an admin removes a test that has customer history: hidden everywhere, history kept. */
+  removedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -28,7 +30,8 @@ const testSchema = new Schema<ITest>(
       currency: { type: String, required: true, default: 'usd' }
     },
     active: { type: Boolean, default: false },
-    currentVersionId: { type: Schema.Types.ObjectId, ref: 'TestVersion', default: null }
+    currentVersionId: { type: Schema.Types.ObjectId, ref: 'TestVersion', default: null },
+    removedAt: { type: Date, default: null }
   },
   { timestamps: true }
 );

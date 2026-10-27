@@ -8,7 +8,8 @@ export type ScoringMethod =
   | 'TALLY_MAPPING'
   | 'CATEGORY_AVERAGE_BAND'
   | 'FRAMEWORK_SNIPPET_ASSEMBLY'
-  | 'TRAIT_BAND_ASSEMBLY';
+  | 'TRAIT_BAND_ASSEMBLY'
+  | 'CATEGORY_HIGHEST_SCORE';
 
 export type TestVersionStatus = 'draft' | 'complete' | 'published' | 'archived';
 
@@ -62,7 +63,8 @@ const testVersionSchema = new Schema<ITestVersion>(
         'TALLY_MAPPING',
         'CATEGORY_AVERAGE_BAND',
         'FRAMEWORK_SNIPPET_ASSEMBLY',
-        'TRAIT_BAND_ASSEMBLY'
+        'TRAIT_BAND_ASSEMBLY',
+        'CATEGORY_HIGHEST_SCORE'
       ],
       required: true
     },
