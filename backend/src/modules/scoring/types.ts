@@ -23,6 +23,8 @@ export interface ScoringInput {
 export interface ScoringOutput {
   /** One or more ResultDefinition.resultKey values this outcome matches. */
   resultKeys: string[];
+  /** Optional heading for outcomes that combine several results (e.g. a tie). */
+  title?: string;
   rawScores: Record<string, unknown>;
   categoryScores: Record<string, unknown>;
 }

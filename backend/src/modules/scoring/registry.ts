@@ -7,6 +7,7 @@ import { tallyMappingStrategy } from './strategies/tallyMapping';
 import { categoryAverageBandStrategy } from './strategies/categoryAverageBand';
 import { frameworkSnippetAssemblyStrategy } from './strategies/frameworkSnippetAssembly';
 import { traitBandAssemblyStrategy } from './strategies/traitBandAssembly';
+import { categoryHighestScoreStrategy } from './strategies/categoryHighestScore';
 
 /**
  * The ONLY place that maps a scoring method to its implementation.
@@ -21,5 +22,6 @@ export const scoringStrategyRegistry: Record<ScoringMethod, ScoringStrategy> = {
   TALLY_MAPPING: tallyMappingStrategy,
   CATEGORY_AVERAGE_BAND: categoryAverageBandStrategy,
   FRAMEWORK_SNIPPET_ASSEMBLY: frameworkSnippetAssemblyStrategy,
-  TRAIT_BAND_ASSEMBLY: traitBandAssemblyStrategy
+  TRAIT_BAND_ASSEMBLY: traitBandAssemblyStrategy,
+  CATEGORY_HIGHEST_SCORE: categoryHighestScoreStrategy
 };

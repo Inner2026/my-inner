@@ -139,7 +139,7 @@ export async function scoreAttempt(
           results
         }
       : {
-          title: 'Your Combined Result',
+          title: output.title ?? 'Your Combined Result',
           description: results.map((r) => `${r.title}: ${r.description}`).join('\n\n'),
           strengths: results.map((r) => r.strengths).filter(Boolean).join('\n') || null,
           challenges: results.map((r) => r.challenges).filter(Boolean).join('\n') || null,
