@@ -33,7 +33,7 @@ export async function listPublicTests() {
 
 export async function getPublicTestBySlug(slug: string) {
   const test = await Test.findOne({ slug }).lean();
-  if (!test) {
+  if (!test || test.removedAt) {
     throw AppError.notFound('Test not found.');
   }
   const version = test.currentVersionId
