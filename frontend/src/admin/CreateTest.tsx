@@ -10,7 +10,8 @@ const scoringMethods = [
   ['TALLY_MAPPING', 'Tally mapping'],
   ['CATEGORY_AVERAGE_BAND', 'Category average bands'],
   ['FRAMEWORK_SNIPPET_ASSEMBLY', 'Framework snippet assembly'],
-  ['TRAIT_BAND_ASSEMBLY', 'Trait bands']
+  ['TRAIT_BAND_ASSEMBLY', 'Trait bands'],
+  ['CATEGORY_HIGHEST_SCORE', 'Highest category wins (pick-one personality)']
 ] as const;
 
 export function CreateTest() {
