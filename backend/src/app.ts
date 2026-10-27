@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import cors from 'cors';
+import { buildCorsOrigins } from './utils/corsOrigins';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { env } from './config/env';
@@ -20,7 +21,7 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors({ origin: env.clientOrigin, credentials: true }));
+  app.use(cors({ origin: buildCorsOrigins(env.clientOrigin), credentials: true }));
   app.use(morgan(env.isProd ? 'combined' : 'dev'));
 
   // Vercel keeps the Express app warm between requests but does not run the
