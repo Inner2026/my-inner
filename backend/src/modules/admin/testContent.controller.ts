@@ -42,6 +42,10 @@ export const archiveTest = asyncHandler(async (req: Request, res: Response) => {
   res.json({ test: await svc.archiveTest(req.params.testId) });
 });
 
+export const deleteTest = asyncHandler(async (req: Request, res: Response) => {
+  res.json(await svc.deleteTest(req.params.testId));
+});
+
 export const listTests = asyncHandler(async (req: Request, res: Response) => {
   const page = Math.max(1, Number(req.query.page ?? 1) || 1);
   const pageSize = Math.min(100, Math.max(1, Number(req.query.pageSize ?? 25) || 25));

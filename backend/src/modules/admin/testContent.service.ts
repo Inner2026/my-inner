@@ -5,6 +5,8 @@ import { Question } from '../../models/Question';
 import { ResultDefinition } from '../../models/ResultDefinition';
 import { TestAttempt } from '../../models/TestAttempt';
 import { Purchase } from '../../models/Purchase';
+import { TestRating } from '../../models/TestRating';
+import { MarketingDelivery } from '../../models/MarketingDelivery';
 import { AppError } from '../../utils/AppError';
 import { validateTestVersionForActivation } from './validation.service';
 import { scoreAttempt } from '../scoring/scoringEngine';
@@ -55,6 +57,7 @@ export async function createTest(input: { slug: string; name: string; descriptio
 export async function updateTest(testId: string, patch: Partial<{ name: string; description: string; imageUrl: string; priceCents: number; active: boolean; marketingSubject: string; marketingMessage: string }>) {
   const test = await Test.findById(testId);
   if (!test) throw AppError.notFound('Test not found.');
+  if (test.removedAt) throw AppError.badRequest('This test was removed and can no longer be edited or activated.');
   if (patch.name !== undefined) { if (!patch.name.trim()) throw AppError.badRequest('Name cannot be empty.'); test.name = patch.name.trim(); }
   if (patch.description !== undefined) { if (!patch.description.trim()) throw AppError.badRequest('Description cannot be empty.'); test.description = patch.description.trim(); }
   if (patch.marketingSubject !== undefined) test.marketingSubject = patch.marketingSubject.trim();
@@ -92,8 +95,49 @@ export async function archiveTest(testId: string) {
   return test;
 }
 
+/**
+ * Delete a test from the admin.
+ *
+ * - No purchases or attempts: the test and everything that belongs only to it
+ *   (versions, questions, result definitions, ratings, marketing deliveries)
+ *   are permanently deleted.
+ * - Has purchases or attempts: customers' orders and saved results must keep
+ *   working, so the test is deactivated and marked removed instead. It then
+ *   disappears from the admin list and the public catalog. Its slug is kept
+ *   unchanged so existing customers' result pages keep rendering correctly.
+ */
+export async function deleteTest(testId: string): Promise<{ mode: 'deleted' | 'removed'; testId: string; purchases: number; attempts: number }> {
+  if (!Types.ObjectId.isValid(testId)) throw AppError.badRequest('Invalid test id.');
+  const test = await Test.findById(testId);
+  if (!test) throw AppError.notFound('Test not found. It may already have been deleted.');
+
+  const [purchases, attempts] = await Promise.all([
+    Purchase.countDocuments({ testId: test._id }),
+    TestAttempt.countDocuments({ testId: test._id })
+  ]);
+
+  if (purchases > 0 || attempts > 0) {
+    test.active = false;
+    test.removedAt = new Date();
+    await test.save();
+    return { mode: 'removed', testId: test._id.toString(), purchases, attempts };
+  }
+
+  const versionIds = (await TestVersion.find({ testId: test._id }).select('_id').lean()).map((v) => v._id);
+  await Promise.all([
+    Question.deleteMany({ testVersionId: { $in: versionIds } }),
+    ResultDefinition.deleteMany({ testVersionId: { $in: versionIds } }),
+    TestRating.deleteMany({ testId: test._id }),
+    MarketingDelivery.deleteMany({ testId: test._id })
+  ]);
+  await TestVersion.deleteMany({ testId: test._id });
+  await test.deleteOne();
+  return { mode: 'deleted', testId: test._id.toString(), purchases, attempts };
+}
+
 export async function listTestsAdmin(input: { search?: string; active?: boolean; page: number; pageSize: number }) {
-  const query: Record<string, unknown> = {};
+  // `removedAt: null` also matches tests created before the field existed.
+  const query: Record<string, unknown> = { removedAt: null };
   const search = input.search?.trim();
   if (search) { const safe = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); query.$or = [{ name: new RegExp(safe, 'i') }, { slug: new RegExp(safe, 'i') }]; }
   if (input.active !== undefined) query.active = input.active;

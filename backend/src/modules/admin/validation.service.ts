@@ -18,6 +18,85 @@ function fail(issues: ValidationIssue[], field: string, message: string) {
   issues.push({ field, message });
 }
 
+const OPTION_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+/** "Answer B" for the 2nd option -- matches how admins read the editor. */
+function answerLabel(question: IQuestion, optionIndex: number) {
+  const option = question.answerOptions[optionIndex];
+  const letter = OPTION_LETTERS[optionIndex] ?? String(optionIndex + 1);
+  const text = option?.text?.trim();
+  const short = text ? ` ("${text.length > 40 ? `${text.slice(0, 40)}...` : text}")` : '';
+  return `Answer ${letter}${short}`;
+}
+
+/** Lists every question/answer failing a check, e.g. "Question 6: Answer A, Answer B". */
+function describeOptionLocations(questions: IQuestion[], predicate: (option: IQuestion['answerOptions'][number]) => boolean, limit = 6) {
+  const parts: string[] = [];
+  for (const question of questions) {
+    const bad = question.answerOptions
+      .map((option, index) => (predicate(option) ? OPTION_LETTERS[index] ?? String(index + 1) : null))
+      .filter((v): v is string => v !== null);
+    if (bad.length > 0) parts.push(`Question ${question.order}: answer${bad.length > 1 ? 's' : ''} ${bad.join(', ')}`);
+  }
+  if (parts.length === 0) return '';
+  const shown = parts.slice(0, limit).join('; ');
+  return parts.length > limit ? `${shown}; and ${parts.length - limit} more question(s)` : shown;
+}
+
+const missingNumber = (o: { numericalValue?: number | null }) => o.numericalValue === null || o.numericalValue === undefined || Number.isNaN(o.numericalValue);
+
+/**
+ * "Highest category wins" (CATEGORY_HIGHEST_SCORE): each answer belongs to one
+ * category and adds its numericalValue to it. Dichotomy pairs, scoring
+ * directions, question category keys and score ranges are NOT used and are
+ * therefore never required here.
+ */
+function validateHighestScore(
+  version: ITestVersion,
+  questions: IQuestion[],
+  resultDefinitions: IResultDefinition[],
+  issues: ValidationIssue[]
+) {
+  const keys = version.categories.map((c) => c.key?.trim()).filter(Boolean) as string[];
+  if (keys.length < 2) {
+    fail(issues, 'categories', 'Add at least two scoring categories (for example Dolphin, Dog, Fox...) in the version settings.');
+  }
+  const duplicates = keys.filter((key, index) => keys.indexOf(key) !== index);
+  if (duplicates.length > 0) {
+    fail(issues, 'categories', `Category keys must be unique. Duplicated: ${[...new Set(duplicates)].join(', ')}.`);
+  }
+  const known = new Set(keys);
+
+  for (const question of questions) {
+    question.answerOptions.forEach((option, index) => {
+      const where = `Question ${question.order}, ${answerLabel(question, index)}`;
+      if (missingNumber(option)) {
+        fail(issues, 'answerOptions', `${where}: enter a numerical value (use 1 for one point).`);
+      } else if ((option.numericalValue as number) < 0) {
+        fail(issues, 'answerOptions', `${where}: the numerical value cannot be negative.`);
+      }
+      const category = (option.scoringCategory ?? option.resultMapping ?? '').trim();
+      if (!category) {
+        fail(issues, 'answerOptions', `${where}: choose a scoring category.`);
+      } else if (keys.length > 0 && !known.has(category)) {
+        fail(issues, 'answerOptions', `${where}: category "${category}" is not one of this test's categories (${keys.join(', ')}). Check the spelling.`);
+      }
+    });
+  }
+
+  const resultKeys = new Set(resultDefinitions.map((r) => r.resultKey));
+  for (const key of keys) {
+    if (!resultKeys.has(key)) {
+      fail(issues, 'resultDefinitions', `Category "${key}" has no result. Add a result whose Result key is exactly "${key}".`);
+    }
+  }
+  for (const definition of resultDefinitions) {
+    if (keys.length > 0 && !known.has(definition.resultKey)) {
+      fail(issues, 'resultDefinitions', `Result "${definition.title || definition.resultKey}" uses Result key "${definition.resultKey}", which does not match any category (${keys.join(', ')}).`);
+    }
+  }
+}
+
 /**
  * Method-specific completeness rules, keyed by scoringMethod -- never by test id.
  * This mirrors the scoring engine's own dispatch design (see scoring/registry.ts).
@@ -25,9 +104,10 @@ function fail(issues: ValidationIssue[], field: string, message: string) {
 function validateByScoringMethod(
   version: ITestVersion,
   questions: IQuestion[],
-  resultCount: number,
+  resultDefinitions: IResultDefinition[],
   issues: ValidationIssue[]
 ) {
+  const resultCount = resultDefinitions.length;
   const allOptions = questions.flatMap((q) => q.answerOptions);
 
   switch (version.scoringMethod) {
@@ -37,10 +117,10 @@ function validateByScoringMethod(
       if (!Array.isArray(dichotomies) || dichotomies.length === 0) {
         fail(issues, 'scoringConfig', 'scoringConfig.dichotomies (e.g. [["E","I"], ...]) is required for this scoring method.');
       }
-      const missingWeights = allOptions.filter((o) => o.numericalValue === null || o.numericalValue === undefined);
-      if (missingWeights.length > 0) fail(issues, 'answerOptions', 'All answer options must have a numericalValue (weight).');
-      const missingPole = questions.filter((q) => q.answerOptions.some((o) => !o.scoringCategory || !o.scoringDirection));
-      if (missingPole.length > 0) fail(issues, 'answerOptions', 'Every answer option needs a scoringCategory and scoringDirection.');
+      const missingWeights = describeOptionLocations(questions, missingNumber);
+      if (missingWeights) fail(issues, 'answerOptions', `All answer options must have a numericalValue (weight). Missing on ${missingWeights}.`);
+      const missingPole = describeOptionLocations(questions, (o) => !o.scoringCategory || !o.scoringDirection);
+      if (missingPole) fail(issues, 'answerOptions', `Every answer option needs a scoringCategory and scoringDirection. Missing on ${missingPole}.`);
       if (resultCount === 0) fail(issues, 'resultDefinitions', 'At least one result definition is required (e.g. one per personality type).');
       break;
     }
@@ -48,8 +128,8 @@ function validateByScoringMethod(
       if ((version.scoringConfig as Record<string, unknown>)?.pendingContentConfirmation === true) {
         fail(issues, 'scoringConfig', 'MISSING FROM CLIENT SPECIFICATION: deterministic Inner Child result bands/analysis are not defined.');
       }
-      const missingValue = allOptions.some((o) => o.numericalValue === null || o.numericalValue === undefined);
-      if (missingValue) fail(issues, 'answerOptions', 'All answer options must have a numericalValue.');
+      const missingValue = describeOptionLocations(questions, missingNumber);
+      if (missingValue) fail(issues, 'answerOptions', `All answer options must have a numericalValue. Missing on ${missingValue}.`);
       if (resultCount === 0) fail(issues, 'resultDefinitions', 'At least one score-range result definition is required.');
       break;
     }
@@ -58,10 +138,10 @@ function validateByScoringMethod(
         fail(issues, 'scoringConfig', 'MISSING FROM CLIENT SPECIFICATION: deterministic SELF/PARTNER comparison and final interpretation are not defined.');
       }
       if (version.categories.length < 2) fail(issues, 'categories', 'At least two categories are required for a ranking test.');
-      const missingValue = allOptions.some((o) => o.numericalValue === null || o.numericalValue === undefined);
-      if (missingValue) fail(issues, 'answerOptions', 'All answer options must have a numericalValue.');
-      const missingCategory = questions.some((q) => !q.categoryKey);
-      if (missingCategory) fail(issues, 'questions', 'Every question must be assigned a category.');
+      const missingValue = describeOptionLocations(questions, missingNumber);
+      if (missingValue) fail(issues, 'answerOptions', `All answer options must have a numericalValue. Missing on ${missingValue}.`);
+      const missingCategory = questions.filter((q) => !q.categoryKey).map((q) => q.order);
+      if (missingCategory.length > 0) fail(issues, 'questions', `Every question must be assigned a category. Missing on question${missingCategory.length > 1 ? 's' : ''} ${missingCategory.join(', ')}. (For tests where each answer belongs to a different category, use the "Highest category wins" scoring method instead.)`);
       break;
     }
     case 'CORRECT_ANSWER_PERCENTAGE': {
@@ -74,8 +154,8 @@ function validateByScoringMethod(
       if ((version.scoringConfig as Record<string, unknown>)?.pendingContentConfirmation === true) {
         fail(issues, 'scoringConfig', 'MISSING FROM CLIENT FILES: Question 30 and its answer mappings.');
       }
-      const missingMapping = allOptions.some((o) => !o.resultMapping);
-      if (missingMapping) fail(issues, 'answerOptions', 'Every answer option must have a resultMapping (e.g. an animal key).');
+      const missingMapping = describeOptionLocations(questions, (o) => !o.resultMapping);
+      if (missingMapping) fail(issues, 'answerOptions', `Every answer option must have a resultMapping (e.g. an animal key). Missing on ${missingMapping}.`);
       if (resultCount === 0) fail(issues, 'resultDefinitions', 'Result definitions are required for the possible primary/secondary combinations.');
       break;
     }
@@ -94,9 +174,13 @@ function validateByScoringMethod(
     }
     case 'CATEGORY_AVERAGE_BAND': {
       if (version.categories.length === 0) fail(issues, 'categories', 'Categories are required for average-band scoring.');
-      const missingValue = allOptions.some((o) => o.numericalValue === null || o.numericalValue === undefined);
-      if (missingValue) fail(issues, 'answerOptions', 'All answer options must have a numericalValue.');
+      const missingValue = describeOptionLocations(questions, missingNumber);
+      if (missingValue) fail(issues, 'answerOptions', `All answer options must have a numericalValue. Missing on ${missingValue}.`);
       if (resultCount === 0) fail(issues, 'resultDefinitions', 'Band-based result definitions are required per category.');
+      break;
+    }
+    case 'CATEGORY_HIGHEST_SCORE': {
+      validateHighestScore(version, questions, resultDefinitions, issues);
       break;
     }
     default:
@@ -173,14 +257,15 @@ export async function validateTestVersionForActivation(testVersionId: Types.Obje
     const orders = questions.map((q) => q.order);
     const uniqueOrders = new Set(orders);
     if (uniqueOrders.size !== orders.length) {
-      fail(issues, 'questions', 'Question order values must be unique.');
+      const dupes = [...new Set(orders.filter((order, index) => orders.indexOf(order) !== index))];
+      fail(issues, 'questions', `Question order values must be unique. Used more than once: ${dupes.join(', ')}.`);
     }
     const emptyOptions = questions.filter((q) => !q.answerOptions || q.answerOptions.length < 2);
     if (emptyOptions.length > 0) {
-      fail(issues, 'answerOptions', 'Every question needs at least two answer options.');
+      fail(issues, 'answerOptions', `Every question needs at least two answer options. Check question${emptyOptions.length > 1 ? 's' : ''} ${emptyOptions.map((q) => q.order).join(', ')}.`);
     }
 
-    validateByScoringMethod(version, questions, resultCount, issues);
+    validateByScoringMethod(version, questions, resultDefinitions, issues);
   }
 
   // NOTE: an empty scoringConfig is not, by itself, a validation failure --

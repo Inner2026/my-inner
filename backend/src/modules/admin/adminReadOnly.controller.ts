@@ -26,7 +26,7 @@ export const overview = asyncHandler(async (_req: Request, res: Response) => {
     User.countDocuments(),
     User.countDocuments({ active: true }),
     User.countDocuments({ createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } }),
-    Test.countDocuments(),
+    Test.countDocuments({ removedAt: null }),
     Test.countDocuments({ active: true }),
     TestVersion.countDocuments({ status: 'draft' }),
     TestVersion.countDocuments({ status: 'published' }),

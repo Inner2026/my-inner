@@ -21,6 +21,7 @@ adminRouter.post('/tests/:testId/versions/make-latest-mbti-primary', content.mak
 adminRouter.post('/tests', content.createTest);
 adminRouter.patch('/tests/:testId', content.updateTest);
 adminRouter.delete('/tests/:testId', content.archiveTest);
+adminRouter.delete('/tests/:testId/permanent', content.deleteTest);
 
 // Versions
 adminRouter.get('/versions/:versionId', content.getVersion);
