@@ -86,6 +86,8 @@ export interface ResultDetail {
   testName: string;
   completedAt: string;
   categoryScores: Record<string, unknown>;
+  /** Strategy-specific raw scoring output (e.g. counts, outcome, secondary categories). */
+  rawScores?: Record<string, unknown>;
   resultKey: string;
   snapshot: {
     title: string;
