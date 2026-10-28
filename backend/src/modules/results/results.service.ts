@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { TestAttempt } from '../../models/TestAttempt';
 import { Test } from '../../models/Test';
+import { ResultDefinition } from '../../models/ResultDefinition';
 import { AppError } from '../../utils/AppError';
 
 export async function listUserResults(userId: Types.ObjectId) {
@@ -20,13 +21,28 @@ export async function listUserResults(userId: Types.ObjectId) {
   }));
 }
 
-/** Always renders from the frozen snapshot -- never re-fetches ResultDefinition live. */
+/**
+ * Renders from the frozen snapshot. The only exception: when a snapshot item has no
+ * image (e.g. the attempt was taken before result images were added), the image is
+ * filled in from the current ResultDefinition. Text content is never changed.
+ */
 export async function getUserResult(userId: Types.ObjectId, attemptId: string) {
   const attempt = await TestAttempt.findOne({ _id: attemptId, userId, status: 'submitted' }).lean();
   if (!attempt || !attempt.result) {
     throw AppError.notFound('Result not found.');
   }
   const test = await Test.findById(attempt.testId).lean();
+
+  const snapshot = attempt.result.snapshot;
+  let snapshotResults = snapshot?.results ?? [];
+  const keysMissingImage = snapshotResults.filter((item) => !item.imageUrl).map((item) => item.resultKey);
+  if (keysMissingImage.length > 0) {
+    const definitions = await ResultDefinition.find({ testVersionId: attempt.testVersionId, resultKey: { $in: keysMissingImage } })
+      .select('resultKey imageUrl')
+      .lean();
+    const imageByKey = new Map(definitions.filter((d) => d.imageUrl).map((d) => [d.resultKey, d.imageUrl as string]));
+    snapshotResults = snapshotResults.map((item) => (item.imageUrl ? item : { ...item, imageUrl: imageByKey.get(item.resultKey) ?? item.imageUrl ?? null }));
+  }
 
   return {
     attemptId: attempt._id,
@@ -37,6 +53,6 @@ export async function getUserResult(userId: Types.ObjectId, attemptId: string) {
     categoryScores: attempt.result.categoryScores,
     rawScores: attempt.result.rawScores,
     resultKey: attempt.result.resultKey,
-    snapshot: attempt.result.snapshot
+    snapshot: snapshot ? { ...snapshot, results: snapshotResults } : snapshot
   };
 }
