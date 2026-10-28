@@ -315,7 +315,7 @@ function HighestCategoryResultView({ result, retaking, onRetake }: { result: Res
       {items.map((item) => <section key={item.resultKey} className="mt-5 rounded-2xl border border-[#eee5ed] bg-white p-6 shadow-sm sm:p-8">
         {items.length > 1 && <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#765c8d]">{label(item.resultKey)} · {percentages[item.resultKey] ?? 0}%</p>}
         {items.length > 1 && <h2 className="mt-1 text-2xl font-semibold text-[#302447]">{item.title}</h2>}
-        {item.imageUrl && <img src={item.imageUrl} alt={item.title} className="mt-4 max-h-72 w-full rounded-xl object-cover" />}
+        {item.imageUrl && <img src={item.imageUrl} alt={item.title} className="mx-auto mt-4 block h-auto w-full max-w-sm rounded-2xl object-contain shadow-sm" />}
         <p className="mt-4 whitespace-pre-line leading-7 text-[#5f6270]">{item.description}</p>
         {sectionFields.filter(([, field]) => Boolean(item[field])).map(([title, field]) => <div key={title} className="mt-5"><h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-600">{title}</h3><p className="mt-2 whitespace-pre-line leading-7 text-slate-600">{String(item[field])}</p></div>)}
       </section>)}
