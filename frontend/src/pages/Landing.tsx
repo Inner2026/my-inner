@@ -40,6 +40,5 @@ export function Landing() {
 
     <section className="border-y border-[#ebe4e8] bg-[#f5edf1] px-5 py-14 text-center"><h2 className="font-serif text-3xl text-[#283452]">Ready to discover more about yourself?</h2><p className="mt-2 text-sm text-[#737080]">Start with an assessment and take a closer look within.</p><Link to="/tests" className="mt-5 inline-block rounded-full bg-[#765c8d] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#765c8d]/20">Explore Tests →</Link></section>
 
-    <footer className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-8 text-sm text-[#737080] sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-2 font-serif text-lg text-[#302447]"><img src="/my-inner-logo.webp" alt="" className="h-10 w-10 object-contain object-top" />My Inner</div><p>Self-discovery. Understanding. Growth.</p><p className="text-xs">© 2026 My Inner. All rights reserved.</p></footer>
   </div>;
 }
