@@ -42,7 +42,14 @@ export const env = {
   smtpUser: process.env.SMTP_USER ?? '',
   smtpPassword: process.env.SMTP_PASSWORD ?? '',
   mailFrom: process.env.MAIL_FROM ?? 'admin@my-inner.com',
-  passwordResetUrl: process.env.PASSWORD_RESET_URL ?? 'http://localhost:5173/reset-password'
+  passwordResetUrl: process.env.PASSWORD_RESET_URL ?? 'http://localhost:5173/reset-password',
+  // My Inner AI (voice guide). OPENAI_API_KEY stays server-side only.
+  aiEnabled: process.env.AI_ENABLED === 'true',
+  openaiApiKey: process.env.OPENAI_API_KEY ?? '',
+  openaiRealtimeModel: process.env.OPENAI_REALTIME_MODEL ?? 'gpt-realtime',
+  openaiRealtimeVoice: process.env.OPENAI_REALTIME_VOICE ?? 'cedar',
+  aiSessionSeconds: parseInt(process.env.AI_SESSION_SECONDS ?? '600', 10),
+  aiMaxSessionsPerHour: parseInt(process.env.AI_MAX_SESSIONS_PER_IP_PER_HOUR ?? '6', 10)
 };
 
 export function validatePaymentConfiguration(paymentsMode = env.paymentsMode, isProd = env.isProd) {

@@ -1,0 +1,24 @@
+/* My Inner AI — Golden Thread. Uses only existing brand tokens (#765c8d plum, Inter). */
+.mi-ai { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+.mi-ai__thread { position: absolute; left: 46%; top: 56%; width: 30%; height: 120px; transform: translateY(-50%); }
+.mi-ai__ui { position: absolute; left: 61%; top: calc(56% + 64px); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: auto; width: max-content; max-width: min(92vw, 360px); }
+
+.mi-ai__pill, .mi-ai__controls { display: inline-flex; align-items: center; gap: 8px; font: 500 13px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; color: #765c8d; background: rgba(255,255,255,.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.mi-ai__pill--consent { cursor: default; border-radius: 14px; padding: 8px 12px; flex-wrap: wrap; justify-content: center; text-align: center; color: #62596c; }
+.mi-ai__controls { cursor: default; padding: 4px 6px 4px 12px; }
+.mi-ai__status { display: inline-flex; align-items: center; gap: 6px; min-width: 9.5em; }
+.mi-ai__rec { width: 6px; height: 6px; border-radius: 50%; background: #765c8d; } /* mic-active indicator */
+.mi-ai__icon { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; border: 0; background: transparent; color: #765c8d; cursor: pointer; }
+.mi-ai__icon:hover, .mi-ai__icon[aria-pressed="true"] { background: rgba(118,92,141,.1); }
+.mi-ai__link { border: 0; background: none; font: 600 13px Inter, sans-serif; color: #765c8d; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.mi-ai__link--muted { font-weight: 500; color: #62596c; }
+.mi-ai__note, .mi-ai__caption { margin: 0; font: 400 13px/1.45 Inter, sans-serif; color: #62596c; background: rgba(255,255,255,.6); padding: 6px 12px; border-radius: 12px; text-align: center; }
+.mi-ai__type input { width: min(80vw, 320px); font: 400 14px Inter, sans-serif; color: #302447; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(118,92,141,.35); background: rgba(255,255,255,.85); }
+.mi-ai button:focus-visible, .mi-ai input:focus-visible { outline: 2px solid #765c8d; outline-offset: 2px; }
+
+/* Tablet/mobile: the hero stacks, so the thread sits under the hero copy
+   and never overlaps the CTAs. Adjust the top value after checking the real layout. */
+@media (max-width: 900px) {
+  .mi-ai__thread { left: 8%; width: 84%; top: auto; bottom: 64px; transform: none; height: 80px; }
+  .mi-ai__ui { left: 0; right: 0; top: auto; bottom: 16px; transform: none; width: auto; max-width: none; padding: 0 16px; }
+}

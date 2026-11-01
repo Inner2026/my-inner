@@ -15,6 +15,7 @@ import { purchasesRouter } from './modules/purchases/purchases.routes';
 import { paypalWebhookRouter } from './modules/purchases/paypalWebhook.routes';
 import { referralsRouter } from './modules/referrals/referrals.routes';
 import { promotionRouter } from './modules/admin/promotion.routes';
+import { aiRouter } from './modules/ai/ai.routes';
 
 export function createApp() {
   const app = express();
@@ -72,6 +73,7 @@ export function createApp() {
   app.use('/api/referrals', referralsRouter);
   app.use('/api/promotion', promotionRouter);
   app.use('/api/admin', adminRouter);
+  app.use('/api/ai', aiRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

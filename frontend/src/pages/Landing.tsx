@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { TestsApi } from '../api/endpoints';
 import { PublicTest } from '../types';
 import { TestIcon } from '../components/TestIcon';
+import AmbientThread from '../ai/AmbientThread';
 
 function LineIcon({ type }: { type: 'lock' | 'spark' | 'shield' | 'search' | 'pen' }) {
   const paths = { lock: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /><path d="M12 14v3" /></>, spark: <><path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7Z" /><path d="m19 17 .7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7Z" /></>, shield: <><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6Z" /><path d="m8.5 12 2.2 2.2 4.8-5" /></>, search: <><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></>, pen: <><path d="m4 20 3.8-.8L19 8a2.1 2.1 0 0 0-3-3L4.8 16.2Z" /><path d="m14.5 6.5 3 3" /></> };
@@ -18,6 +19,10 @@ const testSymbols = [
   <TestIcon key="animal" slug="hidden-animal" className="h-6 w-6" />
 ];
 
+// My Inner AI is hidden until VITE_AI_ENABLED=true. Before going public you can
+// preview it on the live site by adding ?ai=preview to the homepage URL.
+const showAi = import.meta.env.VITE_AI_ENABLED === 'true' || (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('ai') === 'preview');
+
 export function Landing() {
   const [tests, setTests] = useState<PublicTest[]>([]);
   useEffect(() => { TestsApi.list().then((res) => setTests(res.tests)).catch(() => undefined); }, []);
@@ -28,6 +33,7 @@ export function Landing() {
       <div className="relative z-10 mx-auto max-w-6xl">
         <div className="max-w-xl"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#765c8d]">A space to look within</p><h1 className="mt-5 max-w-xl font-serif text-5xl leading-[1.02] tracking-tight text-[#283452] sm:text-7xl">Discover more<br />about yourself.</h1><p className="mt-6 max-w-lg text-lg leading-8 text-[#5e6170]">Explore thoughtfully designed assessments that help you understand your personality, emotions, relationships, and the way you see yourself.</p><div className="mt-8 flex flex-wrap gap-3"><Link to="/tests" className="rounded-full bg-[#765c8d] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#765c8d]/20 transition hover:-translate-y-0.5 hover:bg-[#634a78]">Explore Tests <span className="ml-2">→</span></Link><a href="#how-it-works" className="rounded-full border border-[#bcaec5] px-6 py-3.5 text-sm font-semibold text-[#4d4162] transition hover:bg-white/80">How It Works</a></div></div>
       </div>
+      {showAi && <AmbientThread />}
     </section>
 
     <section className="border-y border-[#ebe4e8] bg-white/65"><div className="mx-auto grid max-w-6xl gap-6 px-5 py-7 sm:grid-cols-3 sm:gap-0"><div className="flex items-start gap-4 border-[#ebe4e8] sm:border-r sm:px-7 first:sm:pl-0"><span className="rounded-full bg-[#f1eaf4] p-3 text-[#5c4772]"><LineIcon type="lock" /></span><div><h2 className="font-semibold">Private & Personal</h2><p className="mt-1 text-sm leading-5 text-[#737080]">Your results are saved securely to your account.</p></div></div><div className="flex items-start gap-4 border-[#ebe4e8] sm:border-r sm:px-7"><span className="rounded-full bg-[#f1eaf4] p-3 text-[#5c4772]"><LineIcon type="spark" /></span><div><h2 className="font-semibold">Thoughtfully Designed</h2><p className="mt-1 text-sm leading-5 text-[#737080]">Assessments built around structured questions and scoring.</p></div></div><div className="flex items-start gap-4 sm:pl-7"><span className="rounded-full bg-[#f1eaf4] p-3 text-[#5c4772]"><LineIcon type="shield" /></span><div><h2 className="font-semibold">Clear Results</h2><p className="mt-1 text-sm leading-5 text-[#737080]">Understand your result through a focused personal report.</p></div></div></div></section>
