@@ -1,0 +1,26 @@
+{
+  "mbti-style": {
+    "description": "Explore your personality pattern across four dimensions with this 93-question, MBTI-style self-discovery test. An original assessment, not the official MBTI.",
+    "image": "/og/mbti-style.png"
+  },
+  "inner-child": {
+    "image": "/og/inner-child.png"
+  },
+  "five-love-languages": {
+    "description": "How do you most like to give and receive love? Take the Five Love Languages test and get a clear, personal result to reflect on and share.",
+    "image": "/og/five-love-languages.png"
+  },
+  "hidden-animal": {
+    "image": "/og/hidden-animal.png"
+  },
+  "cube-personality": {
+    "description": "Imagine a cube, a ladder, a horse, flowers and a storm. This symbolic personality test reveals how you see yourself. For self-reflection and fun.",
+    "image": "/og/cube-personality.png"
+  },
+  "yourenergy": {
+    "image": "/og/yourenergy.png"
+  },
+  "employee": {
+    "image": "/og/employee.png"
+  }
+}
