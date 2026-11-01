@@ -20,6 +20,10 @@ import { Seo } from './components/Seo';
 import { TestsApi } from './api/endpoints';
 import { seoSiteUrl } from './components/Seo';
 import { LoadingScreen } from './components/LoadingScreen';
+import testSeoOverrides from './seo/testSeo.json';
+
+// Search-only overrides (meta description + social preview image) per test slug; visible page copy is unchanged.
+const testSeo = testSeoOverrides as Record<string, { description?: string; image?: string }>;
 
 // Private, payment and admin screens are split into separate chunks so public pages load less JavaScript.
 const TestDetail = lazy(() => import('./pages/TestDetail').then((module) => ({ default: module.TestDetail })));
@@ -44,9 +48,11 @@ function RouteSeo() {
   const noIndex = isPrivate || !isKnownPublic;
   const title = pathname === '/' ? 'My Inner | Self-Awareness & Personal Growth' : pathname === '/tests' ? 'Self-Discovery Tests | My Inner' : pathname === '/about' ? 'About My Inner | Self-Discovery & Personal Growth' : pathname === '/terms' ? 'Terms of Service | My Inner' : pathname === '/login' ? 'Log In | My Inner' : pathname === '/register' ? 'Create an Account | My Inner' : pathname === '/forgot-password' ? 'Reset Your Password | My Inner' : !isPrivate && !isKnownPublic ? 'Page Not Found | My Inner' : undefined;
   const description = pathname === '/' ? 'Explore My Inner for self-reflection, personal growth, and emotional wellness resources designed to support your journey toward greater self-awareness.' : pathname === '/tests' ? 'Explore self-discovery assessments from My Inner for personality, emotions, relationships, and personal reflection.' : pathname === '/about' ? 'Learn about My Inner and our approach to self-discovery, personal growth, and thoughtful assessments.' : pathname === '/terms' ? 'Read the My Inner terms of service for using our self-discovery assessment platform.' : undefined;
-  const testImage = test?.imageUrl || '/og-image.jpg';
-  const jsonLd = test ? { '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${seoSiteUrl}/tests/${test.slug}`, image: testImage.startsWith('http') ? testImage : `${seoSiteUrl}${testImage}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl } } : pathname === '/' ? [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: seoSiteUrl, logo: `${seoSiteUrl}/logo-512.png` }, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${seoSiteUrl}/` }] : undefined;
-  return <Seo title={test ? `${test.name} | My Inner` : title} description={test?.description ?? description} canonicalPath={test ? `/tests/${test.slug}` : undefined} image={testImage} noIndex={noIndex} jsonLd={jsonLd} />;
+  const seoOverride = test ? testSeo[test.slug] : undefined;
+  const testDescription = seoOverride?.description ?? test?.description;
+  const testImage = seoOverride?.image || test?.imageUrl || '/og-image.jpg';
+  const jsonLd = test ? { '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: testDescription, url: `${seoSiteUrl}/tests/${test.slug}`, image: testImage.startsWith('http') ? testImage : `${seoSiteUrl}${testImage}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl } } : pathname === '/' ? [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: seoSiteUrl, logo: `${seoSiteUrl}/logo-512.png` }, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${seoSiteUrl}/` }] : undefined;
+  return <Seo title={test ? `${test.name} | My Inner` : title} description={testDescription ?? description} canonicalPath={test ? `/tests/${test.slug}` : undefined} image={testImage} noIndex={noIndex} jsonLd={jsonLd} />;
 }
 
 export default function App() {
