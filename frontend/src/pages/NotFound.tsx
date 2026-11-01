@@ -16,7 +16,7 @@ export function NotFound() {
             </div>
 
             <h1 className="mt-6 text-5xl font-semibold tracking-[-0.05em] text-[#2d1f3e] sm:text-7xl">Page not found</h1>
-            <p className="mt-3 text-lg text-[#685d74]">هذه الصفحة غير موجودة</p>
+            <p className="mt-3 text-lg text-[#685d74]"> You just hit a route that doesn’t exist...</p>
 
             <p className="mt-6 max-w-xl text-sm leading-7 text-[#5f5b66] sm:text-base">
               The page you tried to open doesn’t exist, or it may have moved. Let’s take you back to a safe place and keep going.
