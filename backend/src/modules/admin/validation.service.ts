@@ -3,6 +3,7 @@ import { TestVersion, ITestVersion } from '../../models/TestVersion';
 import { Question, IQuestion } from '../../models/Question';
 import { ResultDefinition, IResultDefinition } from '../../models/ResultDefinition';
 import { containsPlaceholderText } from '../../utils/placeholderContent';
+import { requiredTallyResultKeys, tallyResultMode } from '../scoring/strategies/tallyMapping';
 
 export interface ValidationIssue {
   field: string;
@@ -157,6 +158,14 @@ function validateByScoringMethod(
       const missingMapping = describeOptionLocations(questions, (o) => !o.resultMapping);
       if (missingMapping) fail(issues, 'answerOptions', `Every answer option must have a resultMapping (e.g. an animal key). Missing on ${missingMapping}.`);
       if (resultCount === 0) fail(issues, 'resultDefinitions', 'Result definitions are required for the possible primary/secondary combinations.');
+      const missingQuestions = questions.filter((question) => question.answerOptions.some((option) => !option.resultMapping)).map((question) => question.order);
+      if (missingQuestions.length > 0) fail(issues, 'answerOptions', `Missing in question${missingQuestions.length > 1 ? 's' : ''} ${missingQuestions.join(', ')}.`);
+      const definedKeys = new Set(resultDefinitions.map((definition) => definition.resultKey));
+      const missingResults = requiredTallyResultKeys(questions, version.scoringConfig).filter((key) => !definedKeys.has(key));
+      if (missingResults.length > 0) {
+        const modeLabel = tallyResultMode(version.scoringConfig) === 'single' ? 'Single top result' : 'Single top result / pair';
+        fail(issues, 'resultDefinitions', `${modeLabel} definitions are missing for: ${missingResults.map((key) => `"${key}"`).join(', ')}.`);
+      }
       break;
     }
     case 'FRAMEWORK_SNIPPET_ASSEMBLY': {
