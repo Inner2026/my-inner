@@ -195,3 +195,36 @@ describe('validateTestVersionForActivation -- incomplete client result specifica
     expect(report.issues.some((issue) => /Question 30/i.test(issue.message))).toBe(true);
   });
 });
+
+describe('validateTestVersionForActivation -- tally result coverage', () => {
+  beforeEach(() => jest.clearAllMocks());
+  const question = (order: number) => ({ order, answerOptions: [{ resultMapping: 'lion' }, { resultMapping: 'owl' }] });
+
+  it('blocks publishing a pair-mode tally test whose result pairs are incomplete (customer would get an error)', async () => {
+    const version = baseVersion({ scoringMethod: 'TALLY_MAPPING', scoringConfig: {}, expectedQuestionCount: 2 });
+    (TestVersion.findById as jest.Mock).mockResolvedValue(version);
+    mockFindReturning(Question as any, [question(1), question(2)]);
+    (ResultDefinition.find as jest.Mock).mockResolvedValue([{ resultKey: 'lion', title: 'Lion', description: 'approved' }, { resultKey: 'owl', title: 'Owl', description: 'approved' }]);
+    const report = await validateTestVersionForActivation(version._id);
+    expect(report.valid).toBe(false);
+    expect(report.issues.some((issue) => /Single top result/.test(issue.message) && /"lion\+owl"/.test(issue.message))).toBe(true);
+  });
+
+  it('passes a single-result tally test with one result per outcome', async () => {
+    const version = baseVersion({ scoringMethod: 'TALLY_MAPPING', scoringConfig: { resultMode: 'single' }, expectedQuestionCount: 2 });
+    (TestVersion.findById as jest.Mock).mockResolvedValue(version);
+    mockFindReturning(Question as any, [question(1), question(2)]);
+    (ResultDefinition.find as jest.Mock).mockResolvedValue([{ resultKey: 'lion', title: 'Lion', description: 'approved' }, { resultKey: 'owl', title: 'Owl', description: 'approved' }]);
+    const report = await validateTestVersionForActivation(version._id);
+    expect(report).toEqual({ valid: true, issues: [] });
+  });
+
+  it('names the questions whose answers have no result mapping', async () => {
+    const version = baseVersion({ scoringMethod: 'TALLY_MAPPING', scoringConfig: { resultMode: 'single' }, expectedQuestionCount: 2 });
+    (TestVersion.findById as jest.Mock).mockResolvedValue(version);
+    mockFindReturning(Question as any, [question(1), { order: 2, answerOptions: [{ resultMapping: '' }, { resultMapping: 'owl' }] }]);
+    (ResultDefinition.find as jest.Mock).mockResolvedValue([]);
+    const report = await validateTestVersionForActivation(version._id);
+    expect(report.issues.some((issue) => /Missing in question 2\./.test(issue.message))).toBe(true);
+  });
+});

@@ -311,3 +311,26 @@ input[type='password']::-ms-clear {
 .referral-confetti-three { left: 1.5rem; top: 5rem; color: #dce9df; animation-delay: .7s; }
 @media (prefers-reduced-motion: reduce) { .about-copy-item, .announcement-track, .referral-modal, .referral-gift, .referral-confetti { animation: none; } }
 @media (max-width: 1023px) { .about-page { background-size: auto 100%; background-position: 62% center; } .about-art { min-height: 22rem; } }
+
+/* Blog article body (rendered Markdown) */
+.article-body { color: #3d3550; font-size: 1.0625rem; line-height: 1.85; overflow-wrap: anywhere; }
+.article-body > * + * { margin-top: 1.25em; }
+.article-body h2 { margin-top: 2.2em; font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif; font-size: 1.75rem; line-height: 1.25; color: #283452; }
+.article-body h3 { margin-top: 1.8em; font-size: 1.25rem; font-weight: 600; line-height: 1.35; color: #302447; }
+.article-body h2 + *, .article-body h3 + * { margin-top: .75em; }
+.article-body a { color: #765c8d; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.article-body a:hover { color: #634a78; }
+.article-body strong { color: #302447; font-weight: 650; }
+.article-body ul, .article-body ol { padding-left: 1.4em; }
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
+.article-body li + li { margin-top: .45em; }
+.article-body li::marker { color: #9b85b0; }
+.article-body blockquote { border-left: 3px solid #cdbcd9; background: #f7f2f9; border-radius: 0 1rem 1rem 0; padding: 1rem 1.25rem; color: #4a3d62; font-style: italic; }
+.article-body img { border-radius: 1rem; max-width: 100%; height: auto; }
+.article-body hr { border: 0; border-top: 1px solid #eee5e9; margin: 2.5em 0; }
+.article-body code { background: #f4eff6; border-radius: .35rem; padding: .1em .35em; font-size: .9em; }
+.article-body table { width: 100%; border-collapse: collapse; font-size: .95rem; display: block; overflow-x: auto; }
+.article-body th, .article-body td { border: 1px solid #eee5e9; padding: .55rem .75rem; text-align: left; }
+.article-body th { background: #faf7fb; color: #302447; }
+@media (max-width: 640px) { .article-body { font-size: 1rem; line-height: 1.8; } .article-body h2 { font-size: 1.5rem; } }

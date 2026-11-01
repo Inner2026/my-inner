@@ -1,4 +1,5 @@
 import { apiRequest } from './client';
+import type { AdminArticle, ArticleInput } from '../types';
 
 export const AdminApi = {
   uploadImage: async (file: File) => {
@@ -11,6 +12,11 @@ export const AdminApi = {
     if (!response.ok) throw new Error(data?.error?.message ?? 'Image upload failed.');
     return data as { imageUrl: string };
   },
+  listArticles: () => apiRequest<{ articles: AdminArticle[] }>('/admin/articles'),
+  getArticle: (articleId: string) => apiRequest<{ article: AdminArticle }>(`/admin/articles/${articleId}`),
+  createArticle: (input: ArticleInput) => apiRequest<{ article: AdminArticle; rebuildTriggered: boolean }>('/admin/articles', { method: 'POST', body: input }),
+  updateArticle: (articleId: string, patch: Partial<ArticleInput>) => apiRequest<{ article: AdminArticle; rebuildTriggered: boolean }>(`/admin/articles/${articleId}`, { method: 'PATCH', body: patch }),
+  deleteArticle: (articleId: string) => apiRequest<void>(`/admin/articles/${articleId}`, { method: 'DELETE' }),
   overview: () => apiRequest<{ stats: any; recentUsers: any[]; recentOrders: any[]; recentAttempts: any[] }>('/admin/overview'),
   listTests: (params: { search?: string; active?: string; page?: number; pageSize?: number } = {}) => { const query = new URLSearchParams(); Object.entries(params).forEach(([key, value]) => { if (value !== undefined && value !== '') query.set(key, String(value)); }); return apiRequest<{ tests: any[]; pagination: { page: number; pageSize: number; total: number; pages: number } }>(`/admin/tests?${query.toString()}`); },
   getTest: (testId: string) => apiRequest<{ test: any }>(`/admin/tests/${testId}`),

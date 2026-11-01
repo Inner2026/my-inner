@@ -18,7 +18,7 @@ if ((sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g) ?? []).length !== u
 if (!/application\/ld\+json" data-seo-jsonld="true">[^<]*"Organization"/.test(distIndex)) fail('built homepage must contain Organization JSON-LD');
 if (!/rel="preload" as="image" href="\/hero-background\.webp"/.test(distIndex)) fail('built homepage must preload the hero image');
 for (const asset of ['og-image.jpg', 'logo-512.png', 'favicon-48.png', 'apple-touch-icon.png', 'hero-background.webp']) await readFile(new URL(`../dist/${asset}`, import.meta.url)).catch(() => fail(`missing public asset ${asset}`));
-const expectedRoutes = ['/', '/tests', '/about', '/terms', '/tests/mbti-style', '/tests/inner-child', '/tests/five-love-languages', '/tests/hidden-animal', '/tests/cube-personality'];
+const expectedRoutes = ['/', '/tests', '/about', '/terms', '/blog', '/tests/mbti-style', '/tests/inner-child', '/tests/five-love-languages', '/tests/hidden-animal', '/tests/cube-personality'];
 for (const route of expectedRoutes) {
   const relative = route === '/' ? '../dist/index.html' : `../dist${route}/index.html`;
   const html = await readFile(new URL(relative, import.meta.url), 'utf8');

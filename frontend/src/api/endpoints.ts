@@ -1,5 +1,5 @@
 import { apiRequest } from './client';
-import { PublicTest, AuthUser, AttemptQuestion, ResultSummary, ResultDetail, TestRatingSummary } from '../types';
+import { PublicTest, AuthUser, AttemptQuestion, ResultSummary, ResultDetail, TestRatingSummary, PublicArticle } from '../types';
 
 export const AuthApi = {
   register: (input: { username: string; email?: string; phone?: string; password: string; marketingEmails?: boolean; referralCode?: string }) =>
@@ -26,6 +26,11 @@ export const TestsApi = {
   getBySlug: (slug: string) => apiRequest<{ test: PublicTest }>(`/tests/${slug}`, { auth: false }),
   getRating: (slug: string) => apiRequest<{ rating: TestRatingSummary }>(`/tests/${slug}/ratings`),
   rate: (slug: string, rating: number, comment = '') => apiRequest<{ rating: TestRatingSummary }>(`/tests/${slug}/ratings`, { method: 'POST', body: { rating, comment } })
+};
+
+export const ArticlesApi = {
+  list: () => apiRequest<{ articles: PublicArticle[] }>('/articles', { auth: false }),
+  getBySlug: (slug: string) => apiRequest<{ article: PublicArticle }>(`/articles/${encodeURIComponent(slug)}`, { auth: false })
 };
 
 export const PromotionApi = {

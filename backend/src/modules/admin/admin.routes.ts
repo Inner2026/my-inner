@@ -7,6 +7,7 @@ import * as marketing from './marketing.controller';
 import * as reviews from './reviews.controller';
 import { listReferrals, referralTotals } from '../referrals/referrals.admin.controller';
 import * as promotion from './promotion.controller';
+import * as articles from '../articles/articles.controller';
 
 export const adminRouter = Router();
 
@@ -68,3 +69,10 @@ adminRouter.get('/coupons', promotion.listCoupons);
 adminRouter.post('/coupons', promotion.createCoupon);
 adminRouter.patch('/coupons/:couponId', promotion.updateCoupon);
 adminRouter.delete('/coupons/:couponId', promotion.deleteCoupon);
+
+// Articles (blog)
+adminRouter.get('/articles', articles.adminList);
+adminRouter.get('/articles/:articleId', articles.adminGet);
+adminRouter.post('/articles', articles.adminCreate);
+adminRouter.patch('/articles/:articleId', articles.adminUpdate);
+adminRouter.delete('/articles/:articleId', articles.adminDelete);

@@ -101,3 +101,24 @@ export interface ResultDetail {
     results: ResultItem[];
   };
 }
+
+export interface PublicArticle {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content?: string;
+  coverImageUrl: string;
+  coverImageAlt: string;
+  relatedTestSlug: string;
+  publishedAt: string | null;
+  updatedAt: string;
+}
+
+export interface AdminArticle extends Omit<PublicArticle, 'content'> {
+  _id: string;
+  content?: string;
+  status: 'draft' | 'published';
+  createdAt: string;
+}
+
+export type ArticleInput = { title: string; slug?: string; excerpt: string; content: string; coverImageUrl?: string; coverImageAlt?: string; relatedTestSlug?: string; status: 'draft' | 'published' };

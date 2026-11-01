@@ -95,3 +95,20 @@ Changes:
 Verification (Linux build of the same sources): `npm run build` PASS, `npm run verify:seo` PASS (now also checks sitemap lastmod, homepage JSON-LD, hero preload and new assets), oxlint warnings only (pre-existing), headless Chromium check of `/`, `/about`, `/login` and an unknown URL: correct titles and robots values, no failed asset requests, no JS errors.
 
 Still required after deploy: confirm on Vercel that `/about` serves the prerendered `about/index.html` (view source must show the About title), add the site to Google Search Console, submit the sitemap, and run PageSpeed Insights on the homepage.
+
+## Phase 4: Articles (blog) managed from the admin dashboard (2026-10-20)
+
+The client can now write and publish articles from Admin → Articles without developer involvement.
+
+- Public pages: `/blog` (article list) and `/blog/:slug` (article with breadcrumb, reading time, a "Take the test" box for the related test, and "More to read" links). "Articles" was added to the header, mobile menu and footer.
+- Admin: list, create, edit, publish, unpublish and delete. The editor has a formatting toolbar (headings, bold, lists, quote, link), a live preview, a Google result preview, character counters for title and summary, cover image upload with alt text, a related-test selector and short SEO writing tips.
+- Content is stored as Markdown and sanitized with DOMPurify before rendering, so scripts and unsafe attributes in article text never execute.
+- SEO: each article gets its own title, description, canonical URL, cover image for sharing, and BlogPosting + BreadcrumbList structured data. Unknown or unpublished article URLs are `noindex`.
+- Build: `prerender-seo.mjs` fetches published articles from the API and writes a prerendered HTML page per article, and adds `/blog` and every article (with its last-edited date) to `sitemap.xml`.
+- Automatic rebuild (optional): when `VERCEL_DEPLOY_HOOK_URL` is set on the backend, publishing, editing a live article, unpublishing or deleting triggers a frontend rebuild, so the prerendered page and sitemap update within about 2 minutes. Without it, articles are still live immediately; only the prerendered page waits for the next deploy.
+
+Backend: new `Article` model, `GET /api/articles`, `GET /api/articles/:slug`, and admin CRUD under `/api/admin/articles` (protected by the existing admin auth and audit log). Validation enforces a 50–170 character summary, at least 300 characters of body text, a clean URL slug, and safe image URLs.
+
+Verification: backend `tsc` PASS and `jest` 97/97 PASS (13 new tests for validation and publish logic). Frontend build, `verify:seo` and oxlint PASS (warnings only, same patterns as existing code). Headless Chromium end-to-end run against a mock API following the same contract: create → preview → publish → list → public page → related test box → unpublish → delete, plus SEO tags, sanitization of injected script/onerror, external link `rel`, 404 + noindex for a missing article, and mobile layout. Not run against a real MongoDB in this environment.
+
+Deployment steps: deploy backend and frontend as usual; optionally create a Deploy Hook in the Vercel frontend project (Settings → Git → Deploy Hooks) and set it as `VERCEL_DEPLOY_HOOK_URL` in the backend project's environment variables.

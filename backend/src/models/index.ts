@@ -12,3 +12,4 @@ export * from './Referral';
 export * from './WalletLedger';
 export * from './Coupon';
 export * from './WalletAccount';
+export * from './Article';

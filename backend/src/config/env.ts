@@ -42,6 +42,8 @@ export const env = {
   smtpUser: process.env.SMTP_USER ?? '',
   smtpPassword: process.env.SMTP_PASSWORD ?? '',
   mailFrom: process.env.MAIL_FROM ?? 'admin@my-inner.com',
+  // Optional Vercel Deploy Hook for rebuilding the frontend after article changes.
+  vercelDeployHookUrl: process.env.VERCEL_DEPLOY_HOOK_URL ?? '',
   passwordResetUrl: process.env.PASSWORD_RESET_URL ?? 'http://localhost:5173/reset-password',
   // My Inner AI (voice guide). OPENAI_API_KEY stays server-side only.
   aiEnabled: process.env.AI_ENABLED === 'true',
