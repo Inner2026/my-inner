@@ -10,12 +10,12 @@ export class ApiError extends Error {
 
 function friendlyApiMessage(status: number, fallback: string): string {
   if (status === 409 && /active attempt/i.test(fallback)) {
-    return 'لديك محاولة مفتوحة بالفعل. سيتم فتحها لك بدل إنشاء محاولة جديدة.';
+    return 'You already have an active attempt. It will be opened for you instead of creating a new one.';
   }
-  if (status === 401) return 'انتهت الجلسة. سجّل الدخول مرة أخرى للمتابعة.';
-  if (status === 403) return 'ليس لديك صلاحية لتنفيذ هذا الإجراء.';
-  if (status === 404) return 'المحتوى المطلوب غير موجود أو لم يعد متاحًا.';
-  if (status >= 500) return 'حدث خطأ في الخادم. حاول مرة أخرى بعد قليل.';
+  if (status === 401) return 'Your session has expired. Please log in again to continue.';
+  if (status === 403) return 'You do not have permission to perform this action.';
+  if (status === 404) return 'The requested content is not found or no longer available.';
+  if (status >= 500) return 'An error occurred on the server. Please try again later.';
   return fallback;
 }
 

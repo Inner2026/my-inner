@@ -358,7 +358,7 @@ export function ResultPage() {
 
           <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.22em] text-[#765c8d]">Processing</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-[#2d1f3e] sm:text-4xl">Loading your result...</h1>
-          <p className="mt-3 text-sm leading-7 text-[#655d70]">جاري تجهيز نتيجتك... من فضلك انتظر قليلًا.</p>
+          <p className="mt-3 text-sm leading-7 text-[#655d70]">Your result is being processed. This may take a few seconds.</p>
         </div>
       </div>
     </div>
