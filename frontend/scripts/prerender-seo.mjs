@@ -4,6 +4,8 @@ import { join } from 'node:path';
 const siteUrl = (process.env.VITE_SITE_URL || 'https://my-inner.com').replace(/\/$/, '');
 const distDir = new URL('../dist/', import.meta.url);
 const template = await readFile(new URL('../dist/index.html', import.meta.url), 'utf8');
+// Search-only overrides shared with the client (src/App.tsx): meta description + social preview image per test.
+const testSeo = JSON.parse(await readFile(new URL('../src/seo/testSeo.json', import.meta.url), 'utf8'));
 
 const staticRoutes = [
   { path: '/', title: 'My Inner | Self-Awareness & Personal Growth', description: 'Explore My Inner for self-reflection, personal growth, and emotional wellness resources designed to support your journey toward greater self-awareness.' },
@@ -66,6 +68,11 @@ function renderRoute(route) {
   html = replaceMeta(html, 'property', 'og:url', canonical);
   html = replaceMeta(html, 'name', 'twitter:title', route.title);
   html = replaceMeta(html, 'name', 'twitter:description', route.description);
+  if (route.image) {
+    const image = route.image.startsWith('http') ? route.image : `${siteUrl}${route.image}`;
+    html = replaceMeta(html, 'property', 'og:image', image);
+    html = replaceMeta(html, 'name', 'twitter:image', image);
+  }
   html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/?\s*>/i, `<link rel="canonical" href="${canonical}" />`);
   html = html.replace(/<meta name="robots" content="[^"]*"\s*\/?\s*>/i, `<meta name="robots" content="${route.noIndex ? 'noindex, nofollow' : 'index, follow'}" />`);
   if (!/<meta name="robots"/i.test(html)) html = html.replace('</head>', `    <meta name="robots" content="${route.noIndex ? 'noindex, nofollow' : 'index, follow'}" />\n  </head>`);
@@ -80,7 +87,7 @@ function renderRoute(route) {
 
 const organization = { '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: siteUrl, logo: `${siteUrl}/logo-512.png` };
 staticRoutes[0].jsonLd = [organization, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${siteUrl}/` }];
-const testJsonLd = (test) => ({ '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${siteUrl}/tests/${test.slug}`, image: `${siteUrl}/og-image.jpg`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: siteUrl } });
+const testJsonLd = (test) => ({ '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${siteUrl}/tests/${test.slug}`, image: `${siteUrl}${testSeo[test.slug]?.image ?? '/og-image.jpg'}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: siteUrl } });
 
 function renderSitemap(paths) {
   const lastmod = new Date().toISOString().slice(0, 10);
@@ -89,7 +96,7 @@ function renderSitemap(paths) {
 }
 
 const tests = await getPublicTests();
-const testRoutes = tests.map((test) => ({ path: `/tests/${test.slug}`, title: `${test.name} | My Inner`, description: test.description, jsonLd: testJsonLd(test) }));
+const testRoutes = tests.map((raw) => { const test = { ...raw, description: testSeo[raw.slug]?.description ?? raw.description }; return { path: `/tests/${test.slug}`, title: `${test.name} | My Inner`, description: test.description, image: testSeo[test.slug]?.image, jsonLd: testJsonLd(test) }; });
 for (const route of [...staticRoutes, ...testRoutes, ...privateRoutes]) {
   const targetDir = route.path === '/' ? new URL('../dist/', import.meta.url) : new URL(`../dist${route.path}/`, import.meta.url);
   await mkdir(targetDir, { recursive: true });
