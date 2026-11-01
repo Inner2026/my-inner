@@ -31,6 +31,9 @@ export function NavBar() {
           <Link to="/about" className="rounded-full px-3 py-2 text-[#62596c] transition hover:bg-[#f1eaf2] hover:text-[#302447]">
             About
           </Link>
+          <a href="https://inner2026.github.io/my-inner-blog/" className="rounded-full px-3 py-2 text-[#62596c] transition hover:bg-[#f1eaf2] hover:text-[#302447]">
+            Blog
+          </a>
           {user ? (
             <>
               <Link to="/dashboard" className="rounded-full px-3 py-2 text-[#62596c] transition hover:bg-[#f1eaf2] hover:text-[#302447]">
@@ -70,6 +73,7 @@ export function NavBar() {
       {menuOpen && <div className="mobile-menu border-t border-[#eee5ed] bg-[#fffdfb] px-4 pb-4 pt-2 shadow-lg sm:hidden">
         <Link onClick={closeMenu} to="/tests" className="mobile-menu-link">Tests</Link>
         <Link onClick={closeMenu} to="/about" className="mobile-menu-link">About</Link>
+        <a href="https://inner2026.github.io/my-inner-blog/" onClick={closeMenu} className="mobile-menu-link">Blog</a>
         {user ? <>
           <Link onClick={closeMenu} to="/dashboard" className="mobile-menu-link">My Results</Link>
           <Link onClick={closeMenu} to="/profile" className="mobile-menu-link">My Account</Link>
