@@ -54,10 +54,18 @@ export async function createTest(input: { slug: string; name: string; descriptio
   });
 }
 
-export async function updateTest(testId: string, patch: Partial<{ name: string; description: string; imageUrl: string; priceCents: number; active: boolean; marketingSubject: string; marketingMessage: string }>) {
+export async function updateTest(testId: string, patch: Partial<{ slug: string; name: string; description: string; imageUrl: string; priceCents: number; active: boolean; marketingSubject: string; marketingMessage: string }>) {
   const test = await Test.findById(testId);
   if (!test) throw AppError.notFound('Test not found.');
   if (test.removedAt) throw AppError.badRequest('This test was removed and can no longer be edited or activated.');
+  if (patch.slug !== undefined) {
+    const slug = String(patch.slug).trim().toLowerCase();
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 80) throw AppError.badRequest('Slug may only contain lowercase letters, numbers and hyphens.');
+    if (slug !== test.slug) {
+      if (await Test.exists({ slug, _id: { $ne: test._id } })) throw AppError.badRequest('Another test already uses this slug.');
+      test.slug = slug;
+    }
+  }
   if (patch.name !== undefined) { if (!patch.name.trim()) throw AppError.badRequest('Name cannot be empty.'); test.name = patch.name.trim(); }
   if (patch.description !== undefined) { if (!patch.description.trim()) throw AppError.badRequest('Description cannot be empty.'); test.description = patch.description.trim(); }
   if (patch.marketingSubject !== undefined) test.marketingSubject = patch.marketingSubject.trim();

@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { NavBar } from './components/NavBar';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -68,6 +68,8 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/tests/genius-adhd-profile" element={<Navigate to="/tests/focus-creativity-profile" replace />} />
+          <Route path="/tests/genius-adhd-profile/checkout" element={<Navigate to="/tests/focus-creativity-profile/checkout" replace />} />
           <Route path="/tests/:slug" element={<TestOverview />} />
           <Route path="/tests/:slug/checkout" element={<TestDetail />} />
           <Route path="/register" element={<Register />} />

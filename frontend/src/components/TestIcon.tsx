@@ -11,7 +11,8 @@ const icons = {
   'cube-personality': Mountain,
   yourenergy: Sparkles,
   employee: Briefcase,
-  'genius-adhd-profile': BrainCircuit
+  'genius-adhd-profile': BrainCircuit,
+  'focus-creativity-profile': BrainCircuit
 };
 
 export function TestIcon({ slug, className, ...props }: IconProps) {
@@ -30,7 +31,8 @@ export function testIconTone(slug: string) {
     'cognitive-reasoning': 'bg-[#eef2fb] text-[#7d8fbe]',
     yourenergy: 'bg-[#fff8e6] text-[#c9a24a]',
     employee: 'bg-[#eef2fb] text-[#7d8fbe]',
-    'genius-adhd-profile': 'bg-[#edf6f4] text-[#5f9c8f]'
+    'genius-adhd-profile': 'bg-[#edf6f4] text-[#5f9c8f]',
+    'focus-creativity-profile': 'bg-[#edf6f4] text-[#5f9c8f]'
   };
   return tones[slug] ?? 'bg-[#f1edfb] text-[#8a80bd]';
 }
