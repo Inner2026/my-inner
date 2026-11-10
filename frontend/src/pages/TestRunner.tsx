@@ -9,7 +9,7 @@ import { LoadingScreen } from '../components/LoadingScreen';
 
 type TestTheme = { eyebrow: string; note: string; accent: string; accentText: string; accentSoft: string; page: string; panel: string; border: string; shape: string };
 const themes: Record<string, TestTheme> = {
-  'mbti-style': { eyebrow: 'MBTI personality test', note: 'Trust your first instinct', accent: '#75639a', accentText: '#5d4b82', accentSoft: '#f0ebf8', page: '#f7f4fb', panel: '#fffdfb', border: '#e8e0ef', shape: 'runner-shape-mbti' },
+  'mbti-style': { eyebrow: '16 personality types test', note: 'Trust your first instinct', accent: '#75639a', accentText: '#5d4b82', accentSoft: '#f0ebf8', page: '#f7f4fb', panel: '#fffdfb', border: '#e8e0ef', shape: 'runner-shape-mbti' },
   'inner-child': { eyebrow: 'Inner child reflection', note: 'A gentle moment for you', accent: '#719b8d', accentText: '#46786b', accentSoft: '#edf5f0', page: '#f4f8f5', panel: '#fffefa', border: '#dfece4', shape: 'runner-shape-leaf' },
   'five-love-languages': { eyebrow: 'Five love languages', note: 'Answer from the heart', accent: '#bd7891', accentText: '#9d526f', accentSoft: '#fff0f3', page: '#fff7f7', panel: '#fffdfb', border: '#f0dce2', shape: 'runner-shape-heart' },
   'hidden-animal': { eyebrow: 'The hidden animal', note: 'Let your imagination lead', accent: '#c38b55', accentText: '#a36632', accentSoft: '#fff3e5', page: '#fffaf3', panel: '#fffefd', border: '#f0e2cf', shape: 'runner-shape-sun' },

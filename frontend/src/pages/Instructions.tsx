@@ -5,7 +5,7 @@ import { TestIcon } from '../components/TestIcon';
 import { LoadingScreen } from '../components/LoadingScreen';
 
 const tones: Record<string, { accent: string; soft: string; page: string; label: string }> = {
-  'mbti-style': { accent: '#75639a', soft: '#f0ebf8', page: '#f7f4fb', label: 'MBTI personality test' },
+  'mbti-style': { accent: '#75639a', soft: '#f0ebf8', page: '#f7f4fb', label: '16 personality types test' },
   'inner-child': { accent: '#719b8d', soft: '#edf5f0', page: '#f4f8f5', label: 'Inner child reflection' },
   'five-love-languages': { accent: '#bd7891', soft: '#fff0f3', page: '#fff7f7', label: 'Five love languages' },
   'hidden-animal': { accent: '#c38b55', soft: '#fff3e5', page: '#fffaf3', label: 'The hidden animal' },

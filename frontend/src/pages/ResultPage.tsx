@@ -255,7 +255,7 @@ function MbtiResultView({ result, retaking, onRetake }: { result: ResultDetail; 
         <div className="relative grid items-center gap-8 p-7 sm:p-11 md:grid-cols-[1fr_270px]">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#567da4]">Your personality profile</p>
-            <p className="mt-5 inline-flex rounded-full bg-white/80 px-4 py-2 text-xs font-semibold text-[#567da4] shadow-sm">{mbtiGroups[type] ?? 'Personality'} · MBTI-style reflection</p>
+            <p className="mt-5 inline-flex rounded-full bg-white/80 px-4 py-2 text-xs font-semibold text-[#567da4] shadow-sm">{mbtiGroups[type] ?? 'Personality'} · Personality reflection</p>
             <h1 className="mt-5 font-serif text-6xl leading-none tracking-tight text-[#283452] sm:text-8xl">{type}</h1>
             <h2 className="mt-4 max-w-xl text-xl font-semibold text-[#394d70] sm:text-2xl">Your unique way of seeing the world.</h2>
             <p className="mt-4 max-w-xl whitespace-pre-line text-sm leading-7 text-[#5f6c82] sm:text-base">{result.snapshot.description}</p>

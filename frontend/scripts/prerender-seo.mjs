@@ -28,7 +28,7 @@ const privateRoutes = [
 ];
 
 const fallbackTests = [
-  { slug: 'mbti-style', name: 'MBTI-style Personality Test', description: 'A My Inner MBTI-style self-discovery assessment across four dichotomies. This is an original, self-discovery assessment inspired by well-known personality frameworks -- it is not the official proprietary MBTI instrument.' },
+  { slug: 'mbti-style', name: '16 Personality Types Test', description: 'A My Inner self-discovery assessment across four personality dimensions, leading to one of 16 personality types. This is an original assessment inspired by well-known personality frameworks. It is not affiliated with or endorsed by any other personality instrument or its owners.' },
   { slug: 'inner-child', name: 'Inner Child Self-Reflection Test', description: 'Explore emotional and self-reflection patterns. This is not a clinical diagnosis.' },
   { slug: 'five-love-languages', name: 'Five Love Languages Test', description: 'Discover how you prefer to give and receive love.' },
   { slug: 'hidden-animal', name: 'The Hidden Animal Test', description: 'An entertainment/self-reflection personality experience -- not a scientific diagnosis.' },

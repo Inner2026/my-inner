@@ -27,9 +27,9 @@ interface TestSeedSpec {
 const SEEDS: TestSeedSpec[] = [
   {
     slug: 'mbti-style',
-    name: 'MBTI-style Personality Test',
+    name: '16 Personality Types Test',
     description:
-      'A My Inner MBTI-style self-discovery assessment across four dichotomies. This is an original, self-discovery assessment inspired by well-known personality frameworks -- it is not the official proprietary MBTI instrument.',
+      'A My Inner self-discovery assessment across four personality dimensions, leading to one of 16 personality types. This is an original assessment inspired by well-known personality frameworks. It is not affiliated with or endorsed by any other personality instrument or its owners.',
     priceCents: 499,
     scoringMethod: 'WEIGHTED_DICHOTOMY',
     scoringConfig: b.MBTI_SCORING_CONFIG,
