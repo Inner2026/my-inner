@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/prerender-seo.mjs",
+    "build": "tsc -b && vite build && vite build --ssr src/prerender-entry.tsx --outDir dist-ssr && node scripts/prerender-seo.mjs",
     "lint": "oxlint",
     "verify:seo": "node scripts/verify-seo.mjs",
     "verify:seo:http": "node scripts/verify-seo-http.mjs",

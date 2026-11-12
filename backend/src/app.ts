@@ -16,6 +16,7 @@ import { paypalWebhookRouter } from './modules/purchases/paypalWebhook.routes';
 import { referralsRouter } from './modules/referrals/referrals.routes';
 import { promotionRouter } from './modules/admin/promotion.routes';
 import { aiRouter } from './modules/ai/ai.routes';
+import { articlesRouter } from './modules/articles/articles.routes';
 
 export function createApp() {
   const app = express();
@@ -67,6 +68,7 @@ export function createApp() {
 
   app.use('/api/auth', authRouter);
   app.use('/api/tests', testsRouter);
+  app.use('/api/articles', articlesRouter);
   app.use('/api/attempts', attemptsRouter);
   app.use('/api/results', resultsRouter);
   app.use('/api/purchases', purchasesRouter);

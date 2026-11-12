@@ -112,3 +112,29 @@ Backend: new `Article` model, `GET /api/articles`, `GET /api/articles/:slug`, an
 Verification: backend `tsc` PASS and `jest` 97/97 PASS (13 new tests for validation and publish logic). Frontend build, `verify:seo` and oxlint PASS (warnings only, same patterns as existing code). Headless Chromium end-to-end run against a mock API following the same contract: create → preview → publish → list → public page → related test box → unpublish → delete, plus SEO tags, sanitization of injected script/onerror, external link `rel`, 404 + noindex for a missing article, and mobile layout. Not run against a real MongoDB in this environment.
 
 Deployment steps: deploy backend and frontend as usual; optionally create a Deploy Hook in the Vercel frontend project (Settings → Git → Deploy Hooks) and set it as `VERCEL_DEPLOY_HOOK_URL` in the backend project's environment variables.
+
+## Phase 5: crawlable content, guides and AEO/GEO foundation (2026-11-12)
+
+Implements the "My Inner Global SEO, AEO & GEO Master Brief" against the real stack (Vite + React SPA, Express API, Vercel).
+
+Findings from the audit of `main`:
+
+- Pages shipped an empty `<div id="root">`: titles/meta were prerendered, but no body text reached crawlers that do not run JavaScript (Bing, most AI crawlers). Test pages also had very little indexable copy (a description and three bullets).
+- The blog was half-wired: `Blog.tsx`/`ArticlePage.tsx` and the admin API existed, but `/blog` and `/blog/:slug` had no routes (the nav link showed the 404 page) and the public `/api/articles` router was not mounted. The Phase 4 prerender/sitemap code for articles was also missing from `scripts/prerender-seo.mjs`, so `npm run verify:seo` was already failing on `main`.
+
+Changes:
+
+- `src/seo/siteContent.ts` (new): single source of truth for per-test landing copy (direct answer, what it explores, what it does not do, who it is for, FAQs), five guides, titles/descriptions, BreadcrumbList and Article JSON-LD helpers. No invented studies, ratings or credentials; non-clinical limits stated on every page.
+- `src/components/SeoContent.tsx` (new): shared presentational components used in the browser and at build time.
+- `src/prerender-entry.tsx` + `scripts/prerender-seo.mjs`: the build now also bundles an SSR entry (`vite build --ssr`) and injects the real page body into each prerendered shell (home, tests hub, five tests, guides hub, five guides, blog index, published articles). React replaces it on load. Question count and price are read from the API at build time and omitted if the API is unreachable (price falls back to the seeded $4.99).
+- New public routes `/guides` and `/guides/:slug`; `/blog` and `/blog/:slug` restored; `Guides` link in the footer; keyword-aligned titles/descriptions; Quiz + BreadcrumbList on tests, Article + BreadcrumbList on guides, BlogPosting + BreadcrumbList on articles.
+- `backend/src/app.ts`: mounts the existing public `articlesRouter` at `/api/articles`.
+- `public/robots.txt`: explicit `OAI-SearchBot` group (private-area rules repeated, because a named group overrides `*`); `GPTBot` deliberately left unset.
+- `scripts/verify-seo.mjs`: now also checks minimum crawlable word count and a single H1 per key page, guide routes, and robots private-area rules.
+- Sitemap now includes guides and (when the API is reachable at build time) the blog and every published article.
+
+Verification: `npm run build` PASS, `npm run verify:seo` PASS (15 sitemap URLs, 16 prerendered public routes), `tsc` PASS, backend `tsc` + 22 suites / 124 tests PASS, headless Chromium check against a mocked API (metadata, noindex on unknown test/guide URLs, no console errors, no mobile overflow).
+
+Not verified (no access from this environment): live production behaviour, www/apex redirect, Search Console/Bing status, Core Web Vitals, real MongoDB data.
+
+Owner decisions and actions are listed in the pull request / hand-off message.
