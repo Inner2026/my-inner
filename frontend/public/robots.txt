@@ -9,4 +9,16 @@ Disallow: /results
 Disallow: /attempts
 Disallow: /api/
 
+# OpenAI's search crawler (ChatGPT search discovery). Listed explicitly so it is never blocked by accident.
+# A named group replaces the "*" group for that crawler, so the private-area rules are repeated here.
+# This is separate from GPTBot (model-training preference), which is intentionally not set here.
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /results
+Disallow: /attempts
+Disallow: /api/
+
 Sitemap: https://my-inner.com/sitemap.xml

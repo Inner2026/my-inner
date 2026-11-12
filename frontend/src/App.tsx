@@ -17,7 +17,12 @@ import { Footer } from './components/Footer';
 import { ReferralPromoModal } from './components/ReferralPromoModal';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Seo } from './components/Seo';
-import { TestsApi } from './api/endpoints';
+import { TestsApi, ArticlesApi } from './api/endpoints';
+import { PublicArticle } from './types';
+import { Blog } from './pages/Blog';
+import { Guides } from './pages/Guides';
+import { GuidePage } from './pages/GuidePage';
+import { breadcrumbJsonLd, guideBySlug, guideJsonLd, staticSeo, testContent } from './seo/siteContent';
 import { seoSiteUrl } from './components/Seo';
 import { LoadingScreen } from './components/LoadingScreen';
 import testSeoOverrides from './seo/testSeo.json';
@@ -26,6 +31,7 @@ import testSeoOverrides from './seo/testSeo.json';
 const testSeo = testSeoOverrides as Record<string, { description?: string; image?: string }>;
 
 // Private, payment and admin screens are split into separate chunks so public pages load less JavaScript.
+const ArticlePage = lazy(() => import('./pages/ArticlePage').then((module) => ({ default: module.ArticlePage })));
 const TestDetail = lazy(() => import('./pages/TestDetail').then((module) => ({ default: module.TestDetail })));
 const CheckoutSuccess = lazy(() => import('./pages/CheckoutSuccess').then((module) => ({ default: module.CheckoutSuccess })));
 const Instructions = lazy(() => import('./pages/Instructions').then((module) => ({ default: module.Instructions })));
@@ -40,19 +46,32 @@ function RouteSeo() {
   const pathname = rawPathname.length > 1 ? rawPathname.replace(/\/+$/, '') : rawPathname;
   const [test, setTest] = useState<any>(null);
   const [testMissing, setTestMissing] = useState(false);
+  const [article, setArticle] = useState<PublicArticle | null>(null);
+  const [articleMissing, setArticleMissing] = useState(false);
   const testSlug = pathname.match(/^\/tests\/([^/]+)$/)?.[1];
+  const articleSlug = pathname.match(/^\/blog\/([^/]+)$/)?.[1];
+  const guide = guideBySlug(pathname.match(/^\/guides\/([^/]+)$/)?.[1] ?? '');
   useEffect(() => { let cancelled = false; setTest(null); setTestMissing(false); if (testSlug) TestsApi.getBySlug(testSlug).then((result) => { if (!cancelled) setTest(result.test); }).catch(() => { if (!cancelled) setTestMissing(true); }); return () => { cancelled = true; }; }, [testSlug]);
+  useEffect(() => { let cancelled = false; setArticle(null); setArticleMissing(false); if (articleSlug) ArticlesApi.getBySlug(articleSlug).then((result) => { if (!cancelled) setArticle(result.article); }).catch(() => { if (!cancelled) setArticleMissing(true); }); return () => { cancelled = true; }; }, [articleSlug]);
   const isPrivate = /^\/(dashboard|profile|admin|results|attempts|checkout|login|register|forgot-password|reset-password)(\/|$)/.test(pathname) || /^\/tests\/[^/]+\/checkout(\/|$)/.test(pathname);
   // Unknown URLs render the NotFound page with HTTP 200 (SPA rewrite), so keep them out of the index to avoid soft-404s.
-  const isKnownPublic = /^\/(tests|about|terms)?$/.test(pathname) || (Boolean(testSlug) && !testMissing);
+  const isKnownPublic = /^\/(tests|about|terms|guides|blog)?$/.test(pathname) || (Boolean(testSlug) && !testMissing) || Boolean(guide) || (Boolean(articleSlug) && !articleMissing);
   const noIndex = isPrivate || !isKnownPublic;
-  const title = pathname === '/' ? 'My Inner | Self-Awareness & Personal Growth' : pathname === '/tests' ? 'Self-Discovery Tests | My Inner' : pathname === '/about' ? 'About My Inner | Self-Discovery & Personal Growth' : pathname === '/terms' ? 'Terms of Service | My Inner' : pathname === '/login' ? 'Log In | My Inner' : pathname === '/register' ? 'Create an Account | My Inner' : pathname === '/forgot-password' ? 'Reset Your Password | My Inner' : !isPrivate && !isKnownPublic ? 'Page Not Found | My Inner' : undefined;
-  const description = pathname === '/' ? 'Explore My Inner for self-reflection, personal growth, and emotional wellness resources designed to support your journey toward greater self-awareness.' : pathname === '/tests' ? 'Explore self-discovery assessments from My Inner for personality, emotions, relationships, and personal reflection.' : pathname === '/about' ? 'Learn about My Inner and our approach to self-discovery, personal growth, and thoughtful assessments.' : pathname === '/terms' ? 'Read the My Inner terms of service for using our self-discovery assessment platform.' : undefined;
+  const staticEntry = staticSeo[pathname] ?? (pathname === '/blog' ? { title: 'Articles on Personality, Emotions & Relationships | My Inner', description: 'Read My Inner articles on personality, emotions, relationships and self-reflection.' } : undefined);
+  const privateTitles: Record<string, string> = { '/login': 'Log In | My Inner', '/register': 'Create an Account | My Inner', '/forgot-password': 'Reset Your Password | My Inner' };
+  const title = staticEntry?.title ?? privateTitles[pathname] ?? (guide ? guide.seoTitle : !isPrivate && !isKnownPublic ? 'Page Not Found | My Inner' : undefined);
+  const description = staticEntry?.description ?? guide?.description;
+  const content = test ? testContent[test.slug] : undefined;
   const seoOverride = test ? testSeo[test.slug] : undefined;
-  const testDescription = seoOverride?.description ?? test?.description;
+  const testDescription = content?.seoDescription ?? seoOverride?.description ?? test?.description;
   const testImage = seoOverride?.image || test?.imageUrl || '/og-image.jpg';
-  const jsonLd = test ? { '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: testDescription, url: `${seoSiteUrl}/tests/${test.slug}`, image: testImage.startsWith('http') ? testImage : `${seoSiteUrl}${testImage}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl } } : pathname === '/' ? [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: seoSiteUrl, logo: `${seoSiteUrl}/logo-512.png` }, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${seoSiteUrl}/` }] : undefined;
-  return <Seo title={test ? `${test.name} | My Inner` : title} description={testDescription ?? description} canonicalPath={test ? `/tests/${test.slug}` : undefined} image={testImage} noIndex={noIndex} jsonLd={jsonLd} />;
+  const articleImage = article?.coverImageUrl || '/og-image.jpg';
+  const quizLd = test ? { '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: testDescription, url: `${seoSiteUrl}/tests/${test.slug}`, image: testImage.startsWith('http') ? testImage : `${seoSiteUrl}${testImage}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl } } : undefined;
+  const jsonLd = test ? [quizLd!, breadcrumbJsonLd(seoSiteUrl, [{ name: 'Home', path: '/' }, { name: 'Tests', path: '/tests' }, { name: test.name, path: `/tests/${test.slug}` }])]
+    : guide ? guideJsonLd(seoSiteUrl, guide)
+    : article ? [{ '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title, description: article.excerpt, image: articleImage.startsWith('http') ? articleImage : `${seoSiteUrl}${articleImage}`, datePublished: article.publishedAt ?? undefined, dateModified: article.updatedAt, mainEntityOfPage: `${seoSiteUrl}/blog/${article.slug}`, author: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl }, publisher: { '@type': 'Organization', name: 'My Inner', url: seoSiteUrl, logo: { '@type': 'ImageObject', url: `${seoSiteUrl}/logo-512.png` } } }, breadcrumbJsonLd(seoSiteUrl, [{ name: 'Home', path: '/' }, { name: 'Articles', path: '/blog' }, { name: article.title, path: `/blog/${article.slug}` }])]
+    : pathname === '/' ? [{ '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: seoSiteUrl, logo: `${seoSiteUrl}/logo-512.png` }, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${seoSiteUrl}/` }] : undefined;
+  return <Seo title={test ? content?.seoTitle ?? `${test.name} | My Inner` : article ? `${article.title} | My Inner` : title} description={test ? testDescription : article ? article.excerpt : description} canonicalPath={test ? `/tests/${test.slug}` : article ? `/blog/${article.slug}` : undefined} image={test ? testImage : article ? articleImage : undefined} noIndex={noIndex} jsonLd={jsonLd} />;
 }
 
 export default function App() {
@@ -67,6 +86,10 @@ export default function App() {
           <Route path="/tests" element={<TestCatalog />} />
           <Route path="/about" element={<About />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/guides" element={<Guides />} />
+          <Route path="/guides/:slug" element={<GuidePage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<ArticlePage />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/tests/:slug" element={<TestOverview />} />
           <Route path="/tests/:slug/checkout" element={<TestDetail />} />

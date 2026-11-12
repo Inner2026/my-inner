@@ -4,6 +4,7 @@ import { TestsApi } from '../api/endpoints';
 import { PublicTest } from '../types';
 import { TestIcon } from '../components/TestIcon';
 import AmbientThread from '../ai/AmbientThread';
+import { HomeSeoSections } from '../components/SeoContent';
 
 function LineIcon({ type }: { type: 'lock' | 'spark' | 'shield' | 'search' | 'pen' }) {
   const paths = { lock: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /><path d="M12 14v3" /></>, spark: <><path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7Z" /><path d="m19 17 .7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7Z" /></>, shield: <><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6Z" /><path d="m8.5 12 2.2 2.2 4.8-5" /></>, search: <><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></>, pen: <><path d="m4 20 3.8-.8L19 8a2.1 2.1 0 0 0-3-3L4.8 16.2Z" /><path d="m14.5 6.5 3 3" /></> };
@@ -46,5 +47,6 @@ export function Landing() {
 
     <section className="border-y border-[#ebe4e8] bg-[#f5edf1] px-5 py-14 text-center"><h2 className="font-serif text-3xl text-[#283452]">Ready to discover more about yourself?</h2><p className="mt-2 text-sm text-[#737080]">Start with an assessment and take a closer look within.</p><Link to="/tests" className="mt-5 inline-block rounded-full bg-[#765c8d] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#765c8d]/20">Explore Tests →</Link></section>
 
+    <HomeSeoSections />
   </div>;
 }

@@ -1,5 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { marked } from 'marked';
+import * as ssr from '../dist-ssr/prerender-entry.js';
 
 const siteUrl = (process.env.VITE_SITE_URL || 'https://my-inner.com').replace(/\/$/, '');
 const distDir = new URL('../dist/', import.meta.url);
@@ -8,10 +10,8 @@ const template = await readFile(new URL('../dist/index.html', import.meta.url), 
 const testSeo = JSON.parse(await readFile(new URL('../src/seo/testSeo.json', import.meta.url), 'utf8'));
 
 const staticRoutes = [
-  { path: '/', title: 'My Inner | Self-Awareness & Personal Growth', description: 'Explore My Inner for self-reflection, personal growth, and emotional wellness resources designed to support your journey toward greater self-awareness.' },
-  { path: '/tests', title: 'Self-Discovery Tests | My Inner', description: 'Explore self-discovery assessments from My Inner for personality, emotions, relationships, and personal reflection.' },
-  { path: '/about', title: 'About My Inner | Self-Discovery & Personal Growth', description: 'Learn about My Inner and our approach to self-discovery, personal growth, and thoughtful assessments.' },
-  { path: '/terms', title: 'Terms of Service | My Inner', description: 'Read the My Inner terms of service for using our self-discovery assessment platform.' }
+  ...['/', '/tests', '/about', '/terms', '/guides'].map((path) => ({ path, ...ssr.staticSeo[path] })),
+  { path: '/blog', title: 'Articles on Personality, Emotions & Relationships | My Inner', description: 'Read My Inner articles on personality, emotions, relationships and self-reflection.' }
 ];
 
 const privateRoutes = [
@@ -27,28 +27,59 @@ const privateRoutes = [
   { path: '/tests/mbti-style/checkout', title: 'Checkout | My Inner', description: 'Secure checkout for a My Inner assessment.', noIndex: true }
 ];
 
+// Used only when the public API is unreachable during the build. Price matches the seeded catalogue; the
+// question count is deliberately omitted because it is only known from the live API.
 const fallbackTests = [
-  { slug: 'mbti-style', name: '16 Personality Types Test', description: 'A My Inner self-discovery assessment across four personality dimensions, leading to one of 16 personality types. This is an original assessment inspired by well-known personality frameworks. It is not affiliated with or endorsed by any other personality instrument or its owners.' },
+  { slug: 'mbti-style', name: '16 Personality Types Test', description: 'A My Inner self-discovery assessment across four personality dimensions, leading to one of 16 personality types.' },
   { slug: 'inner-child', name: 'Inner Child Self-Reflection Test', description: 'Explore emotional and self-reflection patterns. This is not a clinical diagnosis.' },
   { slug: 'five-love-languages', name: 'Five Love Languages Test', description: 'Discover how you prefer to give and receive love.' },
-  { slug: 'hidden-animal', name: 'The Hidden Animal Test', description: 'An entertainment/self-reflection personality experience -- not a scientific diagnosis.' },
-  { slug: 'cube-personality', name: 'Cube Personality Test', description: 'A symbolic self-reflection exercise (cube, ladder, horse, flowers, storm). Framed as symbolic/self-reflection content, not scientifically proven psychological fact.' }
-];
+  { slug: 'hidden-animal', name: 'The Hidden Animal Test', description: 'An entertainment/self-reflection personality experience, not a scientific diagnosis.' },
+  { slug: 'cube-personality', name: 'Cube Personality Test', description: 'A symbolic self-reflection exercise (cube, ladder, horse, flowers, storm), not scientifically proven psychological fact.' }
+].map((test) => ({ ...test, priceCents: 499, currency: 'usd' }));
+
+const apiBase = (process.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+const apiUsable = apiBase && !/localhost|127\.0\.0\.1/.test(apiBase);
+async function apiGet(path) {
+  const response = await fetch(`${apiBase}${path}`, { signal: AbortSignal.timeout(8000) });
+  if (!response.ok) throw new Error(`API returned ${response.status}`);
+  return response.json();
+}
 
 async function getPublicTests() {
-  const apiBase = (process.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
-  if (!apiBase || /localhost|127\.0\.0\.1/.test(apiBase)) return fallbackTests;
+  if (!apiUsable) return fallbackTests;
   try {
-    const response = await fetch(`${apiBase}/tests`, { signal: AbortSignal.timeout(5000) });
-    if (!response.ok) throw new Error(`API returned ${response.status}`);
-    const data = await response.json();
+    const data = await apiGet('/tests');
     const tests = Array.isArray(data.tests) ? data.tests : [];
-    return tests.filter((test) => test?.slug && test?.name && test?.description).map((test) => ({ slug: test.slug, name: test.name, description: test.description }));
+    return tests.filter((test) => test?.slug && test?.name && test?.description).map((test) => ({ slug: test.slug, name: test.name, description: test.description, questionCount: test.questionCount, priceCents: test.price?.amount, currency: test.price?.currency }));
   } catch (error) {
     console.warn(`[prerender] Public test API unavailable; using repository fallbacks (${error.message})`);
     return fallbackTests;
   }
 }
+
+async function getPublishedArticles() {
+  if (!apiUsable) return [];
+  try {
+    const list = await apiGet('/articles');
+    const articles = [];
+    for (const item of Array.isArray(list.articles) ? list.articles : []) {
+      try { articles.push((await apiGet(`/articles/${encodeURIComponent(item.slug)}`)).article); } catch (error) { console.warn(`[prerender] Skipping article ${item.slug}: ${error.message}`); }
+    }
+    return articles.filter((article) => article?.slug && article?.title);
+  } catch (error) {
+    console.warn(`[prerender] Articles API unavailable; no article pages generated (${error.message})`);
+    return [];
+  }
+}
+
+// Article Markdown is admin-authored, but the prerendered HTML is served before any client-side sanitizing,
+// so raw HTML is escaped and only http(s)/relative links and images are emitted.
+const safeUrl = (href) => (/^(https?:\/\/|\/|#|mailto:)/i.test(href ?? '') ? href : '');
+const articleRenderer = new marked.Renderer();
+articleRenderer.html = ({ text }) => escapeHtml(text);
+articleRenderer.link = function ({ href, title, tokens }) { const url = safeUrl(href); const label = this.parser.parseInline(tokens); return url ? `<a href="${escapeHtml(url)}"${title ? ` title="${escapeHtml(title)}"` : ''}${/^https?:/i.test(url) ? ' rel="noopener noreferrer"' : ''}>${label}</a>` : label; };
+articleRenderer.image = ({ href, text }) => { const url = safeUrl(href); return url ? `<img src="${escapeHtml(url)}" alt="${escapeHtml(text ?? '')}" loading="lazy" />` : ''; };
+const renderArticleHtml = (markdown) => marked.parse(String(markdown ?? ''), { renderer: articleRenderer, async: false });
 
 function escapeHtml(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
@@ -76,6 +107,7 @@ function renderRoute(route) {
   html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/?\s*>/i, `<link rel="canonical" href="${canonical}" />`);
   html = html.replace(/<meta name="robots" content="[^"]*"\s*\/?\s*>/i, `<meta name="robots" content="${route.noIndex ? 'noindex, nofollow' : 'index, follow'}" />`);
   if (!/<meta name="robots"/i.test(html)) html = html.replace('</head>', `    <meta name="robots" content="${route.noIndex ? 'noindex, nofollow' : 'index, follow'}" />\n  </head>`);
+  if (route.body) html = html.replace('<div id="root"></div>', () => `<div id="root">${route.body}</div>`);
   const extraHead = [];
   // The homepage hero is a CSS background, which the browser discovers late; preload it to improve LCP.
   if (route.path === '/') extraHead.push('<link rel="preload" as="image" href="/hero-background.webp" type="image/webp" fetchpriority="high" />');
@@ -86,23 +118,48 @@ function renderRoute(route) {
 }
 
 const organization = { '@context': 'https://schema.org', '@type': 'Organization', name: 'My Inner', url: siteUrl, logo: `${siteUrl}/logo-512.png` };
-staticRoutes[0].jsonLd = [organization, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${siteUrl}/` }];
-const testJsonLd = (test) => ({ '@context': 'https://schema.org', '@type': 'Quiz', name: test.name, description: test.description, url: `${siteUrl}/tests/${test.slug}`, image: `${siteUrl}${testSeo[test.slug]?.image ?? '/og-image.jpg'}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: siteUrl } });
+const breadcrumb = (trail) => ssr.breadcrumbJsonLd(siteUrl, trail);
+const today = new Date().toISOString().slice(0, 10);
 
-function renderSitemap(paths) {
-  const lastmod = new Date().toISOString().slice(0, 10);
-  const urls = paths.map((path) => `  <url><loc>${siteUrl}${path === '/' ? '/' : path}</loc><lastmod>${lastmod}</lastmod></url>`);
+function renderSitemap(entries) {
+  const urls = entries.map(({ path, lastmod }) => `  <url><loc>${siteUrl}${path === '/' ? '/' : path}</loc><lastmod>${lastmod || today}</lastmod></url>`);
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
 }
 
 const tests = await getPublicTests();
-const testRoutes = tests.map((raw) => { const test = { ...raw, description: testSeo[raw.slug]?.description ?? raw.description }; return { path: `/tests/${test.slug}`, title: `${test.name} | My Inner`, description: test.description, image: testSeo[test.slug]?.image, jsonLd: testJsonLd(test) }; });
-for (const route of [...staticRoutes, ...testRoutes, ...privateRoutes]) {
+const articles = await getPublishedArticles();
+
+const testRoutes = tests.map((raw) => {
+  const content = ssr.testContent[raw.slug];
+  const description = content?.seoDescription ?? testSeo[raw.slug]?.description ?? raw.description;
+  const title = content?.seoTitle ?? `${raw.name} | My Inner`;
+  const quiz = { '@context': 'https://schema.org', '@type': 'Quiz', name: raw.name, description, url: `${siteUrl}/tests/${raw.slug}`, image: `${siteUrl}${testSeo[raw.slug]?.image ?? '/og-image.jpg'}`, isAccessibleForFree: false, provider: { '@type': 'Organization', name: 'My Inner', url: siteUrl } };
+  return { path: `/tests/${raw.slug}`, title, description, image: testSeo[raw.slug]?.image, jsonLd: [quiz, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Tests', path: '/tests' }, { name: raw.name, path: `/tests/${raw.slug}` }])], body: ssr.renderTest(raw, description) };
+});
+
+const guideRoutes = ssr.guides.map((guide) => ({ path: `/guides/${guide.slug}`, title: guide.seoTitle, description: guide.description, jsonLd: ssr.guideJsonLd(siteUrl, guide), body: ssr.renderGuide(guide.slug), lastmod: ssr.CONTENT_UPDATED }));
+
+const articleRoutes = articles.map((article) => {
+  const image = article.coverImageUrl ? (article.coverImageUrl.startsWith('http') ? article.coverImageUrl : `${siteUrl}${article.coverImageUrl}`) : `${siteUrl}/og-image.jpg`;
+  const jsonLd = [{ '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title, description: article.excerpt, image, datePublished: article.publishedAt ?? undefined, dateModified: article.updatedAt, mainEntityOfPage: `${siteUrl}/blog/${article.slug}`, author: { '@type': 'Organization', name: 'My Inner', url: siteUrl }, publisher: { ...organization, '@context': undefined, logo: { '@type': 'ImageObject', url: `${siteUrl}/logo-512.png` } } }, breadcrumb([{ name: 'Home', path: '/' }, { name: 'Articles', path: '/blog' }, { name: article.title, path: `/blog/${article.slug}` }])];
+  const body = `<div class="min-h-[60vh] bg-[#fcfaf9] px-4 py-10 sm:px-8"><article class="mx-auto max-w-3xl"><h1 class="font-serif text-4xl leading-tight text-[#283452] sm:text-5xl">${escapeHtml(article.title)}</h1><p class="mt-4 text-lg leading-8 text-[#62596c]">${escapeHtml(article.excerpt ?? '')}</p><div class="mt-8">${renderArticleHtml(article.content)}</div></article></div>`;
+  return { path: `/blog/${article.slug}`, title: `${article.title} | My Inner`, description: article.excerpt, image: article.coverImageUrl || undefined, jsonLd, body, lastmod: (article.updatedAt || article.publishedAt || '').slice(0, 10) || undefined };
+});
+
+staticRoutes[0].jsonLd = [organization, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'My Inner', url: `${siteUrl}/` }];
+staticRoutes[0].body = ssr.renderHome();
+staticRoutes.find((route) => route.path === '/tests').body = ssr.renderTests(tests);
+staticRoutes.find((route) => route.path === '/guides').body = ssr.renderGuides();
+staticRoutes.find((route) => route.path === '/blog').body = `<div class="min-h-[60vh] px-4 py-12 sm:px-8"><div class="mx-auto max-w-4xl"><h1 class="font-serif text-4xl text-[#283452] sm:text-5xl">Guides for knowing yourself better.</h1><ul class="mt-8 space-y-4">${articles.map((article) => `<li><a href="/blog/${escapeHtml(article.slug)}" class="font-serif text-xl text-[#302447]">${escapeHtml(article.title)}</a><p class="text-sm text-[#737080]">${escapeHtml(article.excerpt ?? '')}</p></li>`).join('')}</ul></div></div>`;
+
+const publicRoutes = [...staticRoutes, ...testRoutes, ...guideRoutes, ...articleRoutes];
+for (const route of [...publicRoutes, ...privateRoutes]) {
   const targetDir = route.path === '/' ? new URL('../dist/', import.meta.url) : new URL(`../dist${route.path}/`, import.meta.url);
   await mkdir(targetDir, { recursive: true });
   await writeFile(new URL('index.html', targetDir), renderRoute(route), 'utf8');
 }
-// Regenerate the sitemap from the same public route list so new assessments are included automatically.
-await writeFile(new URL('../dist/sitemap.xml', import.meta.url), renderSitemap([...staticRoutes, ...testRoutes].map((route) => route.path)), 'utf8');
+// Regenerate the sitemap from the same public route list so new assessments, guides and articles are included automatically.
+await writeFile(new URL('../dist/sitemap.xml', import.meta.url), renderSitemap(publicRoutes.filter((route) => route.path !== '/blog' || articleRoutes.length > 0).map((route) => ({ path: route.path, lastmod: route.lastmod }))), 'utf8');
 
-console.log(`[prerender] Generated ${staticRoutes.length + tests.length} public and ${privateRoutes.length} private route HTML shells in ${join(distDir.pathname, '')}`);
+if (!articleRoutes.length) console.warn('[prerender] No published articles fetched: /blog is left out of sitemap.xml. Set VITE_API_BASE_URL for the build to include articles.');
+console.log(`[prerender] Generated ${publicRoutes.length} public (${tests.length} tests, ${guideRoutes.length} guides, ${articleRoutes.length} articles) and ${privateRoutes.length} private route HTML shells in ${join(distDir.pathname, '')}`);
