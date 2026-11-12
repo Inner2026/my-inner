@@ -21,4 +21,4 @@ Disallow: /results
 Disallow: /attempts
 Disallow: /api/
 
-Sitemap: https://my-inner.com/sitemap.xml
+Sitemap: https://www.my-inner.com/sitemap.xml

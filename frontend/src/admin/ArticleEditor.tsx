@@ -6,7 +6,7 @@ import { Markdown } from '../components/Markdown';
 import { readingMinutes } from '../lib/articleFormat';
 import { useAdminFeedback } from './AdminFeedback';
 
-const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://my-inner.com').replace(/\/$/, '');
+const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://www.my-inner.com').replace(/\/$/, '');
 const emptyForm: ArticleInput = { title: '', slug: '', excerpt: '', content: '', coverImageUrl: '', coverImageAlt: '', relatedTestSlug: '', status: 'draft' };
 
 function slugify(value: string) {
@@ -109,7 +109,7 @@ export function ArticleEditor() {
     <section className="mt-6 rounded-2xl border border-[#eee5e9] bg-white p-6 shadow-sm sm:p-8">
       <div className="grid gap-5">
         <label className="admin-field">Title<input value={form.title} onChange={(e) => update('title', e.target.value)} className="admin-input" placeholder="What Is My Love Language? A Simple Guide" /><span className="mt-1 block text-xs font-normal text-slate-400">Use the question or phrase people type into Google. Aim for under 60 characters. <Counter value={form.title.length} min={5} max={60} /></span></label>
-        <label className="admin-field">Page address (URL)<div className="flex items-center overflow-hidden rounded-[.65rem] border border-[#e5dce8]"><span className="shrink-0 bg-[#faf7fb] px-3 py-[.7rem] text-xs text-slate-400">my-inner.com/blog/</span><input value={form.slug} onChange={(e) => { setSlugTouched(true); update('slug', slugify(e.target.value)); }} className="w-full px-3 py-[.7rem] text-sm text-[#302447] outline-none" placeholder="what-is-my-love-language" /></div>{!isNew && savedStatus === 'published' && <span className="mt-1 block text-xs font-normal text-amber-600">Changing the address of a published article breaks links people already shared.</span>}</label>
+        <label className="admin-field">Page address (URL)<div className="flex items-center overflow-hidden rounded-[.65rem] border border-[#e5dce8]"><span className="shrink-0 bg-[#faf7fb] px-3 py-[.7rem] text-xs text-slate-400">www.my-inner.com/blog/</span><input value={form.slug} onChange={(e) => { setSlugTouched(true); update('slug', slugify(e.target.value)); }} className="w-full px-3 py-[.7rem] text-sm text-[#302447] outline-none" placeholder="what-is-my-love-language" /></div>{!isNew && savedStatus === 'published' && <span className="mt-1 block text-xs font-normal text-amber-600">Changing the address of a published article breaks links people already shared.</span>}</label>
         <label className="admin-field">Summary (Google description)<textarea value={form.excerpt} onChange={(e) => update('excerpt', e.target.value)} className="admin-input min-h-20" placeholder="One or two sentences that tell readers what they will learn." /><span className="mt-1 block text-xs font-normal text-slate-400">Shown under the title in Google and on the articles page. <Counter value={form.excerpt.trim().length} min={50} max={170} /></span></label>
       </div>
       <div className="mt-6 rounded-xl border border-[#eee5e9] bg-[#fcfbfd] p-4"><p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Google preview</p><p className="mt-2 truncate text-xs text-slate-500">{SITE_URL.replace(/^https?:\/\//, '')} › blog › {form.slug || '...'}</p><p className="mt-1 truncate text-lg text-[#1a0dab]">{googleTitle}</p><p className="mt-1 line-clamp-2 text-sm text-[#4d5156]">{form.excerpt || 'Your summary will appear here.'}</p></div>
