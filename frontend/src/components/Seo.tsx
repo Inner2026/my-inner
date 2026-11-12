@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export const siteUrl = (import.meta.env.VITE_SITE_URL ?? 'https://my-inner.com').replace(/\/$/, '');
+export const siteUrl = (import.meta.env.VITE_SITE_URL ?? 'https://www.my-inner.com').replace(/\/$/, '');
 const defaultTitle = 'My Inner | Self-Awareness & Personal Growth';
 const defaultDescription = 'Explore My Inner for self-reflection, personal growth, and emotional wellness resources designed to support your journey toward greater self-awareness.';
 const defaultImage = `${siteUrl}/og-image.jpg`;

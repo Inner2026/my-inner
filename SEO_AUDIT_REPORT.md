@@ -58,7 +58,7 @@ Production HTTP status, redirects, Search Console, analytics, Vercel deployment,
 
 ## Manual deployment and next steps
 
-Review the diff, run the commands above, deploy through the existing Vercel project, then verify `/`, `/robots.txt`, `/sitemap.xml`, `/tests`, `/about`, and a real `/tests/:slug` URL in the deployed environment. Add `https://my-inner.com` to Search Console, submit `https://my-inner.com/sitemap.xml`, and use URL Inspection for the homepage and public assessment URLs. Over the next 30 days, prioritize production crawl checks, Search Console indexing review, image/LCP measurement, and human review of any future wellness editorial content.
+Review the diff, run the commands above, deploy through the existing Vercel project, then verify `/`, `/robots.txt`, `/sitemap.xml`, `/tests`, `/about`, and a real `/tests/:slug` URL in the deployed environment. Add `https://www.my-inner.com` to Search Console, submit `https://www.my-inner.com/sitemap.xml`, and use URL Inspection for the homepage and public assessment URLs. Over the next 30 days, prioritize production crawl checks, Search Console indexing review, image/LCP measurement, and human review of any future wellness editorial content.
 
 ## Phase 2: prerendering and production readiness
 
@@ -78,7 +78,7 @@ Known limitation: this is metadata prerendering, not full React HTML rendering. 
 
 ## Phase 3: performance, share image and indexing fixes (2026-10-20)
 
-Observed before this phase: the live site at https://my-inner.com still served the old title ("My Inner — Discover more about yourself"), so Phases 1–2 were not yet deployed.
+Observed before this phase: the live site at https://www.my-inner.com still served the old title ("My Inner — Discover more about yourself"), so Phases 1–2 were not yet deployed.
 
 Changes:
 

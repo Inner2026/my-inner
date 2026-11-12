@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { marked } from 'marked';
 import * as ssr from '../dist-ssr/prerender-entry.js';
 
-const siteUrl = (process.env.VITE_SITE_URL || 'https://my-inner.com').replace(/\/$/, '');
+const siteUrl = (process.env.VITE_SITE_URL || 'https://www.my-inner.com').replace(/\/$/, '');
 const distDir = new URL('../dist/', import.meta.url);
 const template = await readFile(new URL('../dist/index.html', import.meta.url), 'utf8');
 // Search-only overrides shared with the client (src/App.tsx): meta description + social preview image per test.

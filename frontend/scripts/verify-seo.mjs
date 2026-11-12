@@ -7,11 +7,11 @@ const distIndex = await readFile(new URL('../dist/index.html', import.meta.url),
 const fail = (message) => { throw new Error(message); };
 if (!/<html\s+lang="en">/.test(index)) fail('index.html must declare English language');
 if ((index.match(/<title>/g) ?? []).length !== 1) fail('index.html must contain exactly one title');
-if (!/rel="canonical"\s+href="https:\/\/my-inner\.com\/"/.test(index)) fail('homepage canonical is missing or not absolute');
-if (!/Sitemap:\s*https:\/\/my-inner\.com\/sitemap\.xml/.test(robots)) fail('robots.txt sitemap reference is missing');
+if (!/rel="canonical"\s+href="https:\/\/www\.my-inner\.com\/"/.test(index)) fail('homepage canonical is missing or not absolute');
+if (!/Sitemap:\s*https:\/\/www\.my-inner\.com\/sitemap\.xml/.test(robots)) fail('robots.txt sitemap reference is missing');
 if (!/<urlset[^>]+xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/.test(sitemap)) fail('sitemap XML namespace is missing');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-if (urls.some((url) => !url.startsWith('https://my-inner.com/'))) fail('sitemap contains a non-canonical origin');
+if (urls.some((url) => !url.startsWith('https://www.my-inner.com/'))) fail('sitemap contains a non-canonical origin');
 if (urls.some((url) => /\?|#|\/checkout|\/dashboard|\/admin|\/results|\/attempts/.test(url))) fail('sitemap contains a private, transactional, or parameterized URL');
 if (new Set(urls).size !== urls.length) fail('sitemap contains duplicate URLs');
 if ((sitemap.match(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g) ?? []).length !== urls.length) fail('every sitemap URL must have a lastmod date');
