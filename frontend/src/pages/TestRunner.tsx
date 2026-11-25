@@ -6,6 +6,7 @@ import { ApiError } from '../api/client';
 import { TestIcon } from '../components/TestIcon';
 import { PostTestRating } from '../components/PostTestRating';
 import { LoadingScreen } from '../components/LoadingScreen';
+import { track } from '../lib/analytics';
 
 type TestTheme = { eyebrow: string; note: string; accent: string; accentText: string; accentSoft: string; page: string; panel: string; border: string; shape: string };
 const themes: Record<string, TestTheme> = {
@@ -70,7 +71,7 @@ export function TestRunner() {
     if (!attemptId || !allAnswered) return;
     if (!window.confirm('Are you ready to submit your answers? You will not be able to edit this attempt afterward.')) return;
     setSubmitting(true); setError(null);
-    try { await AttemptsApi.submit(attemptId, questions.map((q) => ({ questionId: q.id, answerOptionId: answers[q.id] }))); if (draftKey) localStorage.removeItem(draftKey); setShowRating(true); }
+    try { await AttemptsApi.submit(attemptId, questions.map((q) => ({ questionId: q.id, answerOptionId: answers[q.id] }))); if (draftKey) localStorage.removeItem(draftKey); track('test_complete', { test_slug: testSlug }); setShowRating(true); }
     catch (err) { setError(err instanceof ApiError ? err.message : 'Could not submit your answers.'); }
     finally { setSubmitting(false); }
   }

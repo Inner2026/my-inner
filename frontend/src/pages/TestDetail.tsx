@@ -7,6 +7,7 @@ import { ApiError } from '../api/client';
 import { TestIcon } from '../components/TestIcon';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { LoadingScreen } from '../components/LoadingScreen';
+import { track } from '../lib/analytics';
 
 export function TestDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -25,6 +26,7 @@ export function TestDetail() {
 
   useEffect(() => { if (slug) TestsApi.getBySlug(slug).then((res) => setTest(res.test)).catch((err) => setError(err.message)); }, [slug]);
   useEffect(() => { if (!slug || !user) return; PurchasesApi.entitlement(slug).then((result) => { if (result.owned) navigate(`/tests/${slug}`, { replace: true, state: { owned: true, expiresAt: result.expiresAt } }); }).catch(() => undefined); }, [slug, user, navigate]);
+  useEffect(() => { if (test) track('begin_checkout', { currency: 'USD', value: test.price.amount / 100, item_id: test.slug, item_name: test.name, test_slug: test.slug }); }, [test]);
   useEffect(() => { PaymentsApi.mode().then((res) => { setConfiguredMode(res.mode); setPaymentMode(res.mode); }).catch(() => { setConfiguredMode('paypal'); setPaymentMode('paypal'); }); }, []);
   useEffect(() => {
     if (!test || !user) { setQuote(null); return; }

@@ -7,6 +7,7 @@ import { LoadingScreen } from '../components/LoadingScreen';
 import { useAuth } from '../context/AuthContext';
 import { TestRating } from '../components/TestRating';
 import { TestLandingBody } from '../components/SeoContent';
+import { track } from '../lib/analytics';
 
 const backgrounds: Record<string, string> = {
   'mbti-style': '/test-backgrounds/mbti-style.webp', 'inner-child': '/test-backgrounds/inner-child.webp', 'five-love-languages': '/test-backgrounds/five-love-languages.webp', 'hidden-animal': '/test-backgrounds/hidden-animal.webp', 'cube-personality': '/test-backgrounds/cube-personality.webp'
@@ -23,7 +24,7 @@ export function TestOverview() {
   useEffect(() => { let cancelled = false; setHasPreviousAttempt(false); if (!user || !slug) return () => { cancelled = true; }; AttemptsApi.list().then(({ attempts }) => { if (!cancelled) setHasPreviousAttempt(attempts.some((attempt) => attempt.testId?.slug === slug)); }).catch(() => undefined); return () => { cancelled = true; }; }, [user, slug]);
 
   async function startTest() {
-    if (!test || !slug || starting) return; if (!user) { navigate(`/tests/${slug}/checkout`); return; } setStarting(true); setError(null);
+    if (!test || !slug || starting) return; track('test_start', { test_slug: slug }); if (!user) { navigate(`/tests/${slug}/checkout`); return; } setStarting(true); setError(null);
     try { const { attempts } = await AttemptsApi.list(); const testAttempts = attempts.filter((attempt) => attempt.testId?.slug === test.slug); const activeAttempt = testAttempts.find((attempt) => attempt.status === 'in_progress' || attempt.status === 'scoring'); const purchaseId = activeAttempt?.purchaseId ?? ownedPurchaseId ?? testAttempts[0]?.purchaseId; if (!purchaseId) { navigate(`/tests/${slug}/checkout`); return; } setHasPreviousAttempt(testAttempts.length > 0); if (activeAttempt) { navigate(`/attempts/${activeAttempt._id}/instructions`); return; } const { attempt } = await AttemptsApi.create(purchaseId); navigate(`/attempts/${attempt._id}/instructions`); } catch (err: any) { if (err?.status === 401) navigate('/login', { state: { from: `/tests/${slug}` } }); else if (err?.status === 403 || err?.status === 404) navigate(`/tests/${slug}/checkout`); else setError(err?.message || 'Could not open this test right now.'); } finally { setStarting(false); }
   }
   if (error) return <div className="p-8 text-center text-red-600">{error}</div>; if (!test) return <LoadingScreen message="Opening your assessment..." detail="We’re bringing the details into focus." />;
