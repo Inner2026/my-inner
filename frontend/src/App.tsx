@@ -26,6 +26,7 @@ import { breadcrumbJsonLd, guideBySlug, guideJsonLd, staticSeo, testContent } fr
 import { seoSiteUrl } from './components/Seo';
 import { LoadingScreen } from './components/LoadingScreen';
 import testSeoOverrides from './seo/testSeo.json';
+import { initAnalytics, trackPageView } from './lib/analytics';
 
 // Search-only overrides (meta description + social preview image) per test slug; visible page copy is unchanged.
 const testSeo = testSeoOverrides as Record<string, { description?: string; image?: string }>;
@@ -74,10 +75,18 @@ function RouteSeo() {
   return <Seo title={test ? content?.seoTitle ?? `${test.name} | My Inner` : article ? `${article.title} | My Inner` : title} description={test ? testDescription : article ? article.excerpt : description} canonicalPath={test ? `/tests/${test.slug}` : article ? `/blog/${article.slug}` : undefined} image={test ? testImage : article ? articleImage : undefined} noIndex={noIndex} jsonLd={jsonLd} />;
 }
 
+function PageViewTracker() {
+  const { pathname, search } = useLocation();
+  useEffect(() => { initAnalytics(); }, []);
+  useEffect(() => { const timer = window.setTimeout(() => trackPageView(pathname + search), 0); return () => window.clearTimeout(timer); }, [pathname, search]);
+  return null;
+}
+
 export default function App() {
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <RouteSeo />
+      <PageViewTracker />
       <AnnouncementBar /><NavBar />
       <main className="flex-1">
         <Suspense fallback={<LoadingScreen />}>
