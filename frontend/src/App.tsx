@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { NavBar } from './components/NavBar';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Landing } from './pages/Landing';
@@ -78,7 +78,13 @@ function RouteSeo() {
 function PageViewTracker() {
   const { pathname, search } = useLocation();
   useEffect(() => { initAnalytics(); }, []);
-  useEffect(() => { const timer = window.setTimeout(() => trackPageView(pathname + search), 0); return () => window.clearTimeout(timer); }, [pathname, search]);
+  const firstRender = useRef(true);
+  useEffect(() => {
+    // The first page load is already reported by GA4 itself (enhanced measurement); only report later route changes.
+    if (firstRender.current) { firstRender.current = false; return; }
+    const timer = window.setTimeout(() => trackPageView(pathname + search), 0);
+    return () => window.clearTimeout(timer);
+  }, [pathname, search]);
   return null;
 }
 
